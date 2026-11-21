@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../data/courses_data.dart';
 import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
@@ -443,7 +444,7 @@ class _LessonStudySheetState extends State<LessonStudySheet> {
                   ),
                 ),
 
-                // Mini Inline Video/Audio Player when an episode is playing
+                // Mini Inline Video/Audio Player + Copyable Matn Text (Voice 1)
                 if (_playingEpisode != null)
                   Container(
                     margin: const EdgeInsets.fromLTRB(16, 12, 16, 4),
@@ -454,61 +455,143 @@ class _LessonStudySheetState extends State<LessonStudySheet> {
                       ),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        IconButton.filled(
-                          onPressed: () {
-                            setState(() => _isPlayingMedia = !_isPlayingMedia);
-                          },
-                          style: IconButton.styleFrom(
-                            backgroundColor: AppColors.teal500,
-                          ),
-                          icon: Icon(
-                            _isPlayingMedia
-                                ? Icons.pause_rounded
-                                : Icons.play_arrow_rounded,
-                            color: Colors.white,
-                          ),
+                        Row(
+                          children: [
+                            IconButton.filled(
+                              onPressed: () {
+                                setState(() => _isPlayingMedia = !_isPlayingMedia);
+                              },
+                              style: IconButton.styleFrom(
+                                backgroundColor: AppColors.teal500,
+                              ),
+                              icon: Icon(
+                                _isPlayingMedia
+                                    ? Icons.pause_rounded
+                                    : Icons.play_arrow_rounded,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _isPlayingMedia
+                                        ? '🎬 لە پەخشکردنی ڤیدیۆ/دەنگدایە...'
+                                        : '⏸ وەستاوە',
+                                    style: const TextStyle(
+                                      color: AppColors.amber400,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    _playingEpisode!.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _playingEpisode = null;
+                                  _isPlayingMedia = false;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.close_rounded,
+                                color: Colors.white70,
+                                size: 18,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
+                        const SizedBox(height: 10),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.14),
+                            ),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                _isPlayingMedia
-                                    ? '🎧 لە پەخشکردندایە...'
-                                    : '⏸ وەستاوە',
-                                style: const TextStyle(
-                                  color: AppColors.amber400,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    '📜 مەتنی وانە و پوختە:',
+                                    style: TextStyle(
+                                      color: AppColors.amber400,
+                                      fontSize: 11.5,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  InkWell(
+                                    onTap: () {
+                                      final text =
+                                          '${course.title}\n${_playingEpisode!.title}\n\n${course.summary}';
+                                      Clipboard.setData(ClipboardData(text: text));
+                                      showReboonToast(
+                                        context,
+                                        'مەتنی وانەکە کۆپی کرا ✓',
+                                      );
+                                    },
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 3,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.teal600,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.copy_rounded,
+                                              size: 13, color: Colors.white),
+                                          SizedBox(width: 4),
+                                          Text(
+                                            'کۆپیکردن',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10.5,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                _playingEpisode!.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 12.5,
+                              const SizedBox(height: 6),
+                              SelectableText(
+                                '${_playingEpisode!.title}\n${course.summary}',
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.92),
+                                  fontSize: 12,
+                                  height: 1.6,
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _playingEpisode = null;
-                              _isPlayingMedia = false;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.close_rounded,
-                            color: Colors.white70,
-                            size: 18,
                           ),
                         ),
                       ],

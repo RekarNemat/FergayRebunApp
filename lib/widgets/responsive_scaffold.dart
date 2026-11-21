@@ -3,7 +3,6 @@ import '../screens/modals/live_stream_sheet.dart';
 import '../screens/modals/notifications_sheet.dart';
 import '../screens/modals/search_sheet.dart';
 import '../screens/modals/teachers_sheet.dart';
-import '../screens/pages/settings_page.dart';
 import '../screens/tabs/academy_tab.dart';
 import '../screens/tabs/account_tab.dart';
 import '../screens/tabs/favorites_tab.dart';
@@ -120,19 +119,6 @@ class ResponsiveMainShell extends StatelessWidget {
                     ),
                 ],
               ),
-              IconButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => SettingsPage(
-                      appState: s,
-                      onGoToAccount: () => s.setTabIndex(4),
-                    ),
-                  ),
-                ),
-                icon: const Icon(Icons.settings_outlined, color: Colors.white),
-                tooltip: 'ڕێکخستنەکان',
-              ),
             ],
           ),
           body: IndexedStack(
@@ -150,9 +136,9 @@ class ResponsiveMainShell extends StatelessWidget {
   }
 }
 
-/// Exact 5-tab Dark-Teal & Gold Bottom Navigation Bar matching Image 2 & Voice 2:
+/// Exact 5-tab Dark-Teal & Gold Bottom Navigation Bar matching Image 1:
 /// Right-to-Left (RTL):
-/// 0: سەنەدەکان | 1: ئەکادیمیا | 2: فێرگەی ڕێبوون (center logo) | 3: وانە دڵخوازەکان | 4: هەژمار
+/// 0: سەنەدەکان | 1: ئەکادیمیا | 2: فێرگەی ڕێبوون (official logo) | 3: وانە دڵخوازەکان | 4: هەژمار
 class _ReboonBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final int favCount;
@@ -183,19 +169,17 @@ class _ReboonBottomNavBar extends StatelessWidget {
         children: [
           _NavItem(
             label: 'سەنەدەکان',
-            icon: Icons.workspace_premium_outlined,
-            activeIcon: Icons.workspace_premium_rounded,
+            customIcon: (color) => _BookMedalNavIcon(color: color),
             active: currentIndex == 0,
             onTap: () => onTap(0),
           ),
           _NavItem(
             label: 'ئەکادیمیا',
-            icon: Icons.laptop_chromebook_outlined,
-            activeIcon: Icons.laptop_chromebook_rounded,
+            customIcon: (color) => _LaptopCapNavIcon(color: color),
             active: currentIndex == 1,
             onTap: () => onTap(1),
           ),
-          // Center Brand Tab: Calligraphic "ڕێبوون" Emblem
+          // Center Brand Tab: Official "ڕێبوون" Emblem
           Expanded(
             child: InkWell(
               onTap: () => onTap(2),
@@ -208,11 +192,9 @@ class _ReboonBottomNavBar extends StatelessWidget {
                     AnimatedScale(
                       scale: currentIndex == 2 ? 1.12 : 0.96,
                       duration: const Duration(milliseconds: 200),
-                      child: ReboonEmblem(
-                        height: 30,
-                        backgroundColor: currentIndex == 2
-                            ? AppColors.gold
-                            : AppColors.gold.withValues(alpha: 0.8),
+                      child: const ReboonEmblem(
+                        height: 32,
+                        backgroundColor: AppColors.gold,
                         strokeColor: AppColors.teal900,
                       ),
                     ),
@@ -225,7 +207,7 @@ class _ReboonBottomNavBar extends StatelessWidget {
                         style: TextStyle(
                           color: currentIndex == 2
                               ? AppColors.gold
-                              : Colors.white.withValues(alpha: 0.82),
+                              : AppColors.gold.withValues(alpha: 0.85),
                           fontWeight: currentIndex == 2
                               ? FontWeight.w800
                               : FontWeight.w600,
@@ -240,16 +222,18 @@ class _ReboonBottomNavBar extends StatelessWidget {
           ),
           _NavItem(
             label: 'وانە دڵخوازەکان',
-            icon: Icons.favorite_border_rounded,
-            activeIcon: Icons.favorite_rounded,
+            customIcon: (color) => _BookHeartNavIcon(color: color),
             active: currentIndex == 3,
             badgeCount: favCount > 0 ? favCount : null,
             onTap: () => onTap(3),
           ),
           _NavItem(
             label: 'هەژمار',
-            icon: Icons.person_outline_rounded,
-            activeIcon: Icons.person_rounded,
+            customIcon: (color) => Icon(
+              Icons.person_rounded,
+              color: color,
+              size: 27,
+            ),
             active: currentIndex == 4,
             onTap: () => onTap(4),
           ),
@@ -259,18 +243,121 @@ class _ReboonBottomNavBar extends StatelessWidget {
   }
 }
 
+class _BookMedalNavIcon extends StatelessWidget {
+  final Color color;
+  const _BookMedalNavIcon({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 28,
+      height: 26,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Icon(Icons.menu_book_outlined, color: color, size: 22),
+          ),
+          Positioned(
+            left: -1,
+            bottom: -1,
+            child: Container(
+              padding: const EdgeInsets.all(1),
+              decoration: const BoxDecoration(
+                color: AppColors.teal800,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.workspace_premium_outlined, color: color, size: 15),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LaptopCapNavIcon extends StatelessWidget {
+  final Color color;
+  const _LaptopCapNavIcon({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 28,
+      height: 26,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Icon(Icons.ondemand_video_outlined, color: color, size: 23),
+          ),
+          Positioned(
+            right: -2,
+            top: -2,
+            child: Container(
+              padding: const EdgeInsets.all(1),
+              decoration: const BoxDecoration(
+                color: AppColors.teal800,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.school_outlined, color: color, size: 13),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BookHeartNavIcon extends StatelessWidget {
+  final Color color;
+  const _BookHeartNavIcon({required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 28,
+      height: 26,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            right: 1,
+            top: 0,
+            child: Icon(Icons.book_outlined, color: color, size: 23),
+          ),
+          Positioned(
+            left: -1,
+            top: 4,
+            child: Container(
+              padding: const EdgeInsets.all(1),
+              decoration: const BoxDecoration(
+                color: AppColors.teal800,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.favorite_border_rounded, color: color, size: 14),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _NavItem extends StatelessWidget {
   final String label;
-  final IconData icon;
-  final IconData activeIcon;
+  final Widget Function(Color color) customIcon;
   final bool active;
   final int? badgeCount;
   final VoidCallback onTap;
 
   const _NavItem({
     required this.label,
-    required this.icon,
-    required this.activeIcon,
+    required this.customIcon,
     required this.active,
     this.badgeCount,
     required this.onTap,
@@ -278,6 +365,9 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = active
+        ? AppColors.gold
+        : AppColors.gold.withValues(alpha: 0.78);
     return Expanded(
       child: InkWell(
         onTap: onTap,
@@ -302,13 +392,7 @@ class _NavItem extends StatelessWidget {
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(
-                      active ? activeIcon : icon,
-                      color: active
-                          ? AppColors.gold
-                          : AppColors.gold.withValues(alpha: 0.78),
-                      size: 24,
-                    ),
+                    child: customIcon(iconColor),
                   ),
                   if (badgeCount != null)
                     Positioned(

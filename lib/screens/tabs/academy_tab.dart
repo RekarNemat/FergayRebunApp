@@ -56,7 +56,7 @@ class AcademyTab extends StatelessWidget {
                   runSpacing: 10,
                   children: [
                     _TrackToggleButton(
-                      label: 'مەنهەجی گشتی هاوتەریب',
+                      label: 'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)',
                       active: isGeneral,
                       onTap: () => s.setAcademyTrack('general'),
                     ),
@@ -113,7 +113,7 @@ class AcademyTab extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const Text(
-                'مەنهەجی گشتی هاوتەریب',
+                'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -122,7 +122,7 @@ class AcademyTab extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'ئەم ڕێڕەوە بۆ زۆرینەی خەڵکی و فێرخوازانی ئاسایی داڕێژراوە. ئامانجی ئەوەیە هەر ١٢ علومە شەرعییەکە بە شێوازێکی یەکجار تەنسیقکراو و لەناو ٥ ئاستی ناچاری پەیتاپەیتا دا تێکەڵ بکرێن.',
+                'ئەم ڕێڕەوە بۆ فێرخوازانی سەرەتا، مامناوەند و پێشکەوتوو داڕێژراوە؛ تێیدا هەر ١٢ زانستە شەرعییەکە بە شێوازێکی تەنسیقکراو لە ٥ ئاستی پلەبەپلەدا دەخوێندرێن.',
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 13,
@@ -131,7 +131,7 @@ class AcademyTab extends StatelessWidget {
               const SizedBox(height: 14),
               ElevatedButton.icon(
                 onPressed: () =>
-                    openBookPdfPreviewSheet(context, 'مەنهەجی گشتی هاوتەریب'),
+                    openBookPdfPreviewSheet(context, 'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)'),
                 icon: const Icon(Icons.download_rounded, size: 18),
                 label: const Text('داگرتنی گشتی مەنهەج بە PDF'),
                 style: ElevatedButton.styleFrom(
@@ -299,7 +299,7 @@ class AcademyTab extends StatelessWidget {
                     crossAxisCount: cols,
                     crossAxisSpacing: 12,
                     mainAxisSpacing: 12,
-                    mainAxisExtent: 256,
+                    mainAxisExtent: 274,
                   ),
                   itemCount: lvl.courses.length,
                   itemBuilder: (_, idx) {
@@ -509,7 +509,7 @@ class AcademyTab extends StatelessWidget {
                         crossAxisCount: cols,
                         crossAxisSpacing: 12,
                         mainAxisSpacing: 12,
-                        mainAxisExtent: 256,
+                        mainAxisExtent: 274,
                       ),
                       itemCount: sci.stages.length,
                       itemBuilder: (_, idx) {
@@ -634,61 +634,98 @@ class _CourseVisualCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top row: badge + heart + corner book cover visual (Voice 8)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: color.withValues(alpha: 0.14),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          badge,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: color,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 10.5,
+            // Top visual banner: teacher portrait + book cover + favorite heart (Voice 8)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topRight,
+                  end: Alignment.bottomLeft,
+                  colors: [
+                    color.withValues(alpha: 0.18),
+                    color.withValues(alpha: 0.05),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Row(
+                children: [
+                  TeacherAvatarBubble(
+                    name: instructorFull,
+                    size: 40,
+                    colorStart: color,
+                    colorEnd: Color.lerp(color, Colors.black, 0.35) ?? color,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: color.withValues(alpha: 0.16),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            badge,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: color,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 10,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 14,
+                        const SizedBox(height: 3),
+                        Text(
+                          instructorFull,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  StylizedBookCover(
+                    title: title,
+                    color: color,
+                    width: 44,
+                    height: 58,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13.5,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                Column(
-                  children: [
-                    StylizedBookCover(
-                      title: title,
-                      color: color,
-                      width: 50,
-                      height: 64,
-                    ),
-                  ],
+                FavoriteHeartButton(
+                  appState: appState,
+                  favoriteKey: 'course:$courseKey',
+                  size: 16,
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -710,34 +747,6 @@ class _CourseVisualCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            // Teacher portrait/name underneath + Favorite Heart (Voice 8)
-            Row(
-              children: [
-                TeacherAvatarBubble(
-                  name: instructorFull,
-                  size: 24,
-                  colorStart: color,
-                  colorEnd: Color.lerp(color, Colors.black, 0.35) ?? color,
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    instructorFull,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                FavoriteHeartButton(
-                  appState: appState,
-                  favoriteKey: 'course:$courseKey',
-                  size: 16,
-                ),
-              ],
             ),
             const SizedBox(height: 8),
             Row(

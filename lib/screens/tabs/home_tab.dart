@@ -51,8 +51,12 @@ class _HomeTabState extends State<HomeTab> {
         .where((c) =>
             c.category.contains(science.kurdishName) ||
             c.category.contains(science.arabicName) ||
-            c.title.contains(science.arabicName))
+            c.title.contains(science.arabicName) ||
+            c.title.contains(science.kurdishName))
         .toList();
+    if (relatedCourses.isEmpty) {
+      relatedCourses.addAll(courseCatalog.values.take(2));
+    }
 
     showModalBottomSheet(
       context: context,
@@ -84,7 +88,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       const Text(
-                        'وانە و سەرچاوە و تاقیکردنەوەکانی ئەم زانستە',
+                        'وانە ڤیدیۆییەکان، مەتن، کتێبی PDF و تاقیکردنەوە',
                         style: TextStyle(fontSize: 12),
                       ),
                     ],
@@ -97,35 +101,44 @@ class _HomeTabState extends State<HomeTab> {
               ],
             ),
             const Divider(height: 22),
-            if (relatedCourses.isNotEmpty) ...[
-              const Text(
-                '📖 وانە و پەرتووکە تۆمارکراوەکان:',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
-              ),
-              const SizedBox(height: 8),
-              ...relatedCourses.take(4).map(
-                    (c) => ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const Icon(Icons.play_circle_fill_rounded,
-                          color: AppColors.teal700),
-                      title: Text(c.title,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 13.5)),
-                      subtitle: Text(
-                          '${c.instructor} • ${toKurdishDigits(c.episodesCount)} ئەڵقە'),
-                      onTap: () {
-                        Navigator.pop(ctx);
-                        openLessonStudySheet(
-                          context,
-                          widget.appState,
-                          c.key,
-                          onOpenAccountTab: widget.onGoToAccount,
-                        );
-                      },
+            const Text(
+              '🎬 وانە ڤیدیۆییەکان و مەتنی زانستەکە:',
+              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+            ),
+            const SizedBox(height: 8),
+            ...relatedCourses.take(4).map(
+                  (c) => ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: science.color.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(
+                        Icons.play_circle_fill_rounded,
+                        color: science.color,
+                      ),
                     ),
+                    title: Text(c.title,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 13.5)),
+                    subtitle: Text(
+                        '${c.instructor} • ${toKurdishDigits(c.episodesCount)} ئەڵقە (ڤیدیۆ + مەتن)'),
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                    onTap: () {
+                      Navigator.pop(ctx);
+                      openLessonStudySheet(
+                        context,
+                        widget.appState,
+                        c.key,
+                        onOpenAccountTab: widget.onGoToAccount,
+                      );
+                    },
                   ),
-              const SizedBox(height: 10),
-            ],
+                ),
+            const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(
@@ -174,6 +187,54 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _openAllProjectsSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    'پڕۆژەکانی دیکەی ڕێبوون',
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 17),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              ],
+            ),
+            const Divider(),
+            ...reboonProjectsList.map(
+              (p) => ListTile(
+                contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                leading: Text(p.icon, style: const TextStyle(fontSize: 24)),
+                title: Text(
+                  p.title,
+                  style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5),
+                ),
+                subtitle: Text(p.desc, maxLines: 2, overflow: TextOverflow.ellipsis),
+                trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+                onTap: () {
+                  Navigator.pop(ctx);
+                  openProjectDetailSheet(context, p);
+                },
+              ),
             ),
           ],
         ),
@@ -298,16 +359,10 @@ class _HomeTabState extends State<HomeTab> {
                 _buildGuidanceCarousel(s),
                 const SizedBox(height: 26),
 
-                // 8. خزمەتگوزارییە گشتییەکان (Voice 3 & 8 + Image 6 — Moved down from Header!)
+                // 8. خزمەتگوزارییە گشتییەکان (Image 3 + Voice 3: clean single horizontal row!)
                 const SectionTitleHeader(title: 'بەشەکان و هەڵسەنگاندن'),
                 const SizedBox(height: 12),
                 _buildBottomActionStrip(s),
-                const SizedBox(height: 26),
-
-                // 9. پڕۆژەکانی دیکەی ڕێبوون (HTML Projects showcase)
-                const SectionTitleHeader(title: 'پڕۆژەکانی دیکەی ڕێبوون'),
-                const SizedBox(height: 12),
-                _buildProjectsStrip(),
               ],
             ),
           ),
@@ -498,10 +553,9 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                 ),
 
-                // Slide 3: Seerah App spotlight
+                // Slide 3: Other Reboon Projects Banner (Voice 4: moved from home body into banner)
                 InkWell(
-                  onTap: () =>
-                      openProjectDetailSheet(context, reboonProjectsList.first),
+                  onTap: _openAllProjectsSheet,
                   borderRadius: BorderRadius.circular(24),
                   child: Container(
                     padding: const EdgeInsets.all(18),
@@ -516,7 +570,7 @@ class _HomeTabState extends State<HomeTab> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '⭐ پڕۆژەی پێشنیازکراوی ڕێبوون',
+                          '⭐ پڕۆژەکانی دیکەی ڕێبوون',
                           style: TextStyle(
                             color: AppColors.amber400,
                             fontWeight: FontWeight.w800,
@@ -525,7 +579,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                         SizedBox(height: 6),
                         Text(
-                          'ئەپی سیرەی پێغەمبەر (صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ)',
+                          'ئەپی سیرەی پێغەمبەر ﷺ و پڕۆژە دیجیتالەکان',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w900,
@@ -534,7 +588,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                         SizedBox(height: 6),
                         Text(
-                          'پلاتفۆرمێکی گشتگیر بۆ ناسینی ژیاننامەی پێغەمبەری خوا ﷺ بە نەخشەی کارلێککار و سەنەدی دروست.',
+                          'کلیک بکە بۆ بینینی سەرجەم پڕۆژە و دەستپێشخەرییەکانی دیکەی ڕێکخراو و فێرگەی ڕێبوون.',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: Colors.white70, fontSize: 12),
@@ -641,8 +695,9 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildSciencesStrip() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
-      height: 102,
+      height: 100,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -652,35 +707,35 @@ class _HomeTabState extends State<HomeTab> {
           final item = homeSciencesList[idx];
           return InkWell(
             onTap: () => _openScienceHub(item),
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              width: 74,
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-              decoration: BoxDecoration(
-                color: AppColors.teal800,
-                borderRadius: BorderRadius.circular(22),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.teal900.withValues(alpha: 0.16),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
+            borderRadius: BorderRadius.circular(18),
+            child: SizedBox(
+              width: 72,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: 44,
-                    height: 44,
+                    width: 60,
+                    height: 60,
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.12),
+                      color: isDark ? AppColors.darkCard : Colors.white,
                       shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isDark
+                            ? Colors.white.withValues(alpha: 0.1)
+                            : const Color(0xFFE5E7EB),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.06),
+                          blurRadius: 8,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
                     child: Icon(
                       item.icon,
-                      color: AppColors.amber400,
-                      size: 24,
+                      color: isDark ? AppColors.teal400 : AppColors.teal800,
+                      size: 26,
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -689,8 +744,8 @@ class _HomeTabState extends State<HomeTab> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: isDark ? Colors.white : AppColors.teal900,
                       fontWeight: FontWeight.w700,
                       fontSize: 10.5,
                     ),
@@ -707,7 +762,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget _buildRecordedBooksCarousel(AppState s) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
-      height: 224,
+      height: 212,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -724,13 +779,14 @@ class _HomeTabState extends State<HomeTab> {
             ),
             borderRadius: BorderRadius.circular(20),
             child: Container(
-              width: 158,
+              width: 172,
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.65),
-                  width: 1.4,
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : const Color(0xFFE5E7EB),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -742,7 +798,7 @@ class _HomeTabState extends State<HomeTab> {
               ),
               child: Column(
                 children: [
-                  // Top visual area: stylized book cover + teacher badge + heart
+                  // Top visual area: teacher portrait + book cover side-by-side (Image 3 + Voice 6)
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.all(10),
@@ -761,23 +817,32 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                       child: Stack(
                         children: [
-                          Center(
-                            child: StylizedBookCover(
-                              title: book.title,
-                              subtitle:
-                                  '${toKurdishDigits(book.episodesCount)} ئەڵقە',
-                              color: book.accentColor,
-                              width: 86,
-                              height: 118,
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: TeacherAvatarBubble(
-                              name: book.instructor,
-                              size: 32,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              StylizedBookCover(
+                                title: book.title,
+                                subtitle:
+                                    '${toKurdishDigits(book.episodesCount)} ئەڵقە',
+                                color: book.accentColor,
+                                width: 72,
+                                height: 104,
+                              ),
+                              const SizedBox(width: 8),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TeacherAvatarBubble(
+                                    name: book.instructor,
+                                    size: 52,
+                                    colorStart: book.accentColor,
+                                    colorEnd: AppColors.teal900,
+                                  ),
+                                  const SizedBox(height: 6),
+                                ],
+                              ),
+                            ],
                           ),
                           Positioned(
                             top: 0,
@@ -792,16 +857,16 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     ),
                   ),
-                  // Golden-amber bottom bar matching Image 6
+                  // Clean bottom title strip matching Image 3
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
-                      vertical: 8,
+                      vertical: 10,
                     ),
-                    decoration: const BoxDecoration(
-                      color: AppColors.gold,
-                      borderRadius: BorderRadius.vertical(
+                    decoration: BoxDecoration(
+                      color: isDark ? AppColors.darkCard : Colors.white,
+                      borderRadius: const BorderRadius.vertical(
                         bottom: Radius.circular(18),
                       ),
                     ),
@@ -812,10 +877,10 @@ class _HomeTabState extends State<HomeTab> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: AppColors.teal900,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 12.5,
+                          style: TextStyle(
+                            color: isDark ? Colors.white : AppColors.teal800,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 13,
                           ),
                         ),
                         Text(
@@ -823,11 +888,9 @@ class _HomeTabState extends State<HomeTab> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppColors.teal900.withValues(alpha: 0.8),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 10.5,
-                          ),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                fontSize: 10.5,
+                              ),
                         ),
                       ],
                     ),
@@ -845,7 +908,7 @@ class _HomeTabState extends State<HomeTab> {
     final items =
         _showReelsInWebinarTab ? reelsContentList : webinarsContentList;
     return SizedBox(
-      height: _showReelsInWebinarTab ? 236 : 206,
+      height: _showReelsInWebinarTab ? 228 : 196,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -857,32 +920,51 @@ class _HomeTabState extends State<HomeTab> {
             onTap: () => openVideoPlayerSheet(context, s, v, playlist: items),
             borderRadius: BorderRadius.circular(20),
             child: Container(
-              width: _showReelsInWebinarTab ? 148 : 178,
+              width: _showReelsInWebinarTab ? 148 : 166,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: AppColors.gold.withValues(alpha: 0.65),
-                  width: 1.4,
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [v.colorStart, v.colorEnd],
-                ),
+                color: AppColors.teal800,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.teal900.withValues(alpha: 0.14),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 children: [
+                  // Top visual portrait/stage area matching Image 3 + Voice 6
                   Expanded(
-                    child: Padding(
+                    child: Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            v.colorStart.withValues(alpha: 0.25),
+                            AppColors.teal800,
+                          ],
+                        ),
+                      ),
                       child: Stack(
                         children: [
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: TeacherAvatarBubble(
-                              name: v.speaker,
-                              size: 32,
+                          Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TeacherAvatarBubble(
+                                  name: v.speaker,
+                                  size: 62,
+                                  colorStart: v.colorStart,
+                                  colorEnd: v.colorEnd,
+                                ),
+                              ],
                             ),
                           ),
                           Positioned(
@@ -895,24 +977,25 @@ class _HomeTabState extends State<HomeTab> {
                               size: 16,
                             ),
                           ),
-                          Center(
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
                             child: Container(
-                              width: 44,
-                              height: 44,
+                              width: 28,
+                              height: 28,
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: Colors.white.withValues(alpha: 0.22),
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white54),
                               ),
                               child: const Icon(
                                 Icons.play_arrow_rounded,
                                 color: Colors.white,
-                                size: 28,
+                                size: 18,
                               ),
                             ),
                           ),
                           Positioned(
-                            bottom: 0,
+                            bottom: 2,
                             left: 0,
                             child: Container(
                               padding: const EdgeInsets.symmetric(
@@ -920,14 +1003,14 @@ class _HomeTabState extends State<HomeTab> {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.black54,
+                                color: Colors.black45,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
                                 v.duration,
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 10,
+                                  fontSize: 9.5,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -937,16 +1020,17 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     ),
                   ),
+                  // Teal bottom strip with crisp white title (Image 3)
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
-                      vertical: 8,
+                      vertical: 10,
                     ),
                     decoration: const BoxDecoration(
-                      color: AppColors.gold,
+                      color: AppColors.teal800,
                       borderRadius: BorderRadius.vertical(
-                        bottom: Radius.circular(18),
+                        bottom: Radius.circular(20),
                       ),
                     ),
                     child: Column(
@@ -957,8 +1041,8 @@ class _HomeTabState extends State<HomeTab> {
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color: AppColors.teal900,
-                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
                             fontSize: 11.5,
                             height: 1.3,
                           ),
@@ -968,9 +1052,9 @@ class _HomeTabState extends State<HomeTab> {
                           v.speaker,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppColors.teal900.withValues(alpha: 0.8),
-                            fontWeight: FontWeight.w700,
+                          style: const TextStyle(
+                            color: AppColors.amber400,
+                            fontWeight: FontWeight.w600,
                             fontSize: 10,
                           ),
                         ),
@@ -1023,8 +1107,9 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildGuidanceCarousel(AppState s) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
-      height: 164,
+      height: 174,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -1037,92 +1122,131 @@ class _HomeTabState extends State<HomeTab> {
             borderRadius: BorderRadius.circular(20),
             child: Container(
               width: 248,
-              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
+                color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    g.color,
-                    Color.lerp(g.color, Colors.black, 0.45) ?? g.color,
-                  ],
+                border: Border.all(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : const Color(0xFFE5E7EB),
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: g.color.withValues(alpha: 0.25),
+                    color: Colors.black.withValues(alpha: 0.06),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(12),
+                  // Top visual thumbnail with play icon matching Image 3 + Voice 6
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(18),
                         ),
-                        child: Icon(g.icon, color: Colors.white, size: 20),
+                        gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [
+                            g.color,
+                            Color.lerp(g.color, AppColors.teal900, 0.45) ?? g.color,
+                          ],
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black38,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          g.duration,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            right: -12,
+                            bottom: -12,
+                            child: Icon(
+                              g.icon,
+                              size: 84,
+                              color: Colors.white.withValues(alpha: 0.14),
+                            ),
+                          ),
+                          Center(
+                            child: Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.25),
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white70),
+                              ),
+                              child: const Icon(
+                                Icons.play_arrow_rounded,
+                                color: Colors.white,
+                                size: 28,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: 8,
+                            child: FavoriteHeartButton(
+                              appState: s,
+                              favoriteKey: 'guidance:${g.id}',
+                              inactiveColor: Colors.white70,
+                              size: 16,
+                            ),
+                          ),
+                          Positioned(
+                            top: 8,
+                            right: 8,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.black45,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text(
+                                g.duration,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // Clean bottom title strip (Voice 6)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          g.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 12.5,
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                      FavoriteHeartButton(
-                        appState: s,
-                        favoriteKey: 'guidance:${g.id}',
-                        inactiveColor: Colors.white70,
-                        size: 16,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        g.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 13.5,
+                        Text(
+                          g.specialist,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: g.color,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 10.5,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        g.specialist,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: AppColors.amber400,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -1133,8 +1257,9 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  /// Bottom Action Grid matching Image 6 + Voice 3 & 8
+  /// Single Horizontal Scrollable Row matching Image 3 + Voice 3
   Widget _buildBottomActionStrip(AppState s) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final actions = [
       (
         'بابەتی نووسراو',
@@ -1172,167 +1297,56 @@ class _HomeTabState extends State<HomeTab> {
       ),
     ];
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final cols = constraints.maxWidth >= 700 ? 6 : 3;
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: cols,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: cols == 6 ? 1.05 : 1.08,
-            ),
-            itemCount: actions.length,
-            itemBuilder: (_, idx) {
-              final item = actions[idx];
-              return InkWell(
-                onTap: item.$3,
-                borderRadius: BorderRadius.circular(18),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: AppColors.teal800,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.teal900.withValues(alpha: 0.18),
-                        blurRadius: 8,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(item.$2, color: AppColors.gold, size: 30),
-                      const SizedBox(height: 8),
-                      Text(
-                        item.$1,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 11.5,
-                          height: 1.25,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildProjectsStrip() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
-      height: 158,
+      height: 104,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
-        itemCount: reboonProjectsList.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 12),
+        itemCount: actions.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (_, idx) {
-          final p = reboonProjectsList[idx];
+          final item = actions[idx];
           return InkWell(
-            onTap: () => openProjectDetailSheet(context, p),
-            borderRadius: BorderRadius.circular(20),
+            onTap: item.$3,
+            borderRadius: BorderRadius.circular(18),
             child: Container(
-              width: 246,
-              padding: const EdgeInsets.all(14),
+              width: 96,
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               decoration: BoxDecoration(
-                gradient: p.isFeatured
-                    ? const LinearGradient(
-                        colors: [AppColors.teal700, AppColors.teal800],
-                      )
-                    : null,
-                color: p.isFeatured
-                    ? null
-                    : (isDark ? AppColors.darkCard : Colors.white),
-                borderRadius: BorderRadius.circular(20),
+                color: isDark ? AppColors.darkCard : Colors.white,
+                borderRadius: BorderRadius.circular(18),
                 border: Border.all(
-                  color: p.isFeatured
-                      ? AppColors.teal400.withValues(alpha: 0.5)
-                      : (isDark
-                          ? Colors.white.withValues(alpha: 0.08)
-                          : const Color(0xFFE5E7EB)),
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : const Color(0xFFE5E7EB),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(p.icon, style: const TextStyle(fontSize: 22)),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: p.isFeatured
-                              ? AppColors.amber400
-                              : p.accentColor.withValues(alpha: 0.14),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          p.badge,
-                          style: TextStyle(
-                            color: p.isFeatured
-                                ? AppColors.teal900
-                                : p.accentColor,
-                            fontSize: 10.5,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                    ],
+                  Icon(
+                    item.$2,
+                    color: isDark ? AppColors.teal400 : AppColors.teal700,
+                    size: 28,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        p.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: p.isFeatured ? Colors.white : null,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 13.5,
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        p.desc,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: p.isFeatured
-                              ? Colors.white.withValues(alpha: 0.85)
-                              : Theme.of(context).textTheme.bodySmall?.color,
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 8),
                   Text(
-                    'زانیاری زیاتر ←',
+                    item.$1,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: p.isFeatured ? AppColors.amber400 : p.accentColor,
+                      color: isDark ? Colors.white : AppColors.teal900,
                       fontWeight: FontWeight.w800,
-                      fontSize: 11.5,
+                      fontSize: 10.5,
+                      height: 1.25,
                     ),
                   ),
                 ],

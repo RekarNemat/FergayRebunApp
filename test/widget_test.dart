@@ -50,7 +50,7 @@ void main() {
     // Switch to Academy tab (disambiguate bottom bar item vs drawer/card label)
     await tester.tap(find.text('ئەکادیمیا').last);
     await tester.pumpAndSettle();
-    expect(find.text('مەنهەجی گشتی هاوتەریب'), findsWidgets);
+    expect(find.text('مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)'), findsWidgets);
 
     // Switch to Specialized track
     await tester.tap(find.text('مەنهەجی پسپۆڕی (جیاواز)'));
@@ -98,8 +98,11 @@ void main() {
     await tester.tap(backBtn.first);
     await tester.pumpAndSettle();
 
-    // Open Settings via top Settings gear icon
-    await tester.tap(find.byIcon(Icons.settings_outlined));
+    // Settings gear icon was removed from top AppBar; open Settings via Drawer
+    expect(find.byIcon(Icons.settings_outlined), findsNothing);
+    await tester.tap(find.byIcon(Icons.menu_rounded));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('ڕێکخستنەکان'));
     await tester.pumpAndSettle();
     expect(find.text('ڕێکخستنەکان'), findsOneWidget);
     expect(find.text('ئاگادارکردنەوە (Notification)'), findsOneWidget);

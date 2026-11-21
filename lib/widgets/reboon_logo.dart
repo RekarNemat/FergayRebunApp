@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Calligraphic vertical pill emblem of "ڕێبوون" matching the attached brand mark
-/// in Image 2 (gold on dark teal) and Image 4 (dark teal on white circle).
+/// Official calligraphic vertical pill emblem of "ڕێبوون" using the authentic
+/// brand asset extracted from the official Reboon Organization logo.
 class ReboonEmblem extends StatelessWidget {
   final double height;
   final Color backgroundColor;
@@ -17,89 +17,24 @@ class ReboonEmblem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double width = height * 0.44;
-    return Container(
-      width: width,
+    final bool useGold =
+        backgroundColor.toARGB32() == AppColors.gold.toARGB32() ||
+        backgroundColor.toARGB32() == AppColors.amber500.toARGB32() ||
+        backgroundColor.toARGB32() == AppColors.amber400.toARGB32();
+    final String assetPath = useGold
+        ? 'assets/images/reboon_emblem_gold.png'
+        : 'assets/images/reboon_emblem_green.png';
+
+    return SizedBox(
+      width: height * 0.47,
       height: height,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(width * 0.48),
-      ),
-      child: CustomPaint(
-        painter: _ReboonCalligraphyPainter(strokeColor: strokeColor),
+      child: Image.asset(
+        assetPath,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.high,
       ),
     );
   }
-}
-
-class _ReboonCalligraphyPainter extends CustomPainter {
-  final Color strokeColor;
-
-  const _ReboonCalligraphyPainter({required this.strokeColor});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-
-    final paint = Paint()
-      ..color = strokeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = w * 0.13
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-
-    final fillPaint = Paint()
-      ..color = strokeColor
-      ..style = PaintingStyle.fill;
-
-    // Top calligraphic "ن" / crescent bowl
-    final topBowl = Path()
-      ..moveTo(w * 0.20, h * 0.14)
-      ..quadraticBezierTo(w * 0.18, h * 0.30, w * 0.52, h * 0.31)
-      ..quadraticBezierTo(w * 0.84, h * 0.30, w * 0.82, h * 0.15);
-    canvas.drawPath(topBowl, paint);
-    // Dot inside top bowl
-    canvas.drawCircle(Offset(w * 0.50, h * 0.18), w * 0.08, fillPaint);
-
-    // Middle interlocking "بوو" loops
-    final midWave = Path()
-      ..moveTo(w * 0.78, h * 0.43)
-      ..quadraticBezierTo(w * 0.54, h * 0.36, w * 0.32, h * 0.48)
-      ..quadraticBezierTo(w * 0.18, h * 0.56, w * 0.48, h * 0.60)
-      ..quadraticBezierTo(w * 0.82, h * 0.64, w * 0.66, h * 0.75)
-      ..quadraticBezierTo(w * 0.48, h * 0.84, w * 0.22, h * 0.76);
-    canvas.drawPath(midWave, paint);
-
-    // Secondary loop accent ("و" circle)
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(w * 0.36, h * 0.65),
-        width: w * 0.26,
-        height: h * 0.13,
-      ),
-      paint,
-    );
-
-    // Bottom "ڕ" tail + inverted caret ("v")
-    final bottomTail = Path()
-      ..moveTo(w * 0.78, h * 0.77)
-      ..quadraticBezierTo(w * 0.68, h * 0.90, w * 0.35, h * 0.91);
-    canvas.drawPath(bottomTail, paint);
-
-    final caret = Path()
-      ..moveTo(w * 0.44, h * 0.93)
-      ..lineTo(w * 0.53, h * 0.96)
-      ..lineTo(w * 0.62, h * 0.93);
-    canvas.drawPath(
-      caret,
-      paint..strokeWidth = w * 0.09,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _ReboonCalligraphyPainter oldDelegate) =>
-      oldDelegate.strokeColor != strokeColor;
 }
 
 class TeacherAvatarBubble extends StatelessWidget {
