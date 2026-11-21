@@ -35,13 +35,13 @@ jobs:
         run: flutter pub get
 
       - name: Build Web Release
-        run: flutter build web --release --base-href "/FergayRebunApp/"
+        run: flutter build web --release --base-href "/FergayRebunApp/" --pwa-strategy=none
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: build/web
 
