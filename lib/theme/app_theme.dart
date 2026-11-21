@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color teal900 = Color(0xFF134E4A);
-  static const Color teal800 = Color(0xFF115E59);
-  static const Color teal700 = Color(0xFF0F766E);
-  static const Color teal600 = Color(0xFF0D9488);
-  static const Color teal500 = Color(0xFF14B8A6);
-  static const Color teal400 = Color(0xFF2DD4BF);
-  static const Color teal100 = Color(0xFFCCFBF1);
-  static const Color teal50 = Color(0xFFF0FDFA);
+  static const Color teal900 = Color(0xFF0E4447);
+  static const Color teal800 = Color(0xFF15686C);
+  static const Color teal700 = Color(0xFF1A7A7F);
+  static const Color teal600 = Color(0xFF218E93);
+  static const Color teal500 = Color(0xFF2AA3A8);
+  static const Color teal400 = Color(0xFF4CC3C8);
+  static const Color teal100 = Color(0xFFD6EFF0);
+  static const Color teal50 = Color(0xFFF0F9F9);
 
   static const Color gold = Color(0xFFE5AC18);
   static const Color amber500 = Color(0xFFF59E0B);
   static const Color amber400 = Color(0xFFFBBF24);
   static const Color amber600 = Color(0xFFD97706);
 
-  static const Color lightBg = Color(0xFFFDFBF7);
+  static const Color lightBg = Color(0xFFF6F2F2);
   static const Color darkBg = Color(0xFF111827);
   static const Color darkCard = Color(0xFF1F2937);
   static const Color darkSurface = Color(0xFF374151);

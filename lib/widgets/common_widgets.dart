@@ -53,6 +53,8 @@ class SectionTitleHeader extends StatelessWidget {
       child: Row(
         children: [
           Flexible(
+            flex: 5,
+            fit: FlexFit.loose,
             child: Text(
               title,
               maxLines: 1,
@@ -61,21 +63,34 @@ class SectionTitleHeader extends StatelessWidget {
                 fontWeight: FontWeight.w800,
                 color: theme.brightness == Brightness.dark
                     ? Colors.white
-                    : AppColors.teal900,
+                    : AppColors.teal800,
               ),
             ),
           ),
           const SizedBox(width: 8),
           Container(
-            width: 6,
-            height: 6,
+            width: 5,
+            height: 5,
             decoration: BoxDecoration(
-              color: dotColor ?? AppColors.gold,
+              color: dotColor ??
+                  (theme.brightness == Brightness.dark
+                      ? AppColors.teal400
+                      : AppColors.teal800),
               shape: BoxShape.circle,
             ),
           ),
-          const Spacer(),
-          if (actionLabel != null && onActionTap != null)
+          const SizedBox(width: 8),
+          Expanded(
+            child: Container(
+              height: 1,
+              color: (theme.brightness == Brightness.dark
+                      ? AppColors.teal400
+                      : AppColors.teal800)
+                  .withValues(alpha: 0.35),
+            ),
+          ),
+          if (actionLabel != null && onActionTap != null) ...[
+            const SizedBox(width: 8),
             InkWell(
               onTap: onActionTap,
               borderRadius: BorderRadius.circular(10),
@@ -106,6 +121,7 @@ class SectionTitleHeader extends StatelessWidget {
                 ),
               ),
             ),
+          ],
         ],
       ),
     );

@@ -625,17 +625,23 @@ class _HomeTabState extends State<HomeTab> {
   }
 
   Widget _buildDailyLearningCard(DailyLearningEntry daily) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 14),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.teal800,
-        borderRadius: BorderRadius.circular(24),
+        color: isDark ? AppColors.darkCard : Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.08)
+              : const Color(0xFFECE8E8),
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.teal900.withValues(alpha: 0.2),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -654,16 +660,16 @@ class _HomeTabState extends State<HomeTab> {
               children: [
                 Text(
                   daily.title,
-                  style: const TextStyle(
-                    color: AppColors.amber400,
+                  style: TextStyle(
+                    color: isDark ? AppColors.teal400 : AppColors.teal800,
                     fontWeight: FontWeight.w800,
-                    fontSize: 15,
+                    fontSize: 15.5,
                   ),
                 ),
                 const SizedBox(width: 6),
-                const Icon(
+                Icon(
                   Icons.autorenew_rounded,
-                  color: AppColors.amber400,
+                  color: isDark ? AppColors.teal400 : AppColors.teal800,
                   size: 15,
                 ),
               ],
@@ -672,8 +678,8 @@ class _HomeTabState extends State<HomeTab> {
             Text(
               daily.arabicQuote,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: isDark ? Colors.white : AppColors.teal800,
                 fontWeight: FontWeight.w700,
                 fontSize: 13.5,
                 height: 1.65,
@@ -684,7 +690,9 @@ class _HomeTabState extends State<HomeTab> {
               '${daily.kurdishExplanation} — ${daily.source}',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.85),
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.78)
+                    : AppColors.teal800.withValues(alpha: 0.8),
                 fontSize: 11.5,
               ),
             ),
@@ -694,10 +702,24 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
+  static const Set<String> _scienceAssetIds = {
+    'tafseer',
+    'hadith',
+    'aqeedah',
+    'fiqh',
+    'nahw',
+    'usul_fiqh',
+    'seerah',
+    'sarf',
+    'logic',
+    'balagha',
+  };
+
   Widget _buildSciencesStrip() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconTint = isDark ? AppColors.teal400 : AppColors.teal800;
     return SizedBox(
-      height: 100,
+      height: 94,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -705,39 +727,42 @@ class _HomeTabState extends State<HomeTab> {
         separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (_, idx) {
           final item = homeSciencesList[idx];
+          final hasExactAsset = _scienceAssetIds.contains(item.id);
           return InkWell(
             onTap: () => _openScienceHub(item),
             borderRadius: BorderRadius.circular(18),
-            child: SizedBox(
-              width: 72,
+            child: Container(
+              width: 80,
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.darkCard : Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkCard : Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isDark
-                            ? Colors.white.withValues(alpha: 0.1)
-                            : const Color(0xFFE5E7EB),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.06),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
+                  if (hasExactAsset)
+                    Image.asset(
+                      'assets/images/icons/sci_${item.id}.png',
+                      width: 40,
+                      height: 40,
+                      color: iconTint,
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.high,
+                    )
+                  else
+                    Icon(
                       item.icon,
-                      color: isDark ? AppColors.teal400 : AppColors.teal800,
-                      size: 26,
+                      color: iconTint,
+                      size: 36,
                     ),
-                  ),
                   const SizedBox(height: 6),
                   Text(
                     item.arabicName,
@@ -745,8 +770,8 @@ class _HomeTabState extends State<HomeTab> {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: isDark ? Colors.white : AppColors.teal900,
-                      fontWeight: FontWeight.w700,
+                      color: iconTint,
+                      fontWeight: FontWeight.w800,
                       fontSize: 10.5,
                     ),
                   ),
@@ -1257,28 +1282,29 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  /// Single Horizontal Scrollable Row matching Image 3 + Voice 3
+  /// Single Horizontal Scrollable Row matching Image 2 & Image 4
   Widget _buildBottomActionStrip(AppState s) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconTint = isDark ? AppColors.teal400 : AppColors.teal800;
     final actions = [
       (
         'بابەتی نووسراو',
-        Icons.edit_document,
+        'assets/images/icons/act_articles.png',
         () => openArticlesListSheet(context, s),
       ),
       (
         'خۆهەڵسەنگاندن',
-        Icons.fact_check_rounded,
+        'assets/images/icons/act_self_assess.png',
         () => openSelfAssessmentSheet(context),
       ),
       (
         'تاقیکردنەوەی سەربەخۆ',
-        Icons.assignment_turned_in_rounded,
+        'assets/images/icons/act_quiz.png',
         () => openIndependentQuizSheet(context),
       ),
       (
         'پەخشی ڕاستەوخۆ',
-        Icons.live_tv_rounded,
+        'assets/images/icons/act_live.png',
         () => openLiveStreamSheet(
               context,
               s,
@@ -1287,18 +1313,18 @@ class _HomeTabState extends State<HomeTab> {
       ),
       (
         'مامۆستایانی فێرگە',
-        Icons.school_rounded,
+        'assets/images/icons/act_teachers.png',
         () => openAcademyTeachersSheet(context, s),
       ),
       (
         'سەرچاوە بەسوودەکان',
-        Icons.library_books_rounded,
+        'assets/images/icons/act_resources.png',
         () => openUsefulResourcesSheet(context),
       ),
     ];
 
     return SizedBox(
-      height: 104,
+      height: 106,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -1315,15 +1341,10 @@ class _HomeTabState extends State<HomeTab> {
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.08)
-                      : const Color(0xFFE5E7EB),
-                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 8,
+                    color: Colors.black.withValues(alpha: 0.06),
+                    blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),
                 ],
@@ -1331,22 +1352,25 @@ class _HomeTabState extends State<HomeTab> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  Image.asset(
                     item.$2,
-                    color: isDark ? AppColors.teal400 : AppColors.teal700,
-                    size: 28,
+                    width: 42,
+                    height: 42,
+                    color: iconTint,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   Text(
                     item.$1,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: isDark ? Colors.white : AppColors.teal900,
+                      color: iconTint,
                       fontWeight: FontWeight.w800,
                       fontSize: 10.5,
-                      height: 1.25,
+                      height: 1.2,
                     ),
                   ),
                 ],
