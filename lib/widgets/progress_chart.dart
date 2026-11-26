@@ -1,28 +1,70 @@
 import 'package:flutter/material.dart';
+import '../data/courses_data.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 
 class AcademyProgressChart extends StatelessWidget {
   final AppState appState;
+  final String track; // 'general' or 'specific'
 
-  const AcademyProgressChart({super.key, required this.appState});
+  const AcademyProgressChart({
+    super.key,
+    required this.appState,
+    this.track = 'general',
+  });
+
+  int _calcCourseSetPct(Iterable<String> courseKeys, {int fallbackBase = 0}) {
+    int doneEps = 0;
+    int totalEps = 0;
+    for (final key in courseKeys) {
+      final detail = courseCatalog[key];
+      final count = detail?.episodes.length ?? 6;
+      totalEps += count;
+      doneEps += appState.getCompletedEpisodes(key).length;
+    }
+    if (totalEps == 0) return fallbackBase;
+    final dynamicPct = ((doneEps / totalEps) * 100).round();
+    return dynamicPct > 0 ? dynamicPct.clamp(0, 100) : fallbackBase;
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bool isGeneral = track == 'general';
 
-    // Dynamically boost percentages slightly as user completes episodes
-    final completedCount = appState.lessonProgress.values
-        .fold<int>(0, (sum, set) => sum + set.length);
-    final boost = (completedCount * 4).clamp(0, 45);
+    final String chartTitle = isGeneral
+        ? 'ئاماری پێشکەوتنی مەنهەجی گشتی'
+        : 'ئاماری پێشکەوتنی مەنهەجی پسپۆڕی';
 
-    final items = [
-      ('عەقیدە', 100),
-      ('فیقهـ', (45 + boost).clamp(0, 100)),
-      ('فەرموودە', (80 + (boost ~/ 2)).clamp(0, 100)),
-      ('زمان', (20 + boost).clamp(0, 100)),
-      ('سیرە', (10 + boost).clamp(0, 100)),
-    ];
+    final String chartSubtitle = isGeneral
+        ? 'ڕێژەی پێشکەوتنت لە هەر ٥ ئاستەکەی مەنهەجی گشتیدا'
+        : 'ڕێژەی پێشکەوتنت لە هەر ٥ زانستەکەی مەنهەجی پسپۆڕیدا';
+
+    final List<(String, int)> items = isGeneral
+        ? generalLevelsData.map((lvl) {
+            final isDone = appState.completedLevels[lvl.levelNumber] == true;
+            final pct = isDone
+                ? 100
+                : _calcCourseSetPct(
+                    lvl.courses.map((c) => c.courseKey),
+                    fallbackBase: lvl.levelNumber == 1 ? 35 : 0,
+                  );
+            return ('ئاستی ${toKurdishDigits(lvl.levelNumber)}', pct);
+          }).toList()
+        : specializedSciencesData.asMap().entries.map((entry) {
+            final idx = entry.key;
+            final sci = entry.value;
+            const shortLabels = ['عەقیدە', 'فیقهـ', 'فەرموودە', 'تەفسیر', 'زمان'];
+            const fallbackBases = [55, 30, 40, 20, 15];
+            final pct = _calcCourseSetPct(
+              sci.stages.map((st) => st.courseKey),
+              fallbackBase: idx < fallbackBases.length ? fallbackBases[idx] : 10,
+            );
+            return (
+              idx < shortLabels.length ? shortLabels[idx] : 'بەشی ${toKurdishDigits(idx + 1)}',
+              pct,
+            );
+          }).toList();
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -46,22 +88,35 @@ class AcademyProgressChart extends StatelessWidget {
                   color: AppColors.teal500.withValues(alpha: 0.14),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Text('📊', style: TextStyle(fontSize: 18)),
+                child: const Icon(
+                  Icons.bar_chart_rounded,
+                  color: AppColors.teal800,
+                  size: 22,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: Text(
-                  'ئاماری پێشکەوتنی گشتی',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      chartTitle,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
+                    ),
+                    Text(
+                      chartSubtitle,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 18),
           SizedBox(
-            height: 200,
+            height: 196,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: items.map((item) {
@@ -69,7 +124,7 @@ class AcademyProgressChart extends StatelessWidget {
                 final pct = item.$2;
                 return Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -78,7 +133,7 @@ class AcademyProgressChart extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w800,
-                            color: isDark ? AppColors.teal400 : AppColors.teal700,
+                            color: isDark ? AppColors.teal400 : AppColors.teal800,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -91,29 +146,36 @@ class AcademyProgressChart extends StatelessWidget {
                               curve: Curves.easeOutCubic,
                               builder: (context, value, _) {
                                 return FractionallySizedBox(
-                                  heightFactor: value.clamp(0.05, 1.0),
-                                  widthFactor: 0.65,
+                                  heightFactor: value.clamp(0.06, 1.0),
+                                  widthFactor: 0.62,
                                   child: Container(
                                     decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.vertical(
                                         top: Radius.circular(8),
                                       ),
-                                      gradient: const LinearGradient(
+                                      gradient: LinearGradient(
                                         begin: Alignment.bottomCenter,
                                         end: Alignment.topCenter,
-                                        colors: [
-                                          AppColors.teal700,
-                                          AppColors.teal400,
-                                        ],
+                                        colors: pct == 0
+                                            ? [
+                                                Colors.grey.shade400,
+                                                Colors.grey.shade300,
+                                              ]
+                                            : const [
+                                                AppColors.teal800,
+                                                AppColors.teal400,
+                                              ],
                                       ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: AppColors.teal500
-                                              .withValues(alpha: 0.25),
-                                          blurRadius: 6,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                      ],
+                                      boxShadow: pct == 0
+                                          ? null
+                                          : [
+                                              BoxShadow(
+                                                color: AppColors.teal500
+                                                    .withValues(alpha: 0.25),
+                                                blurRadius: 6,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
                                     ),
                                   ),
                                 );
@@ -143,4 +205,3 @@ class AcademyProgressChart extends StatelessWidget {
     );
   }
 }
-

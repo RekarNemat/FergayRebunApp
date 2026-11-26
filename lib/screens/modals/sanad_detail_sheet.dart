@@ -335,27 +335,10 @@ class _SanadDetailSheetState extends State<SanadDetailSheet> {
   }
 
   Future<void> _pickExamDateTime() async {
-    final now = DateTime.now();
-    final date = await showDatePicker(
-      context: context,
-      initialDate: now.add(const Duration(days: 2)),
-      firstDate: now,
-      lastDate: now.add(const Duration(days: 90)),
-    );
-    if (date == null || !mounted) return;
-    final time = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 20, minute: 30),
-    );
-    if (time == null || !mounted) return;
+    final picked = await _showKurdishDateTimePicker(context);
+    if (picked == null || !mounted) return;
     setState(() {
-      _scheduledExamDate = DateTime(
-        date.year,
-        date.month,
-        date.day,
-        time.hour,
-        time.minute,
-      );
+      _scheduledExamDate = picked;
     });
     showReboonToast(context, 'ژوانگەی تاقیکردنەوەی ڕاستەوخۆ بە زووم جێگیرکرا 📅');
   }
@@ -940,7 +923,7 @@ class _SanadDetailSheetState extends State<SanadDetailSheet> {
               const SizedBox(height: 10),
               Text(
                 _voiceSubmitted
-                    ? '📩 تۆماری دەنگی نێردرا! لە پشکنیندایە لەلایەن مامۆستای سەنەدداری ئەکادیمیا.'
+                    ? '📩 تۆماری دەنگی نێردرا! لە پشکنیندایە لەلایەن مامۆستای سەنەدبەخشی ئەکادیمیا.'
                     : (_isRecording
                         ? '🎙️ دەنگەکەت لە تۆمارکردندایە... خوێندنەوەکە بڵێ.'
                         : (_hasRecorded
@@ -1027,6 +1010,429 @@ class _SubTabPill extends StatelessWidget {
         ),
         onSelected: (_) => onTap(),
       ),
+    );
+  }
+}
+
+/// 100% Central Kurdish (Sorani) Date & Time Picker (Voices 15 & 16):
+/// Zero Arabic strings — uses Kurdish month names, weekdays, بەیانی/ئێوارە, پەسەندکردن/پاشگەزبوونەوە.
+Future<DateTime?> _showKurdishDateTimePicker(BuildContext context) async {
+  final now = DateTime.now();
+  DateTime selectedDate = DateTime(now.year, now.month, now.day).add(const Duration(days: 2));
+  DateTime displayedMonth = DateTime(selectedDate.year, selectedDate.month, 1);
+  int hour12 = 8;
+  int minute = 30;
+  bool isEvening = true; // ئێوارە vs بەیانی
+
+  const kuMonths = [
+    'کانوونی دووەم',
+    'شوبات',
+    'ئازار',
+    'نیسان',
+    'ئایار',
+    'حوزەیران',
+    'تەممووز',
+    'ئاب',
+    'ئەیلوول',
+    'تشرینی یەکەم',
+    'تشرینی دووەم',
+    'کانوونی یەکەم',
+  ];
+  // Weekdays starting Saturday (شەممە -> هەینی)
+  const kuWeekdays = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'هـ'];
+
+  return showDialog<DateTime>(
+    context: context,
+    builder: (ctx) {
+      final isDark = Theme.of(ctx).brightness == Brightness.dark;
+      return StatefulBuilder(
+        builder: (ctx, setModalState) {
+          final daysInMonth =
+              DateTime(displayedMonth.year, displayedMonth.month + 1, 0).day;
+          // Dart weekday: Mon=1..Sat=6,Sun=7 -> map Sat=0, Sun=1, Mon=2..Fri=6
+          final firstWeekday =
+              (DateTime(displayedMonth.year, displayedMonth.month, 1).weekday + 1) % 7;
+          final minDay = DateTime(now.year, now.month, now.day);
+
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 380),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Header
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: AppColors.teal800.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.calendar_month_rounded,
+                            color: AppColors.teal800,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Expanded(
+                          child: Text(
+                            'هەڵبژاردنی بەروار و کات',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Selected summary bar
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.teal800,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Text(
+                        '${toKurdishDigits(selectedDate.day)}ی ${kuMonths[selectedDate.month - 1]}ی ${toKurdishDigits(selectedDate.year)}  •  ${toKurdishDigits(hour12)}:${toKurdishDigits(minute.toString().padLeft(2, '0'))} ${isEvening ? 'ئێوارە' : 'بەیانی'}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13.5,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Month navigation
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            final prev = DateTime(
+                              displayedMonth.year,
+                              displayedMonth.month - 1,
+                              1,
+                            );
+                            if (prev.year > now.year ||
+                                (prev.year == now.year && prev.month >= now.month)) {
+                              setModalState(() => displayedMonth = prev);
+                            }
+                          },
+                          icon: const Icon(Icons.chevron_left_rounded),
+                        ),
+                        Text(
+                          '${kuMonths[displayedMonth.month - 1]} ${toKurdishDigits(displayedMonth.year)}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 14.5,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setModalState(() {
+                              displayedMonth = DateTime(
+                                displayedMonth.year,
+                                displayedMonth.month + 1,
+                                1,
+                              );
+                            });
+                          },
+                          icon: const Icon(Icons.chevron_right_rounded),
+                        ),
+                      ],
+                    ),
+                    // Weekday row
+                    Row(
+                      children: kuWeekdays
+                          .map(
+                            (w) => Expanded(
+                              child: Center(
+                                child: Text(
+                                  w,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 12,
+                                    color: isDark ? AppColors.teal400 : AppColors.teal800,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    const SizedBox(height: 6),
+                    // Calendar days grid
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 7,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                      ),
+                      itemCount: firstWeekday + daysInMonth,
+                      itemBuilder: (_, idx) {
+                        if (idx < firstWeekday) return const SizedBox.shrink();
+                        final day = idx - firstWeekday + 1;
+                        final dateObj =
+                            DateTime(displayedMonth.year, displayedMonth.month, day);
+                        final isPast = dateObj.isBefore(minDay);
+                        final isSelected = selectedDate.year == dateObj.year &&
+                            selectedDate.month == dateObj.month &&
+                            selectedDate.day == dateObj.day;
+                        return InkWell(
+                          onTap: isPast
+                              ? null
+                              : () => setModalState(() => selectedDate = dateObj),
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? AppColors.teal800
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              toKurdishDigits(day),
+                              style: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : (isPast ? Colors.grey.shade400 : null),
+                                fontWeight: isSelected
+                                    ? FontWeight.w800
+                                    : FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    const Divider(height: 22),
+                    // Kurdish Time Picker Section
+                    const Text(
+                      'هەڵبژاردنی کات:',
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Hour selector
+                        _KurdishTimeStepper(
+                          label: 'کاتژمێر',
+                          valueText: toKurdishDigits(hour12.toString().padLeft(2, '0')),
+                          onInc: () => setModalState(
+                            () => hour12 = hour12 == 12 ? 1 : hour12 + 1,
+                          ),
+                          onDec: () => setModalState(
+                            () => hour12 = hour12 == 1 ? 12 : hour12 - 1,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            ':',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        // Minute selector (step by 15 min)
+                        _KurdishTimeStepper(
+                          label: 'خولەک',
+                          valueText: toKurdishDigits(minute.toString().padLeft(2, '0')),
+                          onInc: () => setModalState(
+                            () => minute = (minute + 15) % 60,
+                          ),
+                          onDec: () => setModalState(
+                            () => minute = (minute - 15 + 60) % 60,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        // Kurdish بەیانی / ئێوارە toggle
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () => setModalState(() => isEvening = false),
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                width: 64,
+                                padding: const EdgeInsets.symmetric(vertical: 7),
+                                decoration: BoxDecoration(
+                                  color: !isEvening
+                                      ? AppColors.teal800
+                                      : (isDark
+                                          ? AppColors.darkSurface
+                                          : const Color(0xFFF3F4F6)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'بەیانی',
+                                  style: TextStyle(
+                                    color: !isEvening ? Colors.white : null,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            InkWell(
+                              onTap: () => setModalState(() => isEvening = true),
+                              borderRadius: BorderRadius.circular(10),
+                              child: Container(
+                                width: 64,
+                                padding: const EdgeInsets.symmetric(vertical: 7),
+                                decoration: BoxDecoration(
+                                  color: isEvening
+                                      ? AppColors.teal800
+                                      : (isDark
+                                          ? AppColors.darkSurface
+                                          : const Color(0xFFF3F4F6)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'ئێوارە',
+                                  style: TextStyle(
+                                    color: isEvening ? Colors.white : null,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.pop(ctx),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text('پاشگەزبوونەوە'),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: () {
+                              final h24 = isEvening
+                                  ? (hour12 == 12 ? 12 : hour12 + 12)
+                                  : (hour12 == 12 ? 0 : hour12);
+                              Navigator.pop(
+                                ctx,
+                                DateTime(
+                                  selectedDate.year,
+                                  selectedDate.month,
+                                  selectedDate.day,
+                                  h24,
+                                  minute,
+                                ),
+                              );
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.teal800,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text('پەسەندکردن'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    },
+  );
+}
+
+class _KurdishTimeStepper extends StatelessWidget {
+  final String label;
+  final String valueText;
+  final VoidCallback onInc;
+  final VoidCallback onDec;
+
+  const _KurdishTimeStepper({
+    required this.label,
+    required this.valueText,
+    required this.onInc,
+    required this.onDec,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Column(
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.labelSmall,
+        ),
+        const SizedBox(height: 4),
+        Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkSurface : const Color(0xFFF3F4F6),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            children: [
+              InkWell(
+                onTap: onInc,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  child: Icon(Icons.keyboard_arrow_up_rounded, size: 20),
+                ),
+              ),
+              Text(
+                valueText,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.teal800,
+                ),
+              ),
+              InkWell(
+                onTap: onDec,
+                borderRadius:
+                    const BorderRadius.vertical(bottom: Radius.circular(12)),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  child: Icon(Icons.keyboard_arrow_down_rounded, size: 20),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

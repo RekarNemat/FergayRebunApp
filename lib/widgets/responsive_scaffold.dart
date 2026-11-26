@@ -280,13 +280,19 @@ class _NavItem extends StatelessWidget {
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Image.asset(
-                      assetPath,
-                      width: iconSize,
-                      height: iconSize,
-                      color: tint,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.high,
+                    child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: Center(
+                        child: Image.asset(
+                          assetPath,
+                          width: iconSize,
+                          height: iconSize,
+                          color: tint,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.high,
+                        ),
+                      ),
                     ),
                   ),
                   if (badgeCount != null)

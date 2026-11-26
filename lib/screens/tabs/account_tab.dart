@@ -130,6 +130,149 @@ class _AccountTabState extends State<AccountTab> {
     showReboonToast(context, 'هەژمارەکەت دروست کرا! بەخێربێیت');
   }
 
+  Future<void> _handleGoogleSignIn() async {
+    final customGmailCtrl = TextEditingController();
+    final selected = await showModalBottomSheet<(String, String)>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (ctx) {
+        final isDark = Theme.of(ctx).brightness == Brightness.dark;
+        return Padding(
+          padding: EdgeInsets.fromLTRB(
+            20,
+            18,
+            20,
+            MediaQuery.of(ctx).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  const _GoogleGLogo(size: 26),
+                  const SizedBox(width: 10),
+                  const Expanded(
+                    child: Text(
+                      'چوونەژوورەوە لە ڕێگەی گووگڵ (Gmail)',
+                      style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    icon: const Icon(Icons.close_rounded),
+                  ),
+                ],
+              ),
+              Text(
+                'هەژماری گووگڵەکەت هەڵبژێرە بۆ چوونەژوورەوەی خێرا بێ نووسینی وشەی نهێنی:',
+                style: Theme.of(ctx).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 14),
+              InkWell(
+                onTap: () => Navigator.pop(
+                  ctx,
+                  ('محەمەد ڕێبوونی', 'm.reboon@gmail.com'),
+                ),
+                borderRadius: BorderRadius.circular(14),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: isDark ? AppColors.darkSurface : const Color(0xFFF9FAFB),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: AppColors.teal800.withValues(alpha: 0.25),
+                    ),
+                  ),
+                  child: const Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundColor: AppColors.teal800,
+                        child: Text(
+                          'م',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'محەمەد ڕێبوونی',
+                              style: TextStyle(fontWeight: FontWeight.w800),
+                            ),
+                            Text(
+                              'm.reboon@gmail.com',
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(Icons.check_circle_outline_rounded,
+                          color: AppColors.teal800),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: customGmailCtrl,
+                keyboardType: TextInputType.emailAddress,
+                textDirection: TextDirection.ltr,
+                decoration: const InputDecoration(
+                  labelText: 'یان ئیمەیڵی Gmailی خۆت بنووسە',
+                  hintText: 'example@gmail.com',
+                  prefixIcon: Icon(Icons.mail_outline_rounded),
+                ),
+              ),
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                onPressed: () {
+                  final mail = customGmailCtrl.text.trim();
+                  if (mail.isEmpty || !mail.contains('@')) {
+                    Navigator.pop(ctx, ('محەمەد ڕێبوونی', 'm.reboon@gmail.com'));
+                  } else {
+                    final namePart = mail.split('@').first;
+                    Navigator.pop(ctx, (namePart, mail));
+                  }
+                },
+                icon: const Icon(Icons.login_rounded, size: 18),
+                label: const Text('بەردەوامبوون لەگەڵ گووگڵ'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.teal800,
+                  padding: const EdgeInsets.symmetric(vertical: 13),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    customGmailCtrl.dispose();
+    if (selected == null || !mounted) return;
+    widget.appState.signUp(
+      nameInput: selected.$1,
+      usernameInput: selected.$2.split('@').first,
+      emailInput: selected.$2,
+      passwordInput: 'google_oauth',
+    );
+    _syncControllersFromState();
+    showReboonToast(
+      context,
+      'بە سەرکەوتوویی بە هەژماری گووگڵ (${selected.$2}) چوویتەژوورەوە ✓',
+    );
+  }
+
   void _saveProfile() {
     if (_firstCtrl.text.trim().isEmpty) {
       showReboonToast(context, 'ناوی یەکەم پێویستە');
@@ -290,7 +433,81 @@ class _AccountTabState extends State<AccountTab> {
             ],
           ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 16),
+        // Prominent One-Tap Google Sign-In Section (Voices 9 & 10 + Photo 11-27-02)
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkCard : Colors.white,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.08)
+                  : const Color(0xFFE5E7EB),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              const Text(
+                'چوونەژوورەوەی خێرا لە ڕێگەی گووگڵەوە',
+                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'بێ پێویستی نووسینی ناو و تێپەڕەوشە، ڕاستەوخۆ بە جیمەیڵەکەت داخڵ ببە',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: _handleGoogleSignIn,
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: isDark ? AppColors.darkSurface : Colors.white,
+                    foregroundColor: isDark ? Colors.white : const Color(0xFF1F2937),
+                    side: BorderSide(
+                      color: isDark
+                          ? Colors.white24
+                          : const Color(0xFFD1D5DB),
+                      width: 1.4,
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _GoogleGLogo(size: 22),
+                      SizedBox(width: 10),
+                      Flexible(
+                        child: Text(
+                          'چوونەژوورەوە لە ڕێگەی گووگڵ (Google)',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 13.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
         Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -913,5 +1130,57 @@ class _ProfileSectionCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Crisp multicolored Google "G" emblem drawn cleanly at any DPI
+class _GoogleGLogo extends StatelessWidget {
+  final double size;
+  const _GoogleGLogo({this.size = 24});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(painter: _GoogleGPainter()),
+    );
+  }
+}
+
+class _GoogleGPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final w = size.width;
+    final stroke = w * 0.2;
+    final rect = Rect.fromLTWH(stroke / 2, stroke / 2, w - stroke, w - stroke);
+    Paint arcPaint(Color c) => Paint()
+      ..color = c
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = stroke
+      ..strokeCap = StrokeCap.butt;
+
+    // Red top-left arc
+    canvas.drawArc(rect, -2.55, 1.85, false, arcPaint(const Color(0xFFEA4335)));
+    // Yellow left arc
+    canvas.drawArc(rect, 2.45, 1.28, false, arcPaint(const Color(0xFFFBBC05)));
+    // Green bottom arc
+    canvas.drawArc(rect, 0.72, 1.73, false, arcPaint(const Color(0xFF34A853)));
+    // Blue right-bottom arc
+    canvas.drawArc(rect, -0.05, 0.82, false, arcPaint(const Color(0xFF4285F4)));
+    // Blue horizontal bar
+    final barPaint = Paint()
+      ..color = const Color(0xFF4285F4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = stroke
+      ..strokeCap = StrokeCap.butt;
+    canvas.drawLine(
+      Offset(w * 0.50, w * 0.50),
+      Offset(w - stroke * 0.12, w * 0.50),
+      barPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 

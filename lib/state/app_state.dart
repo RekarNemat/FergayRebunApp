@@ -15,7 +15,7 @@ class AppState extends ChangeNotifier {
   // Appearance & Settings
   bool isDarkMode = false;
   double fontSize = 16.0;
-  String fontFamily = 'NotoSansArabic';
+  String fontFamily = 'Rabar';
 
   // Notifications Settings
   bool pushNotifications = true;
@@ -103,7 +103,7 @@ class AppState extends ChangeNotifier {
     _prefs = await SharedPreferences.getInstance();
     isDarkMode = _prefs?.getBool('isDarkMode') ?? false;
     fontSize = _prefs?.getDouble('fontSize') ?? 16.0;
-    fontFamily = _prefs?.getString('fontFamily') ?? 'NotoSansArabic';
+    fontFamily = _prefs?.getString('fontFamily') ?? 'Rabar';
     pushNotifications = _prefs?.getBool('pushNotif') ?? true;
     emailNotifications = _prefs?.getBool('emailNotif') ?? false;
     dailyReminder = _prefs?.getBool('dailyReminder') ?? true;

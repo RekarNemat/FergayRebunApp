@@ -59,48 +59,6 @@ class _AcademyTeachersSheet extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.amber500.withValues(alpha: 0.16),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                '🎓 مامۆستایانی لێهاتوو',
-                                style: TextStyle(
-                                  color: AppColors.amber600,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.teal500.withValues(alpha: 0.14),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Text(
-                                'ئیجازەی فەرمی',
-                                style: TextStyle(
-                                  color: AppColors.teal700,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
                         const Text(
                           'مامۆستایانی فێرگەی ڕێبوون',
                           style: TextStyle(
@@ -108,8 +66,9 @@ class _AcademyTeachersSheet extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
+                        const SizedBox(height: 3),
                         Text(
-                          'پێڕستی مامۆستایانی سەنەدداری فێرگە کە شەرحی پەرتووکەکانیان ئەنجامداوە',
+                          'لیستی مامۆستایانی سەنەدبەخشی فێرگەی ڕێبوون کە شەرحی پەرتووکەکانیان کردووە',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -134,11 +93,14 @@ class _AcademyTeachersSheet extends StatelessWidget {
                       crossAxisCount: cols,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      mainAxisExtent: 292,
+                      mainAxisExtent: 318,
                     ),
                     itemCount: academyTeachersDatabase.length,
                     itemBuilder: (_, idx) {
                       final t = academyTeachersDatabase[idx];
+                      final portraitAsset = idx.isEven
+                          ? 'assets/images/webinar_teacher.png'
+                          : 'assets/images/teacher_shakhawan.png';
                       return Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
@@ -149,17 +111,52 @@ class _AcademyTeachersSheet extends StatelessWidget {
                                 ? Colors.white.withValues(alpha: 0.08)
                                 : const Color(0xFFE5E7EB),
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                TeacherAvatarBubble(
-                                  name: t.name,
-                                  size: 52,
-                                  colorStart: t.colorStart,
-                                  colorEnd: t.colorEnd,
+                                Container(
+                                  width: 74,
+                                  height: 74,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(18),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topRight,
+                                      end: Alignment.bottomLeft,
+                                      colors: [
+                                        t.colorStart.withValues(alpha: 0.2),
+                                        t.colorEnd.withValues(alpha: 0.1),
+                                      ],
+                                    ),
+                                    border: Border.all(
+                                      color: AppColors.teal800.withValues(alpha: 0.25),
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image.asset(
+                                      portraitAsset,
+                                      fit: BoxFit.cover,
+                                      alignment: Alignment.topCenter,
+                                      filterQuality: FilterQuality.high,
+                                      errorBuilder: (_, _, _) => TeacherAvatarBubble(
+                                        name: t.name,
+                                        size: 70,
+                                        colorStart: t.colorStart,
+                                        colorEnd: t.colorEnd,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(

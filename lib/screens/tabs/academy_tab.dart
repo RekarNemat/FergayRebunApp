@@ -9,7 +9,7 @@ import '../../widgets/reboon_logo.dart';
 import '../modals/lesson_study_sheet.dart';
 import '../modals/quiz_sheet.dart';
 
-class AcademyTab extends StatelessWidget {
+class AcademyTab extends StatefulWidget {
   final AppState appState;
   final VoidCallback onGoToAccount;
 
@@ -20,8 +20,24 @@ class AcademyTab extends StatelessWidget {
   });
 
   @override
+  State<AcademyTab> createState() => _AcademyTabState();
+}
+
+class _AcademyTabState extends State<AcademyTab> {
+  int? _selectedGeneralLevel;
+  String? _selectedSpecializedId;
+
+  static const List<IconData> _levelIcons = [
+    Icons.looks_one_rounded,
+    Icons.looks_two_rounded,
+    Icons.looks_3_rounded,
+    Icons.looks_4_rounded,
+    Icons.looks_5_rounded,
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    final s = appState;
+    final s = widget.appState;
     return AnimatedBuilder(
       animation: s,
       builder: (context, _) {
@@ -33,7 +49,7 @@ class AcademyTab extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 18, 16, 32),
               children: [
-                // Header Title matching HTML
+                // Header Title
                 Text(
                   'ئەکادیمیای ڕێبوون',
                   textAlign: TextAlign.center,
@@ -49,7 +65,7 @@ class AcademyTab extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Track Toggle Buttons matching HTML
+                // Track Toggle Buttons
                 Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 10,
@@ -58,12 +74,18 @@ class AcademyTab extends StatelessWidget {
                     _TrackToggleButton(
                       label: 'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)',
                       active: isGeneral,
-                      onTap: () => s.setAcademyTrack('general'),
+                      onTap: () {
+                        setState(() => _selectedGeneralLevel = null);
+                        s.setAcademyTrack('general');
+                      },
                     ),
                     _TrackToggleButton(
                       label: 'مەنهەجی پسپۆڕی (جیاواز)',
                       active: !isGeneral,
-                      onTap: () => s.setAcademyTrack('specific'),
+                      onTap: () {
+                        setState(() => _selectedSpecializedId = null);
+                        s.setAcademyTrack('specific');
+                      },
                     ),
                   ],
                 ),
@@ -81,7 +103,35 @@ class AcademyTab extends StatelessWidget {
     );
   }
 
+  /// Clean structured General Track (Voice 3):
+  /// 1) Overview shows 5 clean clickable Level Cards + dedicated General Track Progress Chart.
+  /// 2) Tapping a Level opens ONLY that level's courses cleanly with a Back button!
   Widget _buildGeneralTrack(BuildContext context, AppState s) {
+    if (_selectedGeneralLevel != null) {
+      final lvl = generalLevelsData.firstWhere(
+        (l) => l.levelNumber == _selectedGeneralLevel,
+        orElse: () => generalLevelsData.first,
+      );
+      final unlocked = s.isLevelUnlocked(lvl.levelNumber);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton.icon(
+            onPressed: () => setState(() => _selectedGeneralLevel = null),
+            icon: const Icon(Icons.arrow_back_rounded, size: 18),
+            label: const Text('گەڕانەوە بۆ لیستی ئاستەکان'),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.teal800,
+              textStyle: const TextStyle(fontWeight: FontWeight.w800),
+            ),
+          ),
+          const SizedBox(height: 8),
+          _buildGeneralLevelDetailCard(context, s, lvl, unlocked),
+        ],
+      );
+    }
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         // Track Overview Header
@@ -103,7 +153,7 @@ class AcademyTab extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                 ),
                 child: const Text(
-                  '٥ ئاستی ناچاری / بە قفڵ بەستراوە 🔒',
+                  '٥ ئاستی پلەبەپلە / ناچاری 🔒',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 11,
@@ -122,7 +172,7 @@ class AcademyTab extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               Text(
-                'ئەم ڕێڕەوە بۆ فێرخوازانی سەرەتا، مامناوەند و پێشکەوتوو داڕێژراوە؛ تێیدا هەر ١٢ زانستە شەرعییەکە بە شێوازێکی تەنسیقکراو لە ٥ ئاستی پلەبەپلەدا دەخوێندرێن.',
+                'ئەم ڕێڕەوە بۆ فێرخوازانی سەرەتا، مامناوەند و پێشکەوتوو داڕێژراوە؛ کلیکی هەر ئاستێک بکە بۆ بینینی وانەکانی ئەو ئاستە بە جیا و بە ڕێکوپێکی.',
                 style: TextStyle(
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 13,
@@ -130,8 +180,10 @@ class AcademyTab extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               ElevatedButton.icon(
-                onPressed: () =>
-                    openBookPdfPreviewSheet(context, 'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)'),
+                onPressed: () => openBookPdfPreviewSheet(
+                  context,
+                  'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)',
+                ),
                 icon: const Icon(Icons.download_rounded, size: 18),
                 label: const Text('داگرتنی گشتی مەنهەج بە PDF'),
                 style: ElevatedButton.styleFrom(
@@ -147,20 +199,128 @@ class AcademyTab extends StatelessWidget {
         ),
         const SizedBox(height: 18),
 
-        // 5 Mandatory Levels
+        // 5 Clean Clickable Level Selector Cards (Voice 3)
         ...generalLevelsData.map((lvl) {
           final unlocked = s.isLevelUnlocked(lvl.levelNumber);
-          return _buildGeneralLevelCard(context, s, lvl, unlocked);
+          final iconData = _levelIcons[(lvl.levelNumber - 1).clamp(0, 4)];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: InkWell(
+              onTap: () {
+                setState(() => _selectedGeneralLevel = lvl.levelNumber);
+              },
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.darkCard : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: unlocked
+                        ? lvl.badgeColor.withValues(alpha: 0.45)
+                        : Colors.grey.withValues(alpha: 0.25),
+                    width: unlocked ? 1.5 : 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: (unlocked ? lvl.badgeColor : Colors.grey)
+                            .withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Icon(
+                        unlocked ? iconData : Icons.lock_outline_rounded,
+                        color: unlocked ? lvl.badgeColor : Colors.grey,
+                        size: 28,
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 4,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 9,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: lvl.badgeColor.withValues(alpha: 0.14),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  lvl.badgeText,
+                                  style: TextStyle(
+                                    color: lvl.badgeColor,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                unlocked ? '🔓 کراوەیە' : '🔒 بە قفڵ بەستراوە',
+                                style: TextStyle(
+                                  color: unlocked
+                                      ? AppColors.emerald600
+                                      : Colors.grey,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            lvl.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${toKurdishDigits(lvl.courses.length)} وانەی سەرەکی • تاقیکردنەوە و PDF',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                      color: unlocked ? AppColors.teal800 : Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         }),
 
-        const SizedBox(height: 8),
-        // Progress Chart
-        AcademyProgressChart(appState: s),
+        const SizedBox(height: 10),
+        // Separate Progress Chart dedicated to General Track (Voice 2)
+        AcademyProgressChart(appState: s, track: 'general'),
       ],
     );
   }
 
-  Widget _buildGeneralLevelCard(
+  Widget _buildGeneralLevelDetailCard(
     BuildContext context,
     AppState s,
     GeneralLevelData lvl,
@@ -168,7 +328,7 @@ class AcademyTab extends StatelessWidget {
   ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Opacity(
-      opacity: unlocked ? 1.0 : 0.62,
+      opacity: unlocked ? 1.0 : 0.72,
       child: Container(
         margin: const EdgeInsets.only(bottom: 18),
         padding: const EdgeInsets.all(18),
@@ -177,53 +337,35 @@ class AcademyTab extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: unlocked
-                ? (lvl.levelNumber == 1
-                    ? AppColors.teal500
-                    : lvl.badgeColor.withValues(alpha: 0.5))
+                ? lvl.badgeColor.withValues(alpha: 0.5)
                 : Colors.grey.withValues(alpha: 0.3),
-            width: lvl.levelNumber == 1 ? 2 : 1.2,
+            width: 1.5,
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Level Header
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 3,
-                        ),
-                        decoration: BoxDecoration(
-                          color: lvl.badgeColor.withValues(alpha: 0.14),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          lvl.badgeText,
-                          style: TextStyle(
-                            color: lvl.badgeColor,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        '${lvl.title} ${unlocked ? '(ناچاری / 🔓 کراوەیە)' : '(ناچاری / 🔒 بە قفڵ بەستراوە)'}',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
-                    ],
-                  ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              decoration: BoxDecoration(
+                color: lvl.badgeColor.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                lvl.badgeText,
+                style: TextStyle(
+                  color: lvl.badgeColor,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 11,
                 ),
-              ],
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '${lvl.title} ${unlocked ? '(ناچاری / 🔓 کراوەیە)' : '(ناچاری / 🔒 بە قفڵ بەستراوە)'}',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
             ),
             const SizedBox(height: 12),
             Wrap(
@@ -272,7 +414,7 @@ class AcademyTab extends StatelessWidget {
                   icon: const Icon(Icons.quiz_rounded, size: 16),
                   label: const Text('✍️ تاقیکردنەوەی ئاست'),
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.teal700,
+                    backgroundColor: AppColors.teal800,
                     textStyle: const TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
@@ -286,7 +428,7 @@ class AcademyTab extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Responsive Grid of the 4 Courses in this level (Voice 8: book visual + teacher below!)
+            // Responsive Grid of the 4 Courses in this level
             LayoutBuilder(
               builder: (context, constraints) {
                 final cols = constraints.maxWidth >= 780
@@ -326,7 +468,7 @@ class AcademyTab extends StatelessWidget {
                           context,
                           s,
                           c.courseKey,
-                          onOpenAccountTab: onGoToAccount,
+                          onOpenAccountTab: widget.onGoToAccount,
                         );
                       },
                       onOpenPdf: () {
@@ -350,83 +492,38 @@ class AcademyTab extends StatelessWidget {
     );
   }
 
+  /// Clean structured Specialized Track (Voices 2 & 3):
+  /// 1) Overview shows 5 clean clickable Science Cards + dedicated Specialized Track Progress Chart.
+  /// 2) Tapping a Science opens ONLY its 4 stages cleanly with a Back button!
   Widget _buildSpecializedTrack(BuildContext context, AppState s) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Column(
-      children: [
-        // Specialized Header
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.teal700, AppColors.teal800],
-            ),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.teal500.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                child: const Text(
-                  '٥ زانستی سەرەکی / ٤ قۆناغ لە هەریەکەیاندا',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'مەنهەجی پسپۆڕی (ڕێڕەوی جیاواز)',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'ئەم ڕێڕەوە تایبەتە بەو فێرخوازانەی دەیانەوێت بە شێوازێکی یەکجار قووڵ و ئەکادیمی لە زانستە شەرعییەکاندا لێکۆڵینەوە بکەن.',
-                style: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.9),
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 14),
-              ElevatedButton.icon(
-                onPressed: () =>
-                    openBookPdfPreviewSheet(context, 'مەنهەجی پسپۆڕی (ڕێڕەوی جیاواز)'),
-                icon: const Icon(Icons.download_rounded, size: 18),
-                label: const Text('داگرتنی گشتی مەنهەج بە PDF'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: AppColors.teal900,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 18),
 
-        // 5 Sciences x 4 Stages
-        ...specializedSciencesData.map((sci) {
-          return Container(
+    if (_selectedSpecializedId != null) {
+      final sci = specializedSciencesData.firstWhere(
+        (sc) => sc.id == _selectedSpecializedId,
+        orElse: () => specializedSciencesData.first,
+      );
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextButton.icon(
+            onPressed: () => setState(() => _selectedSpecializedId = null),
+            icon: const Icon(Icons.arrow_back_rounded, size: 18),
+            label: const Text('گەڕانەوە بۆ لیستی زانستە پسپۆڕییەکان'),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.teal800,
+              textStyle: const TextStyle(fontWeight: FontWeight.w800),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
             margin: const EdgeInsets.only(bottom: 18),
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: isDark ? AppColors.darkCard : Colors.white,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: sci.color.withValues(alpha: 0.32),
+                color: sci.color.withValues(alpha: 0.35),
               ),
             ),
             child: Column(
@@ -471,8 +568,7 @@ class AcademyTab extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     OutlinedButton.icon(
-                      onPressed: () =>
-                          openBookPdfPreviewSheet(context, sci.title),
+                      onPressed: () => openBookPdfPreviewSheet(context, sci.title),
                       icon: const Icon(Icons.picture_as_pdf_rounded, size: 16),
                       label: const Text('داگرتنی PDFی زانست'),
                       style: OutlinedButton.styleFrom(
@@ -487,7 +583,7 @@ class AcademyTab extends StatelessWidget {
                       icon: const Icon(Icons.quiz_rounded, size: 16),
                       label: const Text('✍️ تاقیکردنەوەی زانست'),
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.teal700,
+                        backgroundColor: AppColors.teal800,
                         textStyle: const TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w700,
@@ -528,7 +624,7 @@ class AcademyTab extends StatelessWidget {
                             context,
                             s,
                             st.courseKey,
-                            onOpenAccountTab: onGoToAccount,
+                            onOpenAccountTab: widget.onGoToAccount,
                           ),
                           onOpenPdf: () =>
                               openBookPdfPreviewSheet(context, st.courseKey),
@@ -539,8 +635,149 @@ class AcademyTab extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        // Specialized Header
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [AppColors.teal700, AppColors.teal800],
+            ),
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.teal500.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: const Text(
+                  '٥ زانستی سەرەکی / ٤ قۆناغ لە هەریەکەیاندا',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'مەنهەجی پسپۆڕی (ڕێڕەوی جیاواز)',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'ئەم ڕێڕەوە تایبەتە بەو فێرخوازانەی دەیانەوێت بە شێوازێکی قووڵ و ئەکادیمی لە زانستێکی دیاریکراودا پسپۆڕ بن؛ هەر زانستێک هەڵبژێرە بۆ بینینی قۆناغەکانی.',
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 14),
+              ElevatedButton.icon(
+                onPressed: () => openBookPdfPreviewSheet(
+                  context,
+                  'مەنهەجی پسپۆڕی (ڕێڕەوی جیاواز)',
+                ),
+                icon: const Icon(Icons.download_rounded, size: 18),
+                label: const Text('داگرتنی گشتی مەنهەج بە PDF'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: AppColors.teal900,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 18),
+
+        // 5 Clean Clickable Science Selector Cards
+        ...specializedSciencesData.map((sci) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: InkWell(
+              onTap: () => setState(() => _selectedSpecializedId = sci.id),
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.darkCard : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: sci.color.withValues(alpha: 0.35),
+                    width: 1.3,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.04),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: sci.color.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(sci.emoji, style: const TextStyle(fontSize: 25)),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            sci.title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            sci.subtitle,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                      color: AppColors.teal800,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         }),
+
+        const SizedBox(height: 10),
+        // Separate Progress Chart dedicated to Specialized Track (Voice 2)
+        AcademyProgressChart(appState: s, track: 'specific'),
       ],
     );
   }
@@ -566,14 +803,14 @@ class _TrackToggleButton extends StatelessWidget {
         duration: const Duration(milliseconds: 220),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         decoration: BoxDecoration(
-          color: active ? AppColors.teal700 : Colors.transparent,
+          color: active ? AppColors.teal800 : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: AppColors.teal700, width: 2),
+          border: Border.all(color: AppColors.teal800, width: 2),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: active ? Colors.white : AppColors.teal700,
+            color: active ? Colors.white : AppColors.teal800,
             fontWeight: FontWeight.w800,
             fontSize: 13,
           ),
@@ -583,8 +820,6 @@ class _TrackToggleButton extends StatelessWidget {
   }
 }
 
-/// Course Card enhanced per Voice 8:
-/// Includes a corner book cover visual + teacher avatar & name underneath + favorite heart!
 class _CourseVisualCard extends StatelessWidget {
   final AppState appState;
   final String courseKey;
@@ -634,7 +869,6 @@ class _CourseVisualCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Top visual banner: teacher portrait + book cover + favorite heart (Voice 8)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
@@ -796,4 +1030,3 @@ class _CourseVisualCard extends StatelessWidget {
     );
   }
 }
-

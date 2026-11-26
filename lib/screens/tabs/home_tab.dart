@@ -6,7 +6,6 @@ import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
-import '../../widgets/reboon_logo.dart';
 import '../modals/independent_quiz_sheet.dart';
 import '../modals/lesson_study_sheet.dart';
 import '../modals/live_stream_sheet.dart';
@@ -38,7 +37,6 @@ class _HomeTabState extends State<HomeTab> {
   final PageController _bannerCtrl = PageController(viewportFraction: 1.0);
   int _bannerPage = 0;
   int _dailyIndex = 0;
-  bool _showReelsInWebinarTab = false;
 
   @override
   void dispose() {
@@ -280,67 +278,10 @@ class _HomeTabState extends State<HomeTab> {
                 _buildRecordedBooksCarousel(s),
                 const SizedBox(height: 24),
 
-                // 5. وێبینار & کورتە ڤیدیۆ (Image 6 + Voice 6 + HTML Webinars/Reels)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          'وێبینار',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.white
-                                    : AppColors.teal900,
-                              ),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        width: 6,
-                        height: 6,
-                        decoration: const BoxDecoration(
-                          color: AppColors.gold,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                      const Spacer(),
-                      ChoiceChip(
-                        label: const Text('وێبینار'),
-                        visualDensity: VisualDensity.compact,
-                        selected: !_showReelsInWebinarTab,
-                        selectedColor: AppColors.teal700,
-                        labelStyle: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: !_showReelsInWebinarTab ? Colors.white : null,
-                        ),
-                        onSelected: (_) =>
-                            setState(() => _showReelsInWebinarTab = false),
-                      ),
-                      const SizedBox(width: 4),
-                      ChoiceChip(
-                        label: const Text('کورتە ڤیدیۆ'),
-                        visualDensity: VisualDensity.compact,
-                        selected: _showReelsInWebinarTab,
-                        selectedColor: AppColors.teal700,
-                        labelStyle: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: _showReelsInWebinarTab ? Colors.white : null,
-                        ),
-                        onSelected: (_) =>
-                            setState(() => _showReelsInWebinarTab = true),
-                      ),
-                    ],
-                  ),
-                ),
+                // 5. وێبینار (Exact PSD mockup — removed short videos toggle per Voice 12)
+                const SectionTitleHeader(title: 'وێبینار'),
                 const SizedBox(height: 12),
-                _buildWebinarsOrReelsCarousel(s),
+                _buildWebinarsCarousel(s),
                 const SizedBox(height: 24),
 
                 // 6. کتێبخانە (Image 6 + HTML 29-book PDF library)
@@ -392,14 +333,12 @@ class _HomeTabState extends State<HomeTab> {
                     fit: StackFit.expand,
                     children: [
                       Image.asset(
-                        'assets/images/hero_library.jpg',
+                        'assets/images/hero_library_hd.png',
                         fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Container(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [AppColors.teal800, AppColors.teal900],
-                            ),
-                          ),
+                        filterQuality: FilterQuality.high,
+                        errorBuilder: (_, _, _) => Image.asset(
+                          'assets/images/hero_library.jpg',
+                          fit: BoxFit.cover,
                         ),
                       ),
                       Container(
@@ -748,31 +687,40 @@ class _HomeTabState extends State<HomeTab> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (hasExactAsset)
-                    Image.asset(
-                      'assets/images/icons/sci_${item.id}.png',
-                      width: 40,
-                      height: 40,
-                      color: iconTint,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.high,
-                    )
-                  else
-                    Icon(
-                      item.icon,
-                      color: iconTint,
-                      size: 36,
+                  SizedBox(
+                    height: 44,
+                    child: Center(
+                      child: hasExactAsset
+                          ? Image.asset(
+                              'assets/images/icons/sci_${item.id}.png',
+                              width: 40,
+                              height: 40,
+                              color: iconTint,
+                              fit: BoxFit.contain,
+                              filterQuality: FilterQuality.high,
+                            )
+                          : Icon(
+                              item.icon,
+                              color: iconTint,
+                              size: 36,
+                            ),
                     ),
-                  const SizedBox(height: 6),
-                  Text(
-                    item.arabicName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: iconTint,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 10.5,
+                  ),
+                  const SizedBox(height: 5),
+                  SizedBox(
+                    height: 20,
+                    child: Center(
+                      child: Text(
+                        item.arabicName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: iconTint,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 10.5,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -784,10 +732,15 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
+  static const List<String> _shariaBookAssets = [
+    'assets/images/sharia_book_1.png',
+    'assets/images/sharia_book_2.png',
+  ];
+
   Widget _buildRecordedBooksCarousel(AppState s) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
-      height: 212,
+      height: 222,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -795,6 +748,7 @@ class _HomeTabState extends State<HomeTab> {
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (_, idx) {
           final book = featuredRecordedBooks[idx];
+          final cardAsset = _shariaBookAssets[idx % _shariaBookAssets.length];
           return InkWell(
             onTap: () => openLessonStudySheet(
               context,
@@ -804,120 +758,179 @@ class _HomeTabState extends State<HomeTab> {
             ),
             borderRadius: BorderRadius.circular(20),
             child: Container(
-              width: 172,
+              width: 176,
+              padding: const EdgeInsets.fromLTRB(6, 6, 6, 10),
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.08)
-                      : const Color(0xFFE5E7EB),
-                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 10,
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: Column(
                 children: [
-                  // Top visual area: teacher portrait + book cover side-by-side (Image 3 + Voice 6)
+                  // Exact PSD visual photo (book cover + teacher portrait)
                   Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(18),
-                        ),
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            book.accentColor.withValues(alpha: 0.16),
-                            isDark ? AppColors.darkSurface : AppColors.teal50,
-                          ],
-                        ),
-                      ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
                       child: Stack(
+                        fit: StackFit.expand,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              StylizedBookCover(
-                                title: book.title,
-                                subtitle:
-                                    '${toKurdishDigits(book.episodesCount)} ئەڵقە',
-                                color: book.accentColor,
-                                width: 72,
-                                height: 104,
-                              ),
-                              const SizedBox(width: 8),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TeacherAvatarBubble(
-                                    name: book.instructor,
-                                    size: 52,
-                                    colorStart: book.accentColor,
-                                    colorEnd: AppColors.teal900,
-                                  ),
-                                  const SizedBox(height: 6),
-                                ],
-                              ),
-                            ],
+                          Image.asset(
+                            cardAsset,
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.high,
                           ),
                           Positioned(
-                            top: 0,
-                            right: 0,
-                            child: FavoriteHeartButton(
-                              appState: s,
-                              favoriteKey: 'course:${book.key}',
-                              size: 16,
+                            top: 6,
+                            right: 6,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.85),
+                                shape: BoxShape.circle,
+                              ),
+                              child: FavoriteHeartButton(
+                                appState: s,
+                                favoriteKey: 'course:${book.key}',
+                                size: 15,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  // Clean bottom title strip matching Image 3
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 10,
+                  const SizedBox(height: 8),
+                  Text(
+                    book.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: isDark ? Colors.white : AppColors.teal800,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13.5,
                     ),
-                    decoration: BoxDecoration(
-                      color: isDark ? AppColors.darkCard : Colors.white,
-                      borderRadius: const BorderRadius.vertical(
-                        bottom: Radius.circular(18),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          book.title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: isDark ? Colors.white : AppColors.teal800,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 13,
-                          ),
+                  ),
+                  Text(
+                    book.instructor,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 10.5,
                         ),
-                        Text(
-                          book.instructor,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                fontSize: 10.5,
-                              ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// Exact PSD Webinar Cards: transparent teacher bust popping out above the #15686C teal card!
+  Widget _buildWebinarsCarousel(AppState s) {
+    final items = webinarsContentList;
+    return SizedBox(
+      height: 214,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.fromLTRB(14, 18, 14, 8),
+        itemCount: items.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
+        itemBuilder: (_, idx) {
+          final v = items[idx];
+          return InkWell(
+            onTap: () => openVideoPlayerSheet(context, s, v, playlist: items),
+            borderRadius: BorderRadius.circular(18),
+            child: SizedBox(
+              width: 152,
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.bottomCenter,
+                children: [
+                  // Rounded teal card body
+                  Container(
+                    height: 158,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      color: AppColors.teal800,
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.teal900.withValues(alpha: 0.2),
+                          blurRadius: 12,
+                          offset: const Offset(0, 5),
                         ),
                       ],
+                    ),
+                  ),
+                  // Transparent cutout teacher bust popping out above top edge (exact PSD!)
+                  Positioned(
+                    top: -16,
+                    left: 6,
+                    right: 6,
+                    child: SizedBox(
+                      height: 130,
+                      child: Image.asset(
+                        'assets/images/webinar_teacher.png',
+                        fit: BoxFit.contain,
+                        alignment: Alignment.bottomCenter,
+                        filterQuality: FilterQuality.high,
+                      ),
+                    ),
+                  ),
+                  // Subtle teal bottom gradient for crisp white title readability
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 11),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(18),
+                        ),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppColors.teal800.withValues(alpha: 0.0),
+                            AppColors.teal800.withValues(alpha: 0.94),
+                            AppColors.teal800,
+                          ],
+                          stops: const [0.0, 0.35, 1.0],
+                        ),
+                      ),
+                      child: Text(
+                        v.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12,
+                          height: 1.3,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Favorite heart top-left inside card
+                  Positioned(
+                    top: 34,
+                    left: 6,
+                    child: FavoriteHeartButton(
+                      appState: s,
+                      favoriteKey: 'video:${v.id}',
+                      inactiveColor: Colors.white70,
+                      size: 15,
                     ),
                   ),
                 ],
@@ -929,171 +942,11 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Widget _buildWebinarsOrReelsCarousel(AppState s) {
-    final items =
-        _showReelsInWebinarTab ? reelsContentList : webinarsContentList;
-    return SizedBox(
-      height: _showReelsInWebinarTab ? 228 : 196,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        itemCount: items.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 12),
-        itemBuilder: (_, idx) {
-          final v = items[idx];
-          return InkWell(
-            onTap: () => openVideoPlayerSheet(context, s, v, playlist: items),
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              width: _showReelsInWebinarTab ? 148 : 166,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: AppColors.teal800,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.teal900.withValues(alpha: 0.14),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  // Top visual portrait/stage area matching Image 3 + Voice 6
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(20),
-                        ),
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            v.colorStart.withValues(alpha: 0.25),
-                            AppColors.teal800,
-                          ],
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TeacherAvatarBubble(
-                                  name: v.speaker,
-                                  size: 62,
-                                  colorStart: v.colorStart,
-                                  colorEnd: v.colorEnd,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            child: FavoriteHeartButton(
-                              appState: s,
-                              favoriteKey: 'video:${v.id}',
-                              inactiveColor: Colors.white70,
-                              size: 16,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              width: 28,
-                              height: 28,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.22),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.play_arrow_rounded,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 2,
-                            left: 0,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 7,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.black45,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                v.duration,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9.5,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // Teal bottom strip with crisp white title (Image 3)
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 10,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: AppColors.teal800,
-                      borderRadius: BorderRadius.vertical(
-                        bottom: Radius.circular(20),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          v.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 11.5,
-                            height: 1.3,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          v.speaker,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppColors.amber400,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 10,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
+  static const List<String> _libraryCoverAssets = [
+    'assets/images/book_cover_1.png',
+    'assets/images/book_cover_2.png',
+    'assets/images/book_cover_3.png',
+  ];
 
   Widget _buildLibraryPreviewStrip(AppState s) {
     final previewBooks = [
@@ -1106,7 +959,7 @@ class _HomeTabState extends State<HomeTab> {
     ];
 
     return SizedBox(
-      height: 162,
+      height: 186,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -1114,16 +967,30 @@ class _HomeTabState extends State<HomeTab> {
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (_, idx) {
           final b = previewBooks[idx];
+          final coverAsset = _libraryCoverAssets[idx % _libraryCoverAssets.length];
           return InkWell(
             onTap: () => openPdfBookDetailSheet(context, s, b),
             borderRadius: BorderRadius.circular(14),
-            child: StylizedBookCover(
-              title: b.title,
-              subtitle: b.author,
-              color: b.coverColor,
-              width: 114,
-              height: 158,
-              badge: '${toKurdishDigits(b.pages)} ل',
+            child: Container(
+              width: 124,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.14),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: Image.asset(
+                  coverAsset,
+                  fit: BoxFit.cover,
+                  filterQuality: FilterQuality.high,
+                ),
+              ),
             ),
           );
         },
@@ -1131,10 +998,15 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
+  static const List<String> _guidanceAssets = [
+    'assets/images/guidance_1.png',
+    'assets/images/guidance_2.png',
+  ];
+
   Widget _buildGuidanceCarousel(AppState s) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return SizedBox(
-      height: 174,
+      height: 182,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -1142,72 +1014,40 @@ class _HomeTabState extends State<HomeTab> {
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (_, idx) {
           final g = guidanceVideosList[idx];
+          final thumbAsset = _guidanceAssets[idx % _guidanceAssets.length];
           return InkWell(
             onTap: () => openGuidanceVideoSheet(context, s, g),
             borderRadius: BorderRadius.circular(20),
             child: Container(
-              width: 248,
+              width: 264,
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.08)
-                      : const Color(0xFFE5E7EB),
-                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.06),
-                    blurRadius: 10,
+                    color: Colors.black.withValues(alpha: 0.08),
+                    blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: Column(
                 children: [
-                  // Top visual thumbnail with play icon matching Image 3 + Voice 6
                   Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(18),
-                        ),
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            g.color,
-                            Color.lerp(g.color, AppColors.teal900, 0.45) ?? g.color,
-                          ],
-                        ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(20),
                       ),
                       child: Stack(
+                        fit: StackFit.expand,
                         children: [
-                          Positioned(
-                            right: -12,
-                            bottom: -12,
-                            child: Icon(
-                              g.icon,
-                              size: 84,
-                              color: Colors.white.withValues(alpha: 0.14),
-                            ),
+                          Image.asset(
+                            thumbAsset,
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.high,
                           ),
-                          Center(
-                            child: Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.25),
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white70),
-                              ),
-                              child: const Icon(
-                                Icons.play_arrow_rounded,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ),
+                          Container(
+                            color: Colors.black.withValues(alpha: 0.14),
                           ),
                           Positioned(
                             top: 8,
@@ -1215,7 +1055,7 @@ class _HomeTabState extends State<HomeTab> {
                             child: FavoriteHeartButton(
                               appState: s,
                               favoriteKey: 'guidance:${g.id}',
-                              inactiveColor: Colors.white70,
+                              inactiveColor: Colors.white,
                               size: 16,
                             ),
                           ),
@@ -1228,7 +1068,7 @@ class _HomeTabState extends State<HomeTab> {
                                 vertical: 3,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.black45,
+                                color: Colors.black54,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
@@ -1245,9 +1085,8 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                     ),
                   ),
-                  // Clean bottom title strip (Voice 6)
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1265,7 +1104,7 @@ class _HomeTabState extends State<HomeTab> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: g.color,
+                            color: isDark ? AppColors.teal400 : AppColors.teal800,
                             fontWeight: FontWeight.w700,
                             fontSize: 10.5,
                           ),
@@ -1282,7 +1121,7 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  /// Single Horizontal Scrollable Row matching Image 2 & Image 4
+  /// Single Horizontal Scrollable Row matching PSD with strictly uniform icon baseline alignment (Voice 14)
   Widget _buildBottomActionStrip(AppState s) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final iconTint = isDark ? AppColors.teal400 : AppColors.teal800;
@@ -1324,10 +1163,10 @@ class _HomeTabState extends State<HomeTab> {
     ];
 
     return SizedBox(
-      height: 106,
+      height: 112,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         itemCount: actions.length,
         separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (_, idx) {
@@ -1336,7 +1175,7 @@ class _HomeTabState extends State<HomeTab> {
             onTap: item.$3,
             borderRadius: BorderRadius.circular(18),
             child: Container(
-              width: 96,
+              width: 100,
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkCard : Colors.white,
@@ -1350,27 +1189,37 @@ class _HomeTabState extends State<HomeTab> {
                 ],
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    item.$2,
-                    width: 42,
-                    height: 42,
-                    color: iconTint,
-                    fit: BoxFit.contain,
-                    filterQuality: FilterQuality.high,
+                  // Fixed-height icon container so ALL 6 icons sit at exact same vertical level!
+                  SizedBox(
+                    height: 46,
+                    child: Center(
+                      child: Image.asset(
+                        item.$2,
+                        width: 42,
+                        height: 42,
+                        color: iconTint,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.high,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    item.$1,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: iconTint,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 10.5,
-                      height: 1.2,
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        item.$1,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: iconTint,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 10.5,
+                          height: 1.2,
+                        ),
+                      ),
                     ),
                   ),
                 ],

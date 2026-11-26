@@ -28,6 +28,22 @@ flutter:
     - assets/images/icons/
 
   fonts:
+    - family: Rabar
+      fonts:
+        - asset: assets/fonts/Rabar.ttf
+          weight: 400
+        - asset: assets/fonts/Rabar.ttf
+          weight: 600
+        - asset: assets/fonts/Rabar.ttf
+          weight: 700
+        - asset: assets/fonts/Rabar.ttf
+          weight: 800
+    - family: NRT
+      fonts:
+        - asset: assets/fonts/NRT-Reg.ttf
+          weight: 400
+        - asset: assets/fonts/NRT-Bd.ttf
+          weight: 700
     - family: NotoSansArabic
       fonts:
         - asset: assets/fonts/NotoSansArabic-Regular.ttf

@@ -228,15 +228,37 @@ class _SettingsPageState extends State<SettingsPage> {
                         trailing: SizedBox(
                           width: 155,
                           child: DropdownButton<String>(
-                            value: s.fontFamily,
+                            value: const [
+                              'Rabar',
+                              'NRT',
+                              'NotoSansArabic',
+                              'IBMPlexSansArabic',
+                              'System',
+                            ].contains(s.fontFamily)
+                                ? s.fontFamily
+                                : 'Rabar',
                             isExpanded: true,
                             underline: const SizedBox.shrink(),
                             borderRadius: BorderRadius.circular(12),
                             items: const [
                               DropdownMenuItem(
+                                value: 'Rabar',
+                                child: Text(
+                                  'فۆنتی ڕابەر (دیزاینی فەرمی)',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: 'NRT',
+                                child: Text(
+                                  'فۆنتی NRT کوردی',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              DropdownMenuItem(
                                 value: 'NotoSansArabic',
                                 child: Text(
-                                  'فۆنتی ڕێبوون (ستایل)',
+                                  'Noto Sans Arabic',
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
