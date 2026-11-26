@@ -65,27 +65,29 @@ class _AcademyTabState extends State<AcademyTab> {
                 ),
                 const SizedBox(height: 16),
 
-                // Track Toggle Buttons
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 10,
-                  runSpacing: 10,
+                // Track Toggle Buttons: side-by-side Row with clean short names (Voices 4 & 6)
+                Row(
                   children: [
-                    _TrackToggleButton(
-                      label: 'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)',
-                      active: isGeneral,
-                      onTap: () {
-                        setState(() => _selectedGeneralLevel = null);
-                        s.setAcademyTrack('general');
-                      },
+                    Expanded(
+                      child: _TrackToggleButton(
+                        label: 'مەنهەجی گشتی',
+                        active: isGeneral,
+                        onTap: () {
+                          setState(() => _selectedGeneralLevel = null);
+                          s.setAcademyTrack('general');
+                        },
+                      ),
                     ),
-                    _TrackToggleButton(
-                      label: 'مەنهەجی پسپۆڕی (جیاواز)',
-                      active: !isGeneral,
-                      onTap: () {
-                        setState(() => _selectedSpecializedId = null);
-                        s.setAcademyTrack('specific');
-                      },
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: _TrackToggleButton(
+                        label: 'مەنهەجی پسپۆڕی',
+                        active: !isGeneral,
+                        onTap: () {
+                          setState(() => _selectedSpecializedId = null);
+                          s.setAcademyTrack('specific');
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -163,7 +165,7 @@ class _AcademyTabState extends State<AcademyTab> {
               ),
               const SizedBox(height: 10),
               const Text(
-                'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)',
+                'مەنهەجی گشتی',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -182,7 +184,7 @@ class _AcademyTabState extends State<AcademyTab> {
               ElevatedButton.icon(
                 onPressed: () => openBookPdfPreviewSheet(
                   context,
-                  'مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)',
+                  'مەنهەجی گشتی',
                 ),
                 icon: const Icon(Icons.download_rounded, size: 18),
                 label: const Text('داگرتنی گشتی مەنهەج بە PDF'),
@@ -671,7 +673,7 @@ class _AcademyTabState extends State<AcademyTab> {
               ),
               const SizedBox(height: 10),
               const Text(
-                'مەنهەجی پسپۆڕی (ڕێڕەوی جیاواز)',
+                'مەنهەجی پسپۆڕی',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -690,7 +692,7 @@ class _AcademyTabState extends State<AcademyTab> {
               ElevatedButton.icon(
                 onPressed: () => openBookPdfPreviewSheet(
                   context,
-                  'مەنهەجی پسپۆڕی (ڕێڕەوی جیاواز)',
+                  'مەنهەجی پسپۆڕی',
                 ),
                 icon: const Icon(Icons.download_rounded, size: 18),
                 label: const Text('داگرتنی گشتی مەنهەج بە PDF'),
@@ -801,7 +803,8 @@ class _TrackToggleButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(30),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 220),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: active ? AppColors.teal800 : Colors.transparent,
           borderRadius: BorderRadius.circular(30),
@@ -809,10 +812,13 @@ class _TrackToggleButton extends StatelessWidget {
         ),
         child: Text(
           label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: active ? Colors.white : AppColors.teal800,
             fontWeight: FontWeight.w800,
-            fontSize: 13,
+            fontSize: 13.5,
           ),
         ),
       ),

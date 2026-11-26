@@ -1175,8 +1175,8 @@ class _HomeTabState extends State<HomeTab> {
             onTap: item.$3,
             borderRadius: BorderRadius.circular(18),
             child: Container(
-              width: 100,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+              width: 110,
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
               decoration: BoxDecoration(
                 color: isDark ? AppColors.darkCard : Colors.white,
                 borderRadius: BorderRadius.circular(18),

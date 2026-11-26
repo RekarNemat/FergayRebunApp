@@ -153,10 +153,31 @@ class _SelfAssessmentSheetState extends State<_SelfAssessmentSheet> {
                               '${t.category} • ${toKurdishDigits(t.questionCount)} پرسیار • ئاستی ${t.level}',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
-                            trailing: const Icon(
-                              Icons.play_circle_fill_rounded,
-                              color: AppColors.teal600,
-                              size: 28,
+                            trailing: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.teal800.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.quiz_outlined,
+                                    color: AppColors.teal800,
+                                    size: 18,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: AppColors.teal800,
+                                    size: 12,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           ),

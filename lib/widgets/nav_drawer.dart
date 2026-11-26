@@ -77,10 +77,10 @@ class ReboonNavDrawer extends StatelessWidget {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'ڕێکخراوی ڕێبوون بۆ پەروەردە و ڕاهێنان',
+                          'بۆ زانستە شەرعییەکان',
                           style: TextStyle(
                             color: AppColors.amber400,
-                            fontSize: 11.5,
+                            fontSize: 12,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

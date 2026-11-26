@@ -50,10 +50,10 @@ void main() {
     // Switch to Academy tab (disambiguate bottom bar item vs drawer/card label)
     await tester.tap(find.text('ئەکادیمیا').last);
     await tester.pumpAndSettle();
-    expect(find.text('مەنهەجی گشتی (سەرەتا تا پێشکەوتوو)'), findsWidgets);
+    expect(find.text('مەنهەجی گشتی'), findsWidgets);
 
     // Switch to Specialized track
-    await tester.tap(find.text('مەنهەجی پسپۆڕی (جیاواز)'));
+    await tester.tap(find.text('مەنهەجی پسپۆڕی').first);
     await tester.pumpAndSettle();
     expect(find.text('١. زانستی بیروباوەڕ (العقيدة)'), findsOneWidget);
 

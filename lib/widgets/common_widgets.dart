@@ -48,81 +48,94 @@ class SectionTitleHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final accent = isDark ? AppColors.teal400 : AppColors.teal800;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Flexible(
-            flex: 5,
-            fit: FlexFit.loose,
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w800,
-                color: theme.brightness == Brightness.dark
-                    ? Colors.white
-                    : AppColors.teal800,
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            width: 5,
-            height: 5,
-            decoration: BoxDecoration(
-              color: dotColor ??
-                  (theme.brightness == Brightness.dark
-                      ? AppColors.teal400
-                      : AppColors.teal800),
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              height: 1,
-              color: (theme.brightness == Brightness.dark
-                      ? AppColors.teal400
-                      : AppColors.teal800)
-                  .withValues(alpha: 0.35),
-            ),
-          ),
-          if (actionLabel != null && onActionTap != null) ...[
-            const SizedBox(width: 8),
-            InkWell(
-              onTap: onActionTap,
-              borderRadius: BorderRadius.circular(10),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      actionLabel!,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: theme.brightness == Brightness.dark
-                            ? AppColors.teal400
-                            : AppColors.teal700,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      size: 12,
-                      color: theme.brightness == Brightness.dark
-                          ? AppColors.teal400
-                          : AppColors.teal700,
-                    ),
-                  ],
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final double maxActionW = actionLabel != null
+              ? (constraints.maxWidth * 0.34).clamp(72.0, 130.0)
+              : 0.0;
+          final double maxTitleW = actionLabel != null
+              ? (constraints.maxWidth - maxActionW - 44).clamp(
+                  80.0,
+                  constraints.maxWidth * 0.65,
+                )
+              : (constraints.maxWidth - 36).clamp(
+                  80.0,
+                  constraints.maxWidth * 0.85,
+                );
+          return Row(
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: maxTitleW),
+                child: Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: isDark ? Colors.white : AppColors.teal800,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ],
+              const SizedBox(width: 8),
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: dotColor ?? accent,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Container(
+                  height: 1.2,
+                  color: accent.withValues(alpha: 0.35),
+                ),
+              ),
+              if (actionLabel != null && onActionTap != null) ...[
+                const SizedBox(width: 8),
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxActionW),
+                  child: InkWell(
+                    onTap: onActionTap,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              actionLabel!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: isDark ? AppColors.teal400 : AppColors.teal700,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 12,
+                            color: isDark ? AppColors.teal400 : AppColors.teal700,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          );
+        },
       ),
     );
   }
