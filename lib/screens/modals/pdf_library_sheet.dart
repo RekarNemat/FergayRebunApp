@@ -4,6 +4,7 @@ import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/media_helpers.dart';
 import '../../widgets/reboon_logo.dart';
 
 void openPdfLibrarySheet(
@@ -40,12 +41,22 @@ void openPdfBookDetailSheet(
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              StylizedBookCover(
-                title: book.title,
-                subtitle: book.author,
-                color: book.coverColor,
-                width: 96,
-                height: 132,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: SizedBox(
+                  width: 96,
+                  height: 132,
+                  child: SmartUploadedImage(
+                    imageUrl: book.coverImageUrl,
+                    fallback: StylizedBookCover(
+                      title: book.title,
+                      subtitle: book.author,
+                      color: book.coverColor,
+                      width: 96,
+                      height: 132,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(width: 14),
               Expanded(
@@ -112,7 +123,11 @@ void openPdfBookDetailSheet(
                 child: OutlinedButton.icon(
                   onPressed: () {
                     Navigator.pop(ctx);
-                    showReboonToast(context, 'کتێبی (${book.title}) دەکرێتەوە... 📖');
+                    openUploadedMediaUrl(
+                      context,
+                      book.pdfUrl,
+                      fallbackMessage: 'کتێبی (${book.title}) دەکرێتەوە... 📖',
+                    );
                   },
                   icon: const Icon(Icons.menu_book_rounded),
                   label: const Text('خوێندنەوە لە ناو ئەپ'),
@@ -129,7 +144,11 @@ void openPdfBookDetailSheet(
                 child: FilledButton.icon(
                   onPressed: () {
                     Navigator.pop(ctx);
-                    showReboonToast(context, 'فایلی PDFی (${book.title}) داگیرا 📥');
+                    openUploadedMediaUrl(
+                      context,
+                      book.pdfUrl,
+                      fallbackMessage: 'فایلی PDFی (${book.title}) داگیرا 📥',
+                    );
                   },
                   icon: const Icon(Icons.download_rounded),
                   label: const Text('داگرتنی PDF'),
@@ -324,12 +343,22 @@ class _PdfLibrarySheetState extends State<PdfLibrarySheet> {
                                     ),
                                     child: Row(
                                       children: [
-                                        StylizedBookCover(
-                                          title: b.title,
-                                          subtitle: b.author,
-                                          color: b.coverColor,
-                                          width: 88,
-                                          height: 140,
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: SizedBox(
+                                            width: 88,
+                                            height: 140,
+                                            child: SmartUploadedImage(
+                                              imageUrl: b.coverImageUrl,
+                                              fallback: StylizedBookCover(
+                                                title: b.title,
+                                                subtitle: b.author,
+                                                color: b.coverColor,
+                                                width: 88,
+                                                height: 140,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                         const SizedBox(width: 12),
                                         Expanded(
@@ -430,9 +459,11 @@ class _PdfLibrarySheetState extends State<PdfLibrarySheet> {
                                                   Expanded(
                                                     child: FilledButton(
                                                       onPressed: () =>
-                                                          showReboonToast(
+                                                          openUploadedMediaUrl(
                                                         context,
-                                                        'فایلی PDF داگیرا 📥',
+                                                        b.pdfUrl,
+                                                        fallbackMessage:
+                                                            'فایلی PDF داگیرا 📥',
                                                       ),
                                                       style: FilledButton
                                                           .styleFrom(

@@ -95,6 +95,8 @@ class RemoteCmsService {
                 'arabicQuote': e.arabicQuote,
                 'kurdishExplanation': e.kurdishExplanation,
                 'source': e.source,
+                'imageUrl': e.imageUrl,
+                'audioUrl': e.audioUrl,
               })
           .toList(),
       'sciences': homeSciencesList
@@ -103,6 +105,7 @@ class RemoteCmsService {
                 'arabicName': s.arabicName,
                 'kurdishName': s.kurdishName,
                 'colorHex': colorToHex(s.color),
+                'iconUrl': s.iconUrl,
               })
           .toList(),
       'courses': courseCatalog.values
@@ -114,11 +117,16 @@ class RemoteCmsService {
                 'summary': c.summary,
                 'accentColorHex': colorToHex(c.accentColor),
                 'featured': featuredKeys.contains(c.key),
+                'coverImageUrl': c.coverImageUrl,
+                'pdfUrl': c.pdfUrl,
                 'episodes': c.episodes
                     .map((ep) => {
                           'id': ep.id,
                           'title': ep.title,
                           'duration': ep.duration,
+                          'videoUrl': ep.videoUrl,
+                          'audioUrl': ep.audioUrl,
+                          'attachmentUrl': ep.attachmentUrl,
                         })
                     .toList(),
               })
@@ -133,6 +141,10 @@ class RemoteCmsService {
                 'categoryLabel': w.categoryLabel,
                 'colorStartHex': colorToHex(w.colorStart),
                 'colorEndHex': colorToHex(w.colorEnd),
+                'videoUrl': w.videoUrl,
+                'audioUrl': w.audioUrl,
+                'thumbnailUrl': w.thumbnailUrl,
+                'attachmentUrl': w.attachmentUrl,
               })
           .toList(),
       'pdfBooks': pdfBooksDatabase
@@ -146,6 +158,8 @@ class RemoteCmsService {
                 'icon': b.icon,
                 'desc': b.desc,
                 'coverColorHex': colorToHex(b.coverColor),
+                'pdfUrl': b.pdfUrl,
+                'coverImageUrl': b.coverImageUrl,
               })
           .toList(),
       'guidance': guidanceVideosList
@@ -157,6 +171,10 @@ class RemoteCmsService {
                 'summary': g.summary,
                 'keyTips': g.keyTips,
                 'colorHex': colorToHex(g.color),
+                'videoUrl': g.videoUrl,
+                'audioUrl': g.audioUrl,
+                'thumbnailUrl': g.thumbnailUrl,
+                'attachmentUrl': g.attachmentUrl,
               })
           .toList(),
       'articles': articlesContentList
@@ -168,6 +186,9 @@ class RemoteCmsService {
                 'excerpt': a.excerpt,
                 'fullContent': a.fullContent,
                 'colorHex': colorToHex(a.color),
+                'imageUrl': a.imageUrl,
+                'audioUrl': a.audioUrl,
+                'attachmentUrl': a.attachmentUrl,
               })
           .toList(),
       'teachers': academyTeachersDatabase
@@ -183,6 +204,8 @@ class RemoteCmsService {
                 'books': t.books,
                 'colorStartHex': colorToHex(t.colorStart),
                 'colorEndHex': colorToHex(t.colorEnd),
+                'photoUrl': t.photoUrl,
+                'cvUrl': t.cvUrl,
               })
           .toList(),
       'sanad': sanadItemsList
@@ -198,6 +221,10 @@ class RemoteCmsService {
                 'reqText': sn.reqText,
                 'iconEmoji': sn.iconEmoji,
                 'colorHex': colorToHex(sn.color),
+                'imageUrl': sn.imageUrl,
+                'audioUrl': sn.audioUrl,
+                'videoUrl': sn.videoUrl,
+                'pdfUrl': sn.pdfUrl,
                 'chain': sn.chain
                     .map((n) => {'name': n.name, 'title': n.title})
                     .toList(),
@@ -251,6 +278,7 @@ class RemoteCmsService {
                 'desc': r.desc,
                 'icon': r.icon,
                 'badge': r.badge,
+                'attachmentUrl': r.attachmentUrl,
               })
           .toList(),
       'projects': reboonProjectsList
@@ -265,6 +293,8 @@ class RemoteCmsService {
                 'desc': p.desc,
                 'isFeatured': p.isFeatured,
                 'accentColorHex': colorToHex(p.accentColor),
+                'imageUrl': p.imageUrl,
+                'attachmentUrl': p.attachmentUrl,
               })
           .toList(),
       'quizzes': independentQuizBank.map(
@@ -297,6 +327,8 @@ class RemoteCmsService {
         'slogan': OrganizationInfo.slogan,
         'definition': OrganizationInfo.definition,
         'workAreas': OrganizationInfo.workAreas,
+        'logoUrl': OrganizationInfo.logoUrl,
+        'brochureUrl': OrganizationInfo.brochureUrl,
         'academyGoals': academyGoalsList
             .map((g) => {
                   'title': g.title,
@@ -350,6 +382,8 @@ class RemoteCmsService {
           arabicQuote: '${m['arabicQuote'] ?? ''}',
           kurdishExplanation: '${m['kurdishExplanation'] ?? ''}',
           source: '${m['source'] ?? ''}',
+          imageUrl: '${m['imageUrl'] ?? ''}',
+          audioUrl: '${m['audioUrl'] ?? ''}',
         );
       }).toList();
       if (list.isNotEmpty) {
@@ -369,6 +403,7 @@ class RemoteCmsService {
           kurdishName: '${m['kurdishName'] ?? ''}',
           icon: _scienceIconForId(id),
           color: hexToColor(m['colorHex'], AppColors.teal800),
+          iconUrl: '${m['iconUrl'] ?? ''}',
         );
       }).toList();
       if (list.isNotEmpty) {
@@ -394,6 +429,9 @@ class RemoteCmsService {
                   id: (ep['id'] is int) ? ep['id'] as int : entry.key + 1,
                   title: '${ep['title'] ?? 'ئەڵقەی ${entry.key + 1}'}',
                   duration: '${ep['duration'] ?? '٢٥ خولەک'}',
+                  videoUrl: '${ep['videoUrl'] ?? ''}',
+                  audioUrl: '${ep['audioUrl'] ?? ''}',
+                  attachmentUrl: '${ep['attachmentUrl'] ?? ''}',
                 );
               }).toList();
         final detail = CourseDetail(
@@ -405,6 +443,8 @@ class RemoteCmsService {
           summary: '${raw['summary'] ?? ''}',
           accentColor: hexToColor(raw['accentColorHex'], AppColors.teal700),
           episodes: episodes,
+          coverImageUrl: '${raw['coverImageUrl'] ?? ''}',
+          pdfUrl: '${raw['pdfUrl'] ?? ''}',
         );
         newCatalog[key] = detail;
         if (raw['featured'] == true) {
@@ -436,6 +476,10 @@ class RemoteCmsService {
           isVerticalReel: false,
           colorStart: hexToColor(m['colorStartHex'], AppColors.teal700),
           colorEnd: hexToColor(m['colorEndHex'], AppColors.teal900),
+          videoUrl: '${m['videoUrl'] ?? ''}',
+          audioUrl: '${m['audioUrl'] ?? ''}',
+          thumbnailUrl: '${m['thumbnailUrl'] ?? ''}',
+          attachmentUrl: '${m['attachmentUrl'] ?? ''}',
         );
       }).toList();
       webinarsContentList
@@ -457,6 +501,8 @@ class RemoteCmsService {
           icon: '${m['icon'] ?? '📖'}',
           desc: '${m['desc'] ?? ''}',
           coverColor: hexToColor(m['coverColorHex'], AppColors.teal800),
+          pdfUrl: '${m['pdfUrl'] ?? ''}',
+          coverImageUrl: '${m['coverImageUrl'] ?? ''}',
         );
       }).toList();
       pdfBooksDatabase
@@ -480,6 +526,10 @@ class RemoteCmsService {
           keyTips: tips,
           icon: _guidanceIconForId(id),
           color: hexToColor(m['colorHex'], AppColors.teal800),
+          videoUrl: '${m['videoUrl'] ?? ''}',
+          audioUrl: '${m['audioUrl'] ?? ''}',
+          thumbnailUrl: '${m['thumbnailUrl'] ?? ''}',
+          attachmentUrl: '${m['attachmentUrl'] ?? ''}',
         );
       }).toList();
       guidanceVideosList
@@ -498,6 +548,9 @@ class RemoteCmsService {
           excerpt: '${m['excerpt'] ?? ''}',
           fullContent: '${m['fullContent'] ?? ''}',
           color: hexToColor(m['colorHex'], AppColors.teal700),
+          imageUrl: '${m['imageUrl'] ?? ''}',
+          audioUrl: '${m['audioUrl'] ?? ''}',
+          attachmentUrl: '${m['attachmentUrl'] ?? ''}',
         );
       }).toList();
       articlesContentList
@@ -524,6 +577,8 @@ class RemoteCmsService {
           specialty: '${m['specialty'] ?? ''}',
           bio: '${m['bio'] ?? ''}',
           books: books,
+          photoUrl: '${m['photoUrl'] ?? ''}',
+          cvUrl: '${m['cvUrl'] ?? ''}',
         );
       }).toList();
       academyTeachersDatabase
@@ -554,6 +609,10 @@ class RemoteCmsService {
           iconEmoji: '${m['iconEmoji'] ?? '📖'}',
           color: hexToColor(m['colorHex'], AppColors.teal700),
           chain: chain,
+          imageUrl: '${m['imageUrl'] ?? ''}',
+          audioUrl: '${m['audioUrl'] ?? ''}',
+          videoUrl: '${m['videoUrl'] ?? ''}',
+          pdfUrl: '${m['pdfUrl'] ?? ''}',
         );
       }).toList();
       sanadItemsList
@@ -634,6 +693,7 @@ class RemoteCmsService {
           desc: '${m['desc'] ?? ''}',
           icon: '${m['icon'] ?? '🌐'}',
           badge: '${m['badge'] ?? ''}',
+          attachmentUrl: '${m['attachmentUrl'] ?? ''}',
         );
       }).toList();
       usefulResourcesDatabase
@@ -655,6 +715,8 @@ class RemoteCmsService {
           desc: '${m['desc'] ?? ''}',
           isFeatured: m['isFeatured'] == true,
           accentColor: hexToColor(m['accentColorHex'], AppColors.teal700),
+          imageUrl: '${m['imageUrl'] ?? ''}',
+          attachmentUrl: '${m['attachmentUrl'] ?? ''}',
         );
       }).toList();
       reboonProjectsList
@@ -750,6 +812,8 @@ class RemoteCmsService {
         OrganizationInfo.workAreas =
             (org['workAreas'] as List).map((e) => '$e').where((e) => e.trim().isNotEmpty).toList();
       }
+      if (org['logoUrl'] != null) OrganizationInfo.logoUrl = '${org['logoUrl']}';
+      if (org['brochureUrl'] != null) OrganizationInfo.brochureUrl = '${org['brochureUrl']}';
       if (org['academyGoals'] is List && (org['academyGoals'] as List).isNotEmpty) {
         const goalIcons = [
           Icons.school_rounded,

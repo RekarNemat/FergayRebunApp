@@ -5,6 +5,7 @@ import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/media_helpers.dart';
 
 void openVideoPlayerSheet(
   BuildContext context,
@@ -104,9 +105,10 @@ void openGuidanceVideoSheet(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton.filled(
-                          onPressed: () => showReboonToast(
+                          onPressed: () => openUploadedMediaUrl(
                             ctx,
-                            'پەخشکردنی ڕێنمایی: ${item.title} ▶',
+                            item.videoUrl.isNotEmpty ? item.videoUrl : item.audioUrl,
+                            fallbackMessage: 'پەخشکردنی ڕێنمایی: ${item.title} ▶',
                           ),
                           iconSize: 38,
                           style: IconButton.styleFrom(
@@ -129,6 +131,16 @@ void openGuidanceVideoSheet(
                 ),
               ),
               const SizedBox(height: 14),
+              MediaAttachmentsBar(
+                videoUrl: item.videoUrl,
+                audioUrl: item.audioUrl,
+                attachmentUrl: item.attachmentUrl,
+                accentColor: item.color,
+              ),
+              if (item.videoUrl.isNotEmpty ||
+                  item.audioUrl.isNotEmpty ||
+                  item.attachmentUrl.isNotEmpty)
+                const SizedBox(height: 12),
               Text(
                 item.summary,
                 style: Theme.of(ctx).textTheme.bodyLarge,
@@ -393,9 +405,37 @@ void openArticleReaderSheet(
               child: SingleChildScrollView(
                 controller: controller,
                 padding: const EdgeInsets.all(20),
-                child: Text(
-                  article.fullContent,
-                  style: Theme.of(ctx).textTheme.bodyLarge?.copyWith(height: 1.9),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (article.imageUrl.trim().isNotEmpty) ...[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: SizedBox(
+                          height: 190,
+                          width: double.infinity,
+                          child: SmartUploadedImage(
+                            imageUrl: article.imageUrl,
+                            fallback: const SizedBox.shrink(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                    ],
+                    if (article.audioUrl.trim().isNotEmpty ||
+                        article.attachmentUrl.trim().isNotEmpty) ...[
+                      MediaAttachmentsBar(
+                        audioUrl: article.audioUrl,
+                        attachmentUrl: article.attachmentUrl,
+                        accentColor: article.color,
+                      ),
+                      const SizedBox(height: 14),
+                    ],
+                    Text(
+                      article.fullContent,
+                      style: Theme.of(ctx).textTheme.bodyLarge?.copyWith(height: 1.9),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -454,7 +494,28 @@ void openProjectDetailSheet(BuildContext context, ReboonProjectItem project) {
             ],
           ),
           const SizedBox(height: 14),
+          if (project.imageUrl.trim().isNotEmpty) ...[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: SizedBox(
+                height: 150,
+                width: double.infinity,
+                child: SmartUploadedImage(
+                  imageUrl: project.imageUrl,
+                  fallback: const SizedBox.shrink(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
           Text(project.desc, style: const TextStyle(height: 1.7)),
+          if (project.attachmentUrl.trim().isNotEmpty) ...[
+            const SizedBox(height: 12),
+            MediaAttachmentsBar(
+              attachmentUrl: project.attachmentUrl,
+              accentColor: project.accentColor,
+            ),
+          ],
           const SizedBox(height: 18),
           SizedBox(
             width: double.infinity,
@@ -654,8 +715,16 @@ class _VideoPlayerSheetState extends State<_VideoPlayerSheet> {
                               ),
                             ),
                             IconButton.filled(
-                              onPressed: () =>
-                                  setState(() => _isPlaying = !_isPlaying),
+                              onPressed: () {
+                                if (_current.videoUrl.trim().isNotEmpty) {
+                                  openUploadedMediaUrl(
+                                    context,
+                                    _current.videoUrl,
+                                  );
+                                } else {
+                                  setState(() => _isPlaying = !_isPlaying);
+                                }
+                              },
                               iconSize: 40,
                               style: IconButton.styleFrom(
                                 backgroundColor: AppColors.teal600,
@@ -720,6 +789,16 @@ class _VideoPlayerSheetState extends State<_VideoPlayerSheet> {
                       ),
                     ),
                     const SizedBox(height: 12),
+                    MediaAttachmentsBar(
+                      videoUrl: _current.videoUrl,
+                      audioUrl: _current.audioUrl,
+                      attachmentUrl: _current.attachmentUrl,
+                      accentColor: _current.colorStart,
+                    ),
+                    if (_current.videoUrl.isNotEmpty ||
+                        _current.audioUrl.isNotEmpty ||
+                        _current.attachmentUrl.isNotEmpty)
+                      const SizedBox(height: 10),
                     Text(_current.desc),
                     const SizedBox(height: 18),
                     const Text(

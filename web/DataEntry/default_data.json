@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-28T10:51:58.519439",
+  "updatedAt": "2026-11-28T11:16:11.544371",
   "dailyLearning": [
     {
       "id": "daily_1",
@@ -8,7 +8,9 @@
       "title": "فێربوونی ڕۆژانە",
       "arabicQuote": "«مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ»",
       "kurdishExplanation": "هەركەسێك بە ڕێگەیەکدا بڕوات بۆ بەدەستهێنانی زانستی شەرعی، خوای گەورە ڕێگەیەکی بەرەو بەهەشت بۆ ئاسان دەکات.",
-      "source": "(صحيح مسلم)"
+      "source": "(صحيح مسلم)",
+      "imageUrl": "",
+      "audioUrl": ""
     },
     {
       "id": "daily_2",
@@ -16,7 +18,9 @@
       "title": "فێربوونی ڕۆژانە: علوم الآلة",
       "arabicQuote": "علوم الآلة (العلوم المساعدة): علوم اللغة العربية؛ النحو والصرف والبلاغة لفهم النصوص، أصول الفقه ومقاصد الشريعة؛ قواعد استنباط الأحكام، مصطلح الحديث وأصول التفسير؛ قواعد تلقي وقبول الروايات والتفسيرات، وعلوم الحكمة والمنطق.",
       "kurdishExplanation": "ئەو زانستانەی کە کلیل و ئامرازی تێگەیشتنی دروستن بۆ دەقەکانی قورئان و سوننەت و دەرهێنانی حوکمە شەرعییەکان.",
-      "source": "مەنهەجی فێرگەی ڕێبوون"
+      "source": "مەنهەجی فێرگەی ڕێبوون",
+      "imageUrl": "",
+      "audioUrl": ""
     },
     {
       "id": "daily_3",
@@ -24,7 +28,9 @@
       "title": "ئادابی زانستخوازی",
       "arabicQuote": "«العِلْمُ ثَلَاثَةُ أَشْبَارٍ؛ مَنْ دَخَلَ فِي الشِّبْرِ الأَوَّلِ تَكَبَّرَ، وَمَنْ دَخَلَ فِي الشِّبْرِ الثَّانِي تَوَاضَعَ، وَمَنْ دَخَلَ فِي الشِّبْرِ الثَّالِثِ عَلِمَ أَنَّهُ مَا يَعْلَمُ»",
       "kurdishExplanation": "زانست سێ بستە: هەرکەس لە بستی یەکەمدا بێت خۆبەزلزان دەبێت، لە بستی دووەمدا خاکەڕا دەبێت، و لە بستی سێیەمدا دەزانێت کە هێشتا نازانێت.",
-      "source": "الشعبي رحمه الله"
+      "source": "الشعبي رحمه الله",
+      "imageUrl": "",
+      "audioUrl": ""
     }
   ],
   "sciences": [
@@ -32,73 +38,85 @@
       "id": "tafseer",
       "arabicName": "التفسير",
       "kurdishName": "تەفسیر",
-      "colorHex": "#1A7A7F"
+      "colorHex": "#1A7A7F",
+      "iconUrl": ""
     },
     {
       "id": "hadith",
       "arabicName": "علوم الحديث",
       "kurdishName": "فەرموودە",
-      "colorHex": "#2563EB"
+      "colorHex": "#2563EB",
+      "iconUrl": ""
     },
     {
       "id": "aqeedah",
       "arabicName": "العقيدة",
       "kurdishName": "عەقیدە",
-      "colorHex": "#D97706"
+      "colorHex": "#D97706",
+      "iconUrl": ""
     },
     {
       "id": "fiqh",
       "arabicName": "الفقه",
       "kurdishName": "فیقهـ",
-      "colorHex": "#059669"
+      "colorHex": "#059669",
+      "iconUrl": ""
     },
     {
       "id": "nahw",
       "arabicName": "النحو",
       "kurdishName": "نەحو",
-      "colorHex": "#9333EA"
+      "colorHex": "#9333EA",
+      "iconUrl": ""
     },
     {
       "id": "usul_fiqh",
       "arabicName": "أصول الفقه",
       "kurdishName": "ئوسوڵی فیقهـ",
-      "colorHex": "#4F46E5"
+      "colorHex": "#4F46E5",
+      "iconUrl": ""
     },
     {
       "id": "seerah",
       "arabicName": "السيرة النبوية",
       "kurdishName": "سیرە",
-      "colorHex": "#D97706"
+      "colorHex": "#D97706",
+      "iconUrl": ""
     },
     {
       "id": "sarf",
       "arabicName": "الصرف",
       "kurdishName": "سەرف",
-      "colorHex": "#218E93"
+      "colorHex": "#218E93",
+      "iconUrl": ""
     },
     {
       "id": "logic",
       "arabicName": "المنطق",
       "kurdishName": "مەنتیق",
-      "colorHex": "#0284C7"
+      "colorHex": "#0284C7",
+      "iconUrl": ""
     },
     {
       "id": "balagha",
       "arabicName": "البلاغة",
       "kurdishName": "بەلاغە",
-      "colorHex": "#E11D48"
+      "colorHex": "#E11D48",
+      "iconUrl": ""
     },
     {
       "id": "quran_sciences",
       "arabicName": "علوم القرآن",
       "kurdishName": "زانستەکانی قورئان",
-      "colorHex": "#059669"
+      "colorHex": "#059669",
+      "iconUrl": ""
     },
     {
       "id": "tazkiyah",
       "arabicName": "التزكية",
       "kurdishName": "تەزکیە",
-      "colorHex": "#15686C"
+      "colorHex": "#15686C",
+      "iconUrl": ""
     }
   ],
   "courses": [
@@ -110,36 +128,56 @@
       "summary": "شیکردنەوەی بنەما بنەڕەتییەکانی بیروباوەڕی ئیسلامی: ناسینی پەروەردگار، ناسینی ئایینی ئیسلام بە بەڵگەوە، و ناسینی پێغەمبەری خوا ﷺ.",
       "accentColorHex": "#1A7A7F",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "پێشەکی: ٤ مەسەلە ناچارییەکە (العلم، العمل، الدعوة، الصبر)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ناسینی پەروەردگار (المعرفة الأولى: معرفة الرب)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "جۆرەکانی پەرستش (أنواع العبادة التي أمر الله بها)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ناسینی ئایینی ئیسلام بە بەڵگەوە (المعرفة الثانية)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئاستەکانی ئایین (الإسلام، الإيمان، الإحسان)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ناسینی پێغەمبەر ﷺ و کۆچکردن (المعرفة الثالثة)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -151,21 +189,32 @@
       "summary": "چوار ڕێسا زێڕینەکە بۆ تێگەیشتن لە تەوحید و جیاکردنەوەی لە شێرک.",
       "accentColorHex": "#218E93",
       "featured": false,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ڕێسای یەکەم و دووەم: ناسینی هاوبەشبڕیاردەران لە پەرستشدا",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ڕێسای سێیەم و چوارەم: پەرستشی بتەکان و شەیخەکان",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "واتا و مەرجەکانی تاغوت (معنى طاغوت ورؤوسه)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -177,111 +226,176 @@
       "summary": "کورتە و پوختەی بیروباوەڕی دروستی ئەهلی سوننەت و جەماعەت بە ٢١ ئەڵقەی تێروتەسەل.",
       "accentColorHex": "#1A7A7F",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 10,
           "title": "ئەڵقەی 10: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 10)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 11,
           "title": "ئەڵقەی 11: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 11)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 12,
           "title": "ئەڵقەی 12: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 12)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 13,
           "title": "ئەڵقەی 13: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 13)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 14,
           "title": "ئەڵقەی 14: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 14)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 15,
           "title": "ئەڵقەی 15: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 15)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 16,
           "title": "ئەڵقەی 16: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 16)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 17,
           "title": "ئەڵقەی 17: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 17)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 18,
           "title": "ئەڵقەی 18: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 18)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 19,
           "title": "ئەڵقەی 19: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 19)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 20,
           "title": "ئەڵقەی 20: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 20)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 21,
           "title": "ئەڵقەی 21: شیکردنەوەی سیفاتەکانی پەروەردگار و بیروباوەڕی پێشینان (بەشی 21)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -293,81 +407,128 @@
       "summary": "شاکاری بیروباوەڕی پێشینانی ئوممەت لە دانانی ئیمامی ئەبو جەعفەری طەحاوی.",
       "accentColorHex": "#D97706",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 10,
           "title": "ئەڵقەی 10: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 10)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 11,
           "title": "ئەڵقەی 11: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 11)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 12,
           "title": "ئەڵقەی 12: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 12)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 13,
           "title": "ئەڵقەی 13: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 13)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 14,
           "title": "ئەڵقەی 14: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 14)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 15,
           "title": "ئەڵقەی 15: مەتنی عەقیدەی ئیمامی طحاوی (بەشی 15)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -379,36 +540,56 @@
       "summary": "وەڵامدانەوەی زانستی بۆ گومان و شوبهە باوەکان لە بابەتی تەوحیددا.",
       "accentColorHex": "#2563EB",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: وەڵامدانەوەی گومانەکانی هاوبەشبڕیاردەران (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: وەڵامدانەوەی گومانەکانی هاوبەشبڕیاردەران (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: وەڵامدانەوەی گومانەکانی هاوبەشبڕیاردەران (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: وەڵامدانەوەی گومانەکانی هاوبەشبڕیاردەران (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: وەڵامدانەوەی گومانەکانی هاوبەشبڕیاردەران (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: وەڵامدانەوەی گومانەکانی هاوبەشبڕیاردەران (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -420,206 +601,328 @@
       "summary": "زنجیرە وانەی گشتگیر و ئاسانکراو لە زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان.",
       "accentColorHex": "#2563EB",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 10,
           "title": "ئەڵقەی 10: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 10)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 11,
           "title": "ئەڵقەی 11: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 11)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 12,
           "title": "ئەڵقەی 12: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 12)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 13,
           "title": "ئەڵقەی 13: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 13)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 14,
           "title": "ئەڵقەی 14: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 14)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 15,
           "title": "ئەڵقەی 15: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 15)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 16,
           "title": "ئەڵقەی 16: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 16)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 17,
           "title": "ئەڵقەی 17: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 17)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 18,
           "title": "ئەڵقەی 18: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 18)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 19,
           "title": "ئەڵقەی 19: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 19)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 20,
           "title": "ئەڵقەی 20: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 20)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 21,
           "title": "ئەڵقەی 21: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 21)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 22,
           "title": "ئەڵقەی 22: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 22)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 23,
           "title": "ئەڵقەی 23: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 23)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 24,
           "title": "ئەڵقەی 24: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 24)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 25,
           "title": "ئەڵقەی 25: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 25)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 26,
           "title": "ئەڵقەی 26: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 26)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 27,
           "title": "ئەڵقەی 27: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 27)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 28,
           "title": "ئەڵقەی 28: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 28)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 29,
           "title": "ئەڵقەی 29: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 29)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 30,
           "title": "ئەڵقەی 30: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 30)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 31,
           "title": "ئەڵقەی 31: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 31)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 32,
           "title": "ئەڵقەی 32: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 32)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 33,
           "title": "ئەڵقەی 33: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 33)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 34,
           "title": "ئەڵقەی 34: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 34)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 35,
           "title": "ئەڵقەی 35: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 35)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 36,
           "title": "ئەڵقەی 36: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 36)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 37,
           "title": "ئەڵقەی 37: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 37)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 38,
           "title": "ئەڵقەی 38: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 38)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 39,
           "title": "ئەڵقەی 39: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 39)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 40,
           "title": "ئەڵقەی 40: زاراوەناسی فەرموودە و دابەشبوونی فەرموودەکان (بەشی 40)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -631,51 +934,80 @@
       "summary": "بەڵگە زانستی و شەرعییەکان لەسەر شەرعیەتی فەرموودەی پێغەمبەر ﷺ و پاراستنی.",
       "accentColorHex": "#E11D48",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: بەڵگەکانی شەرعییبوونی فەرموودەی پێغەمبەر ﷺ (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -687,41 +1019,64 @@
       "summary": "مێژووی نووسینەوە و کۆکردنەوەی فەرموودەی نەبەوی لە سەردەمی هاوەڵانەوە.",
       "accentColorHex": "#059669",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: تدوینی فەرموودە لە سەردەمی هاوەڵانەوە تا فەرموودەناسان (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: تدوینی فەرموودە لە سەردەمی هاوەڵانەوە تا فەرموودەناسان (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: تدوینی فەرموودە لە سەردەمی هاوەڵانەوە تا فەرموودەناسان (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: تدوینی فەرموودە لە سەردەمی هاوەڵانەوە تا فەرموودەناسان (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: تدوینی فەرموودە لە سەردەمی هاوەڵانەوە تا فەرموودەناسان (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: تدوینی فەرموودە لە سەردەمی هاوەڵانەوە تا فەرموودەناسان (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: تدوینی فەرموودە لە سەردەمی هاوەڵانەوە تا فەرموودەناسان (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -733,76 +1088,120 @@
       "summary": "ڕێنمایی زێڕین بۆ ئەدەب و ڕەوشت و شێوازی فێربوونی فێرخوازی زانستی شەرعی.",
       "accentColorHex": "#D97706",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 10,
           "title": "ئەڵقەی 10: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 10)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 11,
           "title": "ئەڵقەی 11: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 11)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 12,
           "title": "ئەڵقەی 12: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 12)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 13,
           "title": "ئەڵقەی 13: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 13)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 14,
           "title": "ئەڵقەی 14: ئەدەب و ڕەوشتی فێرخوازی زانست (بەشی 14)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -814,66 +1213,104 @@
       "summary": "شیکاری قووڵ بۆ مەتنی ناوداری حافیز ئیبن حەجەری عەسقەلانی لە زانستی فەرموودەدا.",
       "accentColorHex": "#2563EB",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: شیکاری مەتنی نخبة الفكر (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: شیکاری مەتنی نخبة الفكر (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: شیکاری مەتنی نخبة الفكر (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: شیکاری مەتنی نخبة الفكر (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: شیکاری مەتنی نخبة الفكر (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: شیکاری مەتنی نخبة الفكر (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: شیکاری مەتنی نخبة الفكر (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: شیکاری مەتنی نخبة الفكر (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: شیکاری مەتنی نخبة الفكر (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 10,
           "title": "ئەڵقەی 10: شیکاری مەتنی نخبة الفكر (بەشی 10)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 11,
           "title": "ئەڵقەی 11: شیکاری مەتنی نخبة الفكر (بەشی 11)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 12,
           "title": "ئەڵقەی 12: شیکاری مەتنی نخبة الفكر (بەشی 12)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -885,36 +1322,56 @@
       "summary": "ڕێزگرتن و بەرگریکردن لە پلەوپایەی بەرزی هاوەڵانی پێغەمبەری خوا ﷺ.",
       "accentColorHex": "#E11D48",
       "featured": false,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: بەرگری لە پلەوپایەی هاوەڵانی پێغەمبەر ﷺ (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: بەرگری لە پلەوپایەی هاوەڵانی پێغەمبەر ﷺ (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: بەرگری لە پلەوپایەی هاوەڵانی پێغەمبەر ﷺ (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: بەرگری لە پلەوپایەی هاوەڵانی پێغەمبەر ﷺ (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: بەرگری لە پلەوپایەی هاوەڵانی پێغەمبەر ﷺ (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: بەرگری لە پلەوپایەی هاوەڵانی پێغەمبەر ﷺ (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -926,36 +1383,56 @@
       "summary": "شەرحی چل فەرموودەی هەڵبژێردراوی ئەحکام بۆ پەرستش و مامەڵە شەرعییەکان.",
       "accentColorHex": "#9333EA",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: فەرموودەکانی ئەحکام و کرداری پەرستش (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: فەرموودەکانی ئەحکام و کرداری پەرستش (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: فەرموودەکانی ئەحکام و کرداری پەرستش (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: فەرموودەکانی ئەحکام و کرداری پەرستش (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: فەرموودەکانی ئەحکام و کرداری پەرستش (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: فەرموودەکانی ئەحکام و کرداری پەرستش (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -967,51 +1444,80 @@
       "summary": "هەڵبژاردەی نامە و ئامۆژگارییەکانی پێشەوایانی سەلەفی صاڵح.",
       "accentColorHex": "#E11D48",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: فەرموودە و نامەکانی پێشەوایانی سەلەف (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -1023,26 +1529,40 @@
       "summary": "شیکردنەوەی فەرموودە پیرۆزەکانی مانگی ڕەمەزان و ڕۆژوو.",
       "accentColorHex": "#059669",
       "featured": true,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: فەرموودە پیرۆزەکانی مانگی ڕەمەزان (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: فەرموودە پیرۆزەکانی مانگی ڕەمەزان (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: فەرموودە پیرۆزەکانی مانگی ڕەمەزان (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: فەرموودە پیرۆزەکانی مانگی ڕەمەزان (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -1054,56 +1574,88 @@
       "summary": "چل فەرموودەکەی ئیمامی نەواوی کە کۆڵەکەی سەرەکی زانستی ئیسلامین.",
       "accentColorHex": "#D97706",
       "featured": false,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: شەرحی فەرموودەکانی الأربعين النووية (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: شەرحی فەرموودەکانی الأربعين النووية (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: شەرحی فەرموودەکانی الأربعين النووية (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: شەرحی فەرموودەکانی الأربعين النووية (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: شەرحی فەرموودەکانی الأربعين النووية (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: شەرحی فەرموودەکانی الأربعين النووية (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: شەرحی فەرموودەکانی الأربعين النووية (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: شەرحی فەرموودەکانی الأربعين النووية (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: شەرحی فەرموودەکانی الأربعين النووية (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 10,
           "title": "ئەڵقەی 10: شەرحی فەرموودەکانی الأربعين النووية (بەشی 10)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -1115,66 +1667,104 @@
       "summary": "ئەحکامی دەستنوێژ و نوێژ و پەرستشەکان بە بەڵگەی قورئان و سوننەت.",
       "accentColorHex": "#059669",
       "featured": false,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 4,
           "title": "ئەڵقەی 4: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 4)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 5,
           "title": "ئەڵقەی 5: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 5)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 6,
           "title": "ئەڵقەی 6: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 6)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 7,
           "title": "ئەڵقەی 7: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 7)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 8,
           "title": "ئەڵقەی 8: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 8)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 9,
           "title": "ئەڵقەی 9: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 9)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 10,
           "title": "ئەڵقەی 10: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 10)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 11,
           "title": "ئەڵقەی 11: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 11)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 12,
           "title": "ئەڵقەی 12: الفقه الميسر - ئەحکامی پەرستشەکان (بەشی 12)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     },
@@ -1186,21 +1776,32 @@
       "summary": "شیکردنەوەی ٣٤ دێڕە هۆنراوەی بەیقونی بۆ سەرەتای فەرموودەناسی.",
       "accentColorHex": "#2563EB",
       "featured": false,
+      "coverImageUrl": "",
+      "pdfUrl": "",
       "episodes": [
         {
           "id": 1,
           "title": "ئەڵقەی 1: شەرحی المنظومة البيقونية (بەشی 1)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 2,
           "title": "ئەڵقەی 2: شەرحی المنظومة البيقونية (بەشی 2)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         },
         {
           "id": 3,
           "title": "ئەڵقەی 3: شەرحی المنظومة البيقونية (بەشی 3)",
-          "duration": "٢٥ خولەک"
+          "duration": "٢٥ خولەک",
+          "videoUrl": "",
+          "audioUrl": "",
+          "attachmentUrl": ""
         }
       ]
     }
@@ -1214,7 +1815,11 @@
       "desc": "لێهاتوویی و کارامەییە بنەڕەتییەکان کە هەر فێرخوازێکی زانستی شەرعی پێویستی پێیەتی بۆ سەرکەوتن.",
       "categoryLabel": "وێبینار",
       "colorStartHex": "#D97706",
-      "colorEndHex": "#15686C"
+      "colorEndHex": "#15686C",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "web_2",
@@ -1224,7 +1829,11 @@
       "desc": "کۆڕی تێروتەسەل بۆ بەکارهێنانی تەکنەلۆژیا لە خزمەت فێربوون، پۆلێنکردنی زانستەکان و ڕێکخستنی کاتەکان.",
       "categoryLabel": "وێبینار",
       "colorStartHex": "#4F46E5",
-      "colorEndHex": "#1E1B4B"
+      "colorEndHex": "#1E1B4B",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "web_3",
@@ -1234,7 +1843,11 @@
       "desc": "وێبیناری شیکاری زانستی بۆ دەستنیشانکردنی بنەماکانی باوەڕ و پاراستنی فێرخوازان لە دەمارگیری.",
       "categoryLabel": "وێبینار",
       "colorStartHex": "#1A7A7F",
-      "colorEndHex": "#042F2E"
+      "colorEndHex": "#042F2E",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "web_4",
@@ -1244,7 +1857,11 @@
       "desc": "بۆچی وەرگرتنی زانست لە دەمی مامۆستاوە مرۆڤ دەپارێزێت لە هەڵەتێگەیشتن و تێکەڵبوونی مەنهەج؟",
       "categoryLabel": "وێبینار",
       "colorStartHex": "#059669",
-      "colorEndHex": "#022C22"
+      "colorEndHex": "#022C22",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     }
   ],
   "pdfBooks": [
@@ -1257,7 +1874,9 @@
       "size": "2.4 MB",
       "icon": "📜",
       "desc": "مەتنێکی بەناوبانگی عەقیدەیە لە ناسینی پەروەردگار، ئایین و پێغەمبەر ﷺ.",
-      "coverColorHex": "#0F766E"
+      "coverColorHex": "#0F766E",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 2,
@@ -1268,7 +1887,9 @@
       "size": "4.1 MB",
       "icon": "📖",
       "desc": "کورتە و پوختەی بیروباوەڕی دروستی ئەهلی سننەت و جەماعەت.",
-      "coverColorHex": "#115E59"
+      "coverColorHex": "#115E59",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 3,
@@ -1279,7 +1900,9 @@
       "size": "3.2 MB",
       "icon": "🕋",
       "desc": "دەقێکی ڕەسەنی بێگەرد لە بیروباوەڕی پێشینانی ئوممەت.",
-      "coverColorHex": "#B45309"
+      "coverColorHex": "#B45309",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 4,
@@ -1290,7 +1913,9 @@
       "size": "1.1 MB",
       "icon": "💡",
       "desc": "چوار بنەمای زێڕین بۆ فێربوونی توحید و جیاکردنەوەی لە شیرک.",
-      "coverColorHex": "#0D9488"
+      "coverColorHex": "#0D9488",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 5,
@@ -1301,7 +1926,9 @@
       "size": "6.5 MB",
       "icon": "📚",
       "desc": "شاکاری دەوڵەمەندی ئایەت و فەرموودەکان لەسەر توحید.",
-      "coverColorHex": "#134E4A"
+      "coverColorHex": "#134E4A",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 6,
@@ -1312,7 +1939,9 @@
       "size": "5.8 MB",
       "icon": "⚖️",
       "desc": "ناودارترین مەتنی سەرەتایی لە فیقهی ئیمامی شافعیدا.",
-      "coverColorHex": "#047857"
+      "coverColorHex": "#047857",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 7,
@@ -1323,7 +1952,9 @@
       "size": "9.2 MB",
       "icon": "📖",
       "desc": "پەرتووکی ڕێنماییکاری فێرخوازان لە حوکمە فقهییەکانی مەزهەبی شافعی.",
-      "coverColorHex": "#065F46"
+      "coverColorHex": "#065F46",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 8,
@@ -1334,7 +1965,9 @@
       "size": "16.0 MB",
       "icon": "📜",
       "desc": "سەرچاوەی سەرەکی و مەرجەعی فەتوا لە فیقهی شافعیدا.",
-      "coverColorHex": "#7C2D12"
+      "coverColorHex": "#7C2D12",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 9,
@@ -1345,7 +1978,9 @@
       "size": "3.8 MB",
       "icon": "⚖️",
       "desc": "کورتکراوەی پڕ سوود بۆ فێربوونی سەرەتای فیقهـ.",
-      "coverColorHex": "#0F766E"
+      "coverColorHex": "#0F766E",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 10,
@@ -1356,7 +1991,9 @@
       "size": "7.4 MB",
       "icon": "📚",
       "desc": "بەناوبانگترین مەتنی کورتکراوە بۆ فێرخوازانی فیقهـ.",
-      "coverColorHex": "#1E3A8A"
+      "coverColorHex": "#1E3A8A",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 11,
@@ -1367,7 +2004,9 @@
       "size": "3.0 MB",
       "icon": "📚",
       "desc": "٤٢ فەرموودەی پیرۆزی نەبەوی کە بنەمای حوکمەکانی ئیسلامن.",
-      "coverColorHex": "#92400E"
+      "coverColorHex": "#92400E",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 12,
@@ -1378,7 +2017,9 @@
       "size": "1.2 MB",
       "icon": "📜",
       "desc": "٣٤ دێڕ هۆنراوەی زێڕین بۆ فێربوونی سەرەتای زاراوەی فەرموودە.",
-      "coverColorHex": "#1D4ED8"
+      "coverColorHex": "#1D4ED8",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 13,
@@ -1389,7 +2030,9 @@
       "size": "2.5 MB",
       "icon": "🔍",
       "desc": "مەتنێکی زۆر قووڵ و ورد لە دەستنیشانکردنی جۆرەکانی فەرموودە.",
-      "coverColorHex": "#1E40AF"
+      "coverColorHex": "#1E40AF",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 14,
@@ -1400,7 +2043,9 @@
       "size": "8.1 MB",
       "icon": "📖",
       "desc": "کۆکراوەی فەرموودەکانی حەرام و حەڵاڵ لە بوخاری و مسلم.",
-      "coverColorHex": "#0F766E"
+      "coverColorHex": "#0F766E",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 15,
@@ -1411,7 +2056,9 @@
       "size": "8.9 MB",
       "icon": "📚",
       "desc": "کتێبێکی هاوچەرخ و ئاسان بۆ فێربوونی زاراوەناسی فەرموودە.",
-      "coverColorHex": "#0369A1"
+      "coverColorHex": "#0369A1",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 16,
@@ -1422,7 +2069,9 @@
       "size": "28.0 MB",
       "icon": "📖",
       "desc": "تەفسیرێکی ئاسان و ئاشکرا بۆ تێگەیشتن لە ئایەتەکانی قورئان.",
-      "coverColorHex": "#065F46"
+      "coverColorHex": "#065F46",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 17,
@@ -1433,7 +2082,9 @@
       "size": "22.4 MB",
       "icon": "📚",
       "desc": "تەفسیری قورئان بە قورئان و فەرموودە ڕاستەکان.",
-      "coverColorHex": "#14532D"
+      "coverColorHex": "#14532D",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 18,
@@ -1444,7 +2095,9 @@
       "size": "2.8 MB",
       "icon": "📜",
       "desc": "بنەما و یاساکانی تێگەیشتن و لێکدانەوەی دەقە قورئانییەکان.",
-      "coverColorHex": "#0F766E"
+      "coverColorHex": "#0F766E",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 19,
@@ -1455,7 +2108,9 @@
       "size": "15.2 MB",
       "icon": "🕋",
       "desc": "تەفسیرێکی کورتی ڕوون لە پەراوێزی تەواوی لاپەڕەکانی قورئان.",
-      "coverColorHex": "#115E59"
+      "coverColorHex": "#115E59",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 20,
@@ -1466,7 +2121,9 @@
       "size": "2.1 MB",
       "icon": "✒️",
       "desc": "دەروازەی سەرەکی فێربوونی بەشی نەحو و ڕێزمانی عەرەبی.",
-      "coverColorHex": "#6B21A8"
+      "coverColorHex": "#6B21A8",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 21,
@@ -1477,7 +2134,9 @@
       "size": "6.8 MB",
       "icon": "📖",
       "desc": "شەرحێکی زۆر ناودار بۆ فێرخوازانی ئاستی ناوەندی لە نەحودا.",
-      "coverColorHex": "#7E22CE"
+      "coverColorHex": "#7E22CE",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 22,
@@ -1488,7 +2147,9 @@
       "size": "3.9 MB",
       "icon": "📜",
       "desc": "١٠٠٠ دێڕ هۆنراوەی زێڕین کە تەواوی یاساکانی نەحو و سەڕفی تێدایە.",
-      "coverColorHex": "#581C87"
+      "coverColorHex": "#581C87",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 23,
@@ -1499,7 +2160,9 @@
       "size": "5.4 MB",
       "icon": "✒️",
       "desc": "مەرجەعی سەرەکی فێربوونی ڕێزمانی سەڕف و داڕشتنی وشەکان.",
-      "coverColorHex": "#4C1D95"
+      "coverColorHex": "#4C1D95",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 24,
@@ -1510,7 +2173,9 @@
       "size": "14.5 MB",
       "icon": "🕋",
       "desc": "شاکاری زێڕین لە کۆکردنەوە و شیکردنەوەی ژیاننامەی پێغەمبەری خوا ﷺ.",
-      "coverColorHex": "#B45309"
+      "coverColorHex": "#B45309",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 25,
@@ -1521,7 +2186,9 @@
       "size": "7.1 MB",
       "icon": "📖",
       "desc": "کورتەی ژیاننامە و کەسایەتی پێغەمبەری خوا ﷺ بە سەنەدی ڕاست.",
-      "coverColorHex": "#92400E"
+      "coverColorHex": "#92400E",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 26,
@@ -1532,7 +2199,9 @@
       "size": "11.8 MB",
       "icon": "📚",
       "desc": "ڕێنیشاندەری ژیانی ڕۆژانە و سوننەتەکانی پێغەمبەری خوا ﷺ.",
-      "coverColorHex": "#78350F"
+      "coverColorHex": "#78350F",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 27,
@@ -1543,7 +2212,9 @@
       "size": "9.0 MB",
       "icon": "🕋",
       "desc": "کتێبێکی وانەبێژی ڕەوان و خۆش بۆ تێگەیشتن لە ڕووداوەکانی سیرە.",
-      "coverColorHex": "#D97706"
+      "coverColorHex": "#D97706",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 28,
@@ -1554,7 +2225,9 @@
       "size": "6.2 MB",
       "icon": "📘",
       "desc": "کورتە و پوختەی زانستەکانی فەرموودەناسی بەپێی پێشینان.",
-      "coverColorHex": "#0F766E"
+      "coverColorHex": "#0F766E",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     },
     {
       "id": 29,
@@ -1565,7 +2238,9 @@
       "size": "24.0 MB",
       "icon": "📙",
       "desc": "تەخریج و پشکنینی زانستیی فەرموودەکانی ئەحکام و فیقهـ.",
-      "coverColorHex": "#9A3412"
+      "coverColorHex": "#9A3412",
+      "pdfUrl": "",
+      "coverImageUrl": ""
     }
   ],
   "guidance": [
@@ -1580,7 +2255,11 @@
         "ڕووناکی ژوورەکە بە شێوەیەکی هاوسەنگ دابنێ و لە تاریکیدا مەخوێنەرەوە.",
         "دووری گونجاوی نێوان چاو و کتێب یان شاشە لانیکەم ٤٠ سانتیمەتر بێت."
       ],
-      "colorHex": "#0284C7"
+      "colorHex": "#0284C7",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "guid_2",
@@ -1593,7 +2272,11 @@
         "هەر ٤٥ خولەک جارێک بۆ ٣ خولەک هەستە و جووڵەی سادەی مل و شان بکە.",
         "پشتی کورسی پاڵپشتی کەلەکە و بڕبڕەی خوارەوەی پشت بکات."
       ],
-      "colorHex": "#059669"
+      "colorHex": "#059669",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "guid_3",
@@ -1606,7 +2289,11 @@
         "لە ڕۆژێکدا بە بڕێکی کەم بەڵام جێگیر (٣٠ خولەک) دەست پێبکە.",
         "هەفتەی یەک ڕۆژ تەنها بۆ پێداچوونەوەی وانەکانی پێشوو تەرخان بکە."
       ],
-      "colorHex": "#D97706"
+      "colorHex": "#D97706",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "guid_4",
@@ -1619,7 +2306,11 @@
         "هەر دەستکەوتێکی بچووک لە تەواوکردنی کتێبێک یان ئەڵقەیەک بەرز بنرخێنە.",
         "نوێکردنەوەی نیەت و داوای یارمەتی لە خوای گەورە فشارە دەروونییەکان کەم دەکاتەوە."
       ],
-      "colorHex": "#E11D48"
+      "colorHex": "#E11D48",
+      "videoUrl": "",
+      "audioUrl": "",
+      "thumbnailUrl": "",
+      "attachmentUrl": ""
     }
   ],
   "articles": [
@@ -1630,7 +2321,10 @@
       "badge": "📌 بابەتی ڕۆژ",
       "excerpt": "زانستی شەرعی تەنها کۆمەڵێک زانیاری زوهدیی نییە، بەڵکو ڕێگەیەکی ڕوون و بەدیارخراوە بۆ ڕێکخستنی ژیانی مرۆڤ و دۆزینەوەی ئارامی دەروونی...",
       "fullContent": "زانستی شەرعی تەنها کۆمەڵێک زانیاری نییە، بەڵکو ڕێگەیەکی ڕوون و بەدیارخراوە بۆ ڕێکخستنی ژیانی مرۆڤ، دۆزینەوەی ئارامی دەروونی، و گەیاندنی بە ڕەزامەندی پەروەردگار.\n\nخوێندن لێرە پرۆسەیەکی کارلێکەرە کە تێیدا فێرخواز دەبێتە خاوەنی عەقڵێکی شیکاری و دەتوانێت ڕاستی لە باطل جودا بکاتەوە و بەڵگەی صەحیح بناسێت.\n\nسیستەمی \"پێشکەوتنی پلەبەپلە\" یارمەتی فێرخواز دەدات کە لە بناغەوە دەست پێبکات، ئەمەش ڕێگری دەکات لە دروستبوونی گومان یان لێتێکچوونی بابەتەکان. لە فێرگەی ڕێبوون، ئێمە جەخت لەسەر ئەوە دەکەینەوە کە زانست دەبێت ببێتە هۆی گۆڕینی ڕەوشت، ڕۆحیەت، و ئاوەدانکردنەوەی ژیانی فێرخوازان.",
-      "colorHex": "#1A7A7F"
+      "colorHex": "#1A7A7F",
+      "imageUrl": "",
+      "audioUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "art_1",
@@ -1639,7 +2333,10 @@
       "badge": "ئادابی زانست",
       "excerpt": "زانستی شەرعی پەرستشێکی گەورەیە کە تەنها بە پاکیی نیەت و ئیخلاس بەرەکەتدار دەبێت. فێرخوازی سەرکەوتوو ئەوەیە کە تەنها بۆ ڕەزامەندی پەروەردگار دەخوێنێت...",
       "fullContent": "زانستی شەرعی پەرستشێکی گەورەیە کە تەنها بە پاکیی نیەت و ئیخلاس بەرەکەتدار دەبێت. فێرخوازی سەرکەوتوو ئەوەیە کە تەنها بۆ ڕەزامەندی پەروەردگار و نەهێشتنی نەزانین لەسەر خۆی دەخوێنێت، نهێنی بەردەوامی لێرەوە دەست پێدەکات.\n\nئیمامی ئەحمەد دەفەرموێت: «العلم لا يعدله شيء لمن صحت نيته»، واتە هیچ شتێک هاوتای زانست نییە بۆ کەسێک کە نیەتەکەی پاک بێت.",
-      "colorHex": "#218E93"
+      "colorHex": "#218E93",
+      "imageUrl": "",
+      "audioUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "art_2",
@@ -1648,7 +2345,10 @@
       "badge": "یاسای سەرکەوتن",
       "excerpt": "گەورەترین نهێنی گەیشتن بە پلەی بەرز لە زانستدا، بەردەوامیی ڕۆژانەیە ئەگەر بە بڕێکی کەمیش بێت. ڕۆژانە ١٥ خولەک گوێگرتن دەبێتە دەیان کتێب...",
       "fullContent": "گەورەترین نهێنی گەیشتن بە پلەی بەرز لە زانستدا، بەردەوامیی ڕۆژانەیە ئەگەر بە بڕێکی کەمیش بێت. ڕۆژانە ١٥ خولەک گوێگرتن لە وانەیەکی شەرعی لە ماوەی یەک ساڵدا دەکاتە دەیان کتێبی تەواوکراو.\n\nخەڵکانێکی زۆر بە حەماسێکی گەورەوە دەست پێدەکەن و دوای چەند ڕۆژێک دەوەستن؛ بەڵام زانستخوازی هۆشیار هەنگاو بە هەنگاو و ڕۆژانە بەبێ دابڕان بەرەو ئامانجەکەی دەڕوات.",
-      "colorHex": "#D97706"
+      "colorHex": "#D97706",
+      "imageUrl": "",
+      "audioUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "art_3",
@@ -1657,7 +2357,10 @@
       "badge": "گرنگی سەنەد",
       "excerpt": "سەنەد پارێزەری ڕەسەنایەتی دینی ئیسلامە. وەرگرتنی زانست لە مامۆستایانی سەنەدداری ئیجازەدار فێرخواز لە شێواندن و لێکدانەوەی هەڵە دەپارێزێت...",
       "fullContent": "سەنەد پارێزەری ڕەسەنایەتی دینی ئیسلامە. وەرگرتنی زانست لە مامۆستایانی سەنەدداری ئیجازەدار فێرخواز لە شێواندن و لێکدانەوەی هەڵە دەپارێزێت و دەیبەستێتەوە بە زنجیرەی زانایانی پێشین تا پێغەمبەری خوا صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ.\n\nهەروەک عەبدوڵڵای کوڕی موبارەک دەفەرموێت: «الإسناد من الدين، ولولا الإسناد لقال من شاء ما شاء».",
-      "colorHex": "#9333EA"
+      "colorHex": "#9333EA",
+      "imageUrl": "",
+      "audioUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "art_4",
@@ -1666,7 +2369,10 @@
       "badge": "ئامۆژگاری پێشینان",
       "excerpt": "ئیمامی شافعی دەفەرموێت: (أخي لن تنال العلم إلا بستة... ذكاءٌ وحرصٌ واجتهادٌ وبلغةٌ وصحبةُ أستاذٍ وطولُ زمانٍ). شەش هۆکاری مێژوویی سەرکەوتن...",
       "fullContent": "ئیمامی شافعی دەفەرموێت:\n«أخي لن تنال العلم إلا بستةٍ — سأنبيك عن تفصيلها ببَيانِ:\nذكاءٌ وحرصٌ واجتهادٌ وبلغةٌ — وصحبةُ أستاذٍ وطولُ زمانِ»\n\nشەش هۆکار هەن بۆ وەرگرتنی زانست: ژیری و تێگەیشتن، پەرۆشی و تامەزرۆیی، تێکۆشان و هەوڵدان، ئامراز و بژێوی گونجاو، هاوڕێیەتی مامۆستای سەنەددار، و درێژخایەنی کات و ئارامگرتن.",
-      "colorHex": "#2563EB"
+      "colorHex": "#2563EB",
+      "imageUrl": "",
+      "audioUrl": "",
+      "attachmentUrl": ""
     }
   ],
   "teachers": [
@@ -1687,7 +2393,9 @@
         "كشف الشبهات"
       ],
       "colorStartHex": "#218E93",
-      "colorEndHex": "#15686C"
+      "colorEndHex": "#15686C",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 2,
@@ -1704,7 +2412,9 @@
         "علل الحديث"
       ],
       "colorStartHex": "#D97706",
-      "colorEndHex": "#92400E"
+      "colorEndHex": "#92400E",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 3,
@@ -1720,7 +2430,9 @@
         "تدوين السنة النبوية"
       ],
       "colorStartHex": "#059669",
-      "colorEndHex": "#065F46"
+      "colorEndHex": "#065F46",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 4,
@@ -1737,7 +2449,9 @@
         "تزكية النفس"
       ],
       "colorStartHex": "#0284C7",
-      "colorEndHex": "#075985"
+      "colorEndHex": "#075985",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 5,
@@ -1753,7 +2467,9 @@
         "قواعد التحديث"
       ],
       "colorStartHex": "#E11D48",
-      "colorEndHex": "#9F1239"
+      "colorEndHex": "#9F1239",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 6,
@@ -1770,7 +2486,9 @@
         "نماذج من رسائل الأئمة"
       ],
       "colorStartHex": "#9333EA",
-      "colorEndHex": "#581C87"
+      "colorEndHex": "#581C87",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 7,
@@ -1787,7 +2505,9 @@
         "أحاديث شهر رمضان"
       ],
       "colorStartHex": "#4F46E5",
-      "colorEndHex": "#3730A3"
+      "colorEndHex": "#3730A3",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 8,
@@ -1804,7 +2524,9 @@
         "أحكام العبادات"
       ],
       "colorStartHex": "#218E93",
-      "colorEndHex": "#15686C"
+      "colorEndHex": "#15686C",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 9,
@@ -1820,7 +2542,9 @@
         "بنەماکانی بەلاغەت لە زمانی عەرەبیدا"
       ],
       "colorStartHex": "#D97706",
-      "colorEndHex": "#92400E"
+      "colorEndHex": "#92400E",
+      "photoUrl": "",
+      "cvUrl": ""
     },
     {
       "id": 10,
@@ -1836,7 +2560,9 @@
         "مقدمة في أصول التفسير"
       ],
       "colorStartHex": "#059669",
-      "colorEndHex": "#065F46"
+      "colorEndHex": "#065F46",
+      "photoUrl": "",
+      "cvUrl": ""
     }
   ],
   "sanad": [
@@ -1852,6 +2578,10 @@
       "reqText": "تەنها گوێگرتن لە وانەکان بەس نییە! پێویستە فێرخواز خەتمی تەواوی قورئان بە دەنگی خۆی بە ڕاستەوخۆ (عەرزی قورئان) لای مامۆستای ئیجازەدار بخوێنێتەوە، مامۆستاکە گوێی لێ دەبێت و هەڵەکان و ئەحکامەکانی بۆ ڕاست دەکاتەوە.",
       "iconEmoji": "📖",
       "colorHex": "#218E93",
+      "imageUrl": "",
+      "audioUrl": "",
+      "videoUrl": "",
+      "pdfUrl": "",
       "chain": [
         {
           "name": "فێرخواز (ناوی تۆ)",
@@ -1903,6 +2633,10 @@
       "reqText": "پێویستە فێرخواز بە دەقی لە تەواوی مەتنەکانی فەرموودەکە گوێ بگرێت لای مامۆستای سەنەدداری فەرموودە، و تاقیکردنەوەی تێگەیشتنی فەرموودەکان تێپەڕێنێت.",
       "iconEmoji": "📚",
       "colorHex": "#2563EB",
+      "imageUrl": "",
+      "audioUrl": "",
+      "videoUrl": "",
+      "pdfUrl": "",
       "chain": [
         {
           "name": "فێرخواز (ناوی تۆ)",
@@ -1938,6 +2672,10 @@
       "reqText": "پێویستە فێرخواز مەتنی عەقیدەیی لەبەر بکات و لە تاقیکردنەوەی شفوي لەبەردەم لیژنەی زانستی دەربچێت.",
       "iconEmoji": "🛡️",
       "colorHex": "#D97706",
+      "imageUrl": "",
+      "audioUrl": "",
+      "videoUrl": "",
+      "pdfUrl": "",
       "chain": [
         {
           "name": "فێرخواز (ناوی تۆ)",
@@ -1973,6 +2711,10 @@
       "reqText": "پێویستە فێرخواز خولی فیقهیی بە سەرکەوتوویی تەواو بکات و شیکردنەوەی مسایل بە بەڵگەی شەرعی لەبەردەم مامۆستا پێشکەش بکات.",
       "iconEmoji": "⚖️",
       "colorHex": "#9333EA",
+      "imageUrl": "",
+      "audioUrl": "",
+      "videoUrl": "",
+      "pdfUrl": "",
       "chain": [
         {
           "name": "فێرخواز (ناوی تۆ)",
@@ -2008,6 +2750,10 @@
       "reqText": "پێویستە فێرخواز ڕێساکانی نەحو لەبەر بکات و تاقیکردنەوەی ئیعرابی دەقە قورئانی و فەرموودەییەکان ئەنجام بدات.",
       "iconEmoji": "✒️",
       "colorHex": "#059669",
+      "imageUrl": "",
+      "audioUrl": "",
+      "videoUrl": "",
+      "pdfUrl": "",
       "chain": [
         {
           "name": "فێرخواز (ناوی تۆ)",
@@ -2493,7 +3239,8 @@
       "category": "libraries",
       "desc": "گەورەترین و دەوڵەمەندترین کۆگای دیجیتاڵی بەرهەمە زانستییەکانی جیهانی ئیسلامی (زیاتر لە ٨,٠٠٠ پەرتووک).",
       "icon": "📚",
-      "badge": "مەکتەبەی سەرەکی"
+      "badge": "مەکتەبەی سەرەکی",
+      "attachmentUrl": ""
     },
     {
       "id": 2,
@@ -2502,7 +3249,8 @@
       "category": "libraries",
       "desc": "کۆگایەکی گەورەی تەفسیر، شەرحەکانی فەرموودە و شاکارە فقهییەکانی پێشەوایانی ئیسلام.",
       "icon": "📖",
-      "badge": "تەفسیر & دەق"
+      "badge": "تەفسیر & دەق",
+      "attachmentUrl": ""
     },
     {
       "id": 3,
@@ -2511,7 +3259,8 @@
       "category": "hadith",
       "desc": "مەوسوعەی پێشەنگ بۆ تاقیکردنەوەی پلەی ڕاستیی فەرموودەکان (موسوعة الحديث والأحكام).",
       "icon": "📜",
-      "badge": "پشکنینی فەرموودە"
+      "badge": "پشکنینی فەرموودە",
+      "attachmentUrl": ""
     },
     {
       "id": 4,
@@ -2520,7 +3269,8 @@
       "category": "quran",
       "desc": "پلاتفۆرمی جیهانیی قورئانی پیرۆز بە وەرگێڕان، تەفسیر و دەنگی قاریئە نێودارەکانی جیهان.",
       "icon": "🕋",
-      "badge": "قورئانی پیرۆز"
+      "badge": "قورئانی پیرۆز",
+      "attachmentUrl": ""
     },
     {
       "id": 5,
@@ -2529,7 +3279,8 @@
       "category": "tools",
       "desc": "ماتۆڕی گەڕانی گەشەکردوو لە فەرهەنگە زمانییەکان (القاموس المحيط، لسان العرب، تاج العروس).",
       "icon": "🔍",
-      "badge": "فەرهەنگی عەرەبی"
+      "badge": "فەرهەنگی عەرەبی",
+      "attachmentUrl": ""
     },
     {
       "id": 6,
@@ -2538,7 +3289,8 @@
       "category": "academy",
       "desc": "ئەکادیمیای جیهانی بۆ پێشکەشکردنی وانە شەرعییەکان بۆ هەزاران فێرخواز لە سەرتاسەری جیهان.",
       "icon": "🎓",
-      "badge": "ئەکادیمیای جیهانی"
+      "badge": "ئەکادیمیای جیهانی",
+      "attachmentUrl": ""
     }
   ],
   "projects": [
@@ -2552,7 +3304,9 @@
       "url": "https://reboun.academy/apps/seerah",
       "desc": "ئەپی سیرەی پێغەمبەر صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ پڕۆژەیەکی تایبەت و فراوانی فێرگەی ڕێبوونە بۆ کۆکردنەوە و شیکردنەوەی هەموو ڕووداوە مێژووییەکانی ژیانی پێغەمبەری خوا بە سەنەدی دروست و ڕاست.\n\nئەم ئەپە پێکهاتووە لە نەخشەی کارلێککار، هێڵی کاتی ژیاننامە، وتارە دەنگییەکان، و هەڵسەنگاندنی زانیارییەکان بۆ فێرخوازان.",
       "isFeatured": true,
-      "accentColorHex": "#1A7A7F"
+      "accentColorHex": "#1A7A7F",
+      "imageUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "books",
@@ -2564,7 +3318,9 @@
       "url": "https://reboun.academy/library",
       "desc": "پڕۆژەی کۆگای پەرتووکەکانی ڕێبوون کتێبخانەیەکی دیجیتاڵی دەوڵەمەندە بۆ داگرتن و خوێندنەوەی بەنرخترین سەرچاوە شەرعییەکان، مەتنە زانستییەکان، و شەرحی مامۆستایان بە فۆرماتی PDFی کوالێتی بەرز.",
       "isFeatured": false,
-      "accentColorHex": "#218E93"
+      "accentColorHex": "#218E93",
+      "imageUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "dictionary",
@@ -2576,7 +3332,9 @@
       "url": "https://reboun.academy/dictionary",
       "desc": "فەرهەنگی زاراوەکانی ڕێبوون داتابەیسێکی گشتگیرە بۆ شیکردنەوەی چەمکە فیقهی، عەقیدەیی، و زمانەوانییەکان بەپێی بەکارهێنانی زانایانی پێشین.",
       "isFeatured": false,
-      "accentColorHex": "#D97706"
+      "accentColorHex": "#D97706",
+      "imageUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "inheritance",
@@ -2588,7 +3346,9 @@
       "url": "https://reboun.academy/tools/inheritance",
       "desc": "پڕۆژەی ژمێریاری میرات سیستەمێکی ئەلگۆریثمی زیرەکە کە بەپێی حوکمە فیقهییە ڕاستەکانی ئیسلام بەش و میراتی کەسوکار و زەکاتی سەرمایە بە شێوازێکی زۆر دەقیق ئەژمار دەکات.",
       "isFeatured": false,
-      "accentColorHex": "#059669"
+      "accentColorHex": "#059669",
+      "imageUrl": "",
+      "attachmentUrl": ""
     },
     {
       "id": "podcast",
@@ -2600,7 +3360,9 @@
       "url": "https://reboun.academy/podcast",
       "desc": "پڕۆژەی دەنگ و پۆدکاستی ڕێبوون پلاتفۆرمێکی دەنگی کوالیتی بەرزە بۆ گوێگرتنی خێرا لە زنجیرە وانەکانی مامۆستایان و کۆڕە زانستییەکان بەبێ ئینتەرنێت.",
       "isFeatured": false,
-      "accentColorHex": "#0284C7"
+      "accentColorHex": "#0284C7",
+      "imageUrl": "",
+      "attachmentUrl": ""
     }
   ],
   "quizzes": {
@@ -5063,6 +5825,8 @@
       "گرنگیدان بە پێگەیاندنی گەنجان بەهەردوو ڕەگەزەوە.",
       "بڵاوکردنەوەی هۆشیاری لە بوارە جیاوازەکان."
     ],
+    "logoUrl": "",
+    "brochureUrl": "",
     "academyGoals": [
       {
         "title": "خوێندنی سەنەددار",

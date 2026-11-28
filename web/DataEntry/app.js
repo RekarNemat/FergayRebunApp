@@ -10,8 +10,12 @@
   const STORAGE_KEY_API = 'reboon_cms_api_url';
   const STORAGE_KEY_AUTH = 'reboon_cms_auth_ok';
   const STORAGE_KEY_CACHE = 'reboon_cms_last_data';
+  const STORAGE_KEY_CLOUD_NAME = 'reboon_cloudinary_name';
+  const STORAGE_KEY_CLOUD_PRESET = 'reboon_cloudinary_preset';
 
   let apiUrl = localStorage.getItem(STORAGE_KEY_API) || DEFAULT_API_URL;
+  let cloudinaryName = localStorage.getItem(STORAGE_KEY_CLOUD_NAME) || '';
+  let cloudinaryPreset = localStorage.getItem(STORAGE_KEY_CLOUD_PRESET) || '';
   let db = null;
   let activeSection = 'overview';
   let searchTerm = '';
@@ -21,7 +25,7 @@
 
   const SECTIONS = [
     { id: 'overview', group: 'main', icon: '📊', label: 'پوختە و ئامار' },
-    { id: 'settings', group: 'main', icon: '⚙️', label: 'ڕێکخستنی Mock API و باکئەپ' },
+    { id: 'settings', group: 'main', icon: '⚙️', label: 'ڕێکخستنی Mock API و ئەپلۆد' },
 
     { id: 'dailyLearning', group: 'home', icon: '☀️', label: 'فێربوونی ڕۆژانە' },
     { id: 'sciences', group: 'home', icon: '🕌', label: 'زانستەکان' },
@@ -88,13 +92,19 @@
       .replace(/'/g, '&#39;');
   }
 
+  function formatBytes(bytes) {
+    if (!bytes || bytes < 1024) return `${bytes || 0} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
   function showToast(msg, type = 'success') {
     const container = $('toast-container');
     const el = document.createElement('div');
     el.className = `toast ${type}`;
     el.textContent = msg;
     container.appendChild(el);
-    setTimeout(() => el.remove(), 3400);
+    setTimeout(() => el.remove(), 3600);
   }
 
   function setSyncPill(state, text) {
@@ -113,6 +123,19 @@
       return Object.values(q).reduce((sum, arr) => sum + (Array.isArray(arr) ? arr.length : 0), 0);
     }
     return Array.isArray(db[id]) ? db[id].length : 0;
+  }
+
+  function mediaTagsFor(obj) {
+    const tags = [];
+    if (obj?.videoUrl) tags.push('🎬 ڤیدیۆ');
+    if (obj?.audioUrl) tags.push('🎧 دەنگ');
+    if (obj?.pdfUrl) tags.push('📄 PDF');
+    if (obj?.cvUrl) tags.push('📄 سیڤی');
+    if (obj?.attachmentUrl) tags.push('📎 هاوپێچ');
+    if (obj?.coverImageUrl || obj?.thumbnailUrl || obj?.imageUrl || obj?.photoUrl || obj?.iconUrl) {
+      tags.push('🖼️ وێنە');
+    }
+    return tags;
   }
 
   function ensureSchema(raw) {
@@ -145,9 +168,250 @@
             slogan: '',
             definition: '',
             workAreas: [],
+            logoUrl: '',
+            brochureUrl: '',
             academyGoals: [],
           },
     };
+  }
+
+  // ===== ZERO-BACKEND MULTI-TIER FILE UPLOAD ENGINE =====
+  // Supports Video (MP4/WebM/MOV), Audio (MP3/M4A/WAV/OGG), PDF, Images (JPG/PNG/WebP), and any attachment.
+  function compressImageToDataUrl(file, maxDim = 720, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('خوێندنەوەی وێنەکە سەرکەوتوو نەبوو'));
+      reader.onload = () => {
+        // Keep small PNG icons with transparency intact
+        if (file.type === 'image/png' && file.size <= 70 * 1024) {
+          resolve(reader.result);
+          return;
+        }
+        const img = new Image();
+        img.onerror = () => resolve(reader.result);
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > maxDim || height > maxDim) {
+            if (width >= height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          const out = canvas.toDataURL(mime, quality);
+          resolve(out);
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function xhrUploadForm(url, formData, onProgress) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url, true);
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable && typeof onProgress === 'function') {
+          onProgress(Math.round((e.loaded / e.total) * 100));
+        }
+      };
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            resolve(JSON.parse(xhr.responseText));
+          } catch (_) {
+            resolve(xhr.responseText);
+          }
+        } else {
+          reject(new Error(`HTTP ${xhr.status}`));
+        }
+      };
+      xhr.onerror = () => reject(new Error('کێشەی پەیوەندی بە ئینتەرنێتەوە'));
+      xhr.send(formData);
+    });
+  }
+
+  async function uploadFileToCloud(file, kind, onProgress) {
+    // Tier 1: Optional Cloudinary Unsigned Permanent CDN (if user configured in Settings)
+    if (cloudinaryName && cloudinaryPreset) {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', cloudinaryPreset);
+      const res = await xhrUploadForm(
+        `https://api.cloudinary.com/v1_1/${encodeURIComponent(cloudinaryName)}/auto/upload`,
+        fd,
+        onProgress
+      );
+      if (res?.secure_url) return { url: res.secure_url, provider: 'Cloudinary CDN' };
+    }
+
+    // Tier 2: Images -> smart client-side compression into permanent Data URI (never expires!)
+    if (kind === 'image') {
+      if (typeof onProgress === 'function') onProgress(55);
+      const dataUrl = await compressImageToDataUrl(file, 720, 0.82);
+      if (typeof onProgress === 'function') onProgress(100);
+      return { url: dataUrl, provider: 'هەمیشەیی (وێنەی پەستێنراو)' };
+    }
+
+    // Tier 3: Video, Audio, PDF, and any Attachment -> Gofile.io Cloud (CORS-enabled, zero config)
+    try {
+      const fd = new FormData();
+      fd.append('file', file, file.name);
+      const res = await xhrUploadForm('https://upload.gofile.io/uploadfile', fd, onProgress);
+      const pageUrl = res?.data?.downloadPage;
+      if (pageUrl) return { url: pageUrl, provider: 'Gofile Cloud' };
+    } catch (err) {
+      console.warn('Gofile upload fallback triggered:', err);
+    }
+
+    // Tier 4: Automatic fallback -> tmpfiles.org (CORS-enabled)
+    const fd2 = new FormData();
+    fd2.append('file', file, file.name);
+    const res2 = await xhrUploadForm('https://tmpfiles.org/api/v1/upload', fd2, onProgress);
+    if (res2?.data?.url) {
+      return { url: res2.data.url, provider: 'TmpFiles Cloud' };
+    }
+
+    throw new Error('نەتوانرا فایلەکە ئەپلۆد بکرێت');
+  }
+
+  // ===== UPLOAD WIDGET RENDER & BINDING =====
+  const ACCEPT_MAP = {
+    video: 'video/*,.mp4,.webm,.mov,.mkv',
+    audio: 'audio/*,.mp3,.m4a,.wav,.ogg,.aac',
+    pdf: '.pdf,application/pdf',
+    image: 'image/*,.jpg,.jpeg,.png,.webp,.gif',
+    file: '*/*',
+  };
+
+  const KIND_BTN_LABEL = {
+    video: '🎬 ئەپلۆدی ڤیدیۆ',
+    audio: '🎧 ئەپلۆدی دەنگ',
+    pdf: '📄 ئەپلۆدی PDF',
+    image: '🖼️ ئەپلۆدی وێنە',
+    file: '📎 ئەپلۆدی هاوپێچ',
+  };
+
+  const KIND_PLACEHOLDER = {
+    video: 'لینکی ڤیدیۆ (MP4 / YouTube / ئەپلۆدکراو)...',
+    audio: 'لینکی دەنگ (MP3 / M4A / ئەپلۆدکراو)...',
+    pdf: 'لینکی فایلی PDF (ئەپلۆدکراو یان دەرەکی)...',
+    image: 'لینکی وێنە یان ئەپلۆدکراو...',
+    file: 'لینکی فایلی هاوپێچ...',
+  };
+
+  function renderUploadPreviewHtml(url, kind) {
+    const val = (url || '').trim();
+    if (!val) return '';
+    if (kind === 'image' || val.startsWith('data:image/')) {
+      return `
+        <img src="${esc(val)}" alt="Preview" />
+        <button type="button" class="btn btn-danger btn-sm" data-clear-upload>✕ لابردن</button>
+      `;
+    }
+    const isDirectVideo = /\.(mp4|webm|ogg|mov)(\?|$)/i.test(val);
+    const isDirectAudio = /\.(mp3|m4a|wav|ogg|aac)(\?|$)/i.test(val);
+    let mediaEl = '';
+    if (kind === 'video' && isDirectVideo) {
+      mediaEl = `<video controls src="${esc(val)}"></video>`;
+    } else if (kind === 'audio' && isDirectAudio) {
+      mediaEl = `<audio controls src="${esc(val)}"></audio>`;
+    }
+    return `
+      ${mediaEl}
+      <a class="upload-file-chip" href="${esc(val)}" target="_blank" rel="noopener">🔗 کردنەوە و تاقیکردنەوەی فایل</a>
+      <button type="button" class="btn btn-danger btn-sm" data-clear-upload>✕ لابردن</button>
+    `;
+  }
+
+  function buildUploadBoxHtml({ name, label, kind = 'file', value = '', idAttr = '', full = true }) {
+    const accept = ACCEPT_MAP[kind] || '*/*';
+    const btnText = KIND_BTN_LABEL[kind] || '📤 ئەپلۆد';
+    const ph = KIND_PLACEHOLDER[kind] || 'لینک یان ئەپلۆد...';
+    const displayVal = value && value.startsWith('data:image/') ? value : (value || '');
+    return `
+      <div class="form-group ${full ? 'full' : ''}">
+        <label>${esc(label)}</label>
+        <div class="upload-box" data-upload-widget data-kind="${esc(kind)}" data-name="${esc(name)}">
+          <div class="upload-row">
+            <label class="upload-btn">
+              <span>${btnText}</span>
+              <input type="file" accept="${esc(accept)}" data-upload-file />
+            </label>
+            <input class="input" type="text" dir="ltr" ${idAttr ? `id="${esc(idAttr)}"` : ''} name="${esc(name)}" value="${esc(displayVal)}" placeholder="${esc(ph)}" data-upload-url />
+          </div>
+          <div class="upload-progress" data-upload-progress>
+            <div class="upload-progress-bar" data-upload-bar></div>
+          </div>
+          <div class="upload-status" data-upload-status></div>
+          <div class="upload-preview" data-upload-preview>${renderUploadPreviewHtml(value, kind)}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function bindUploadWidgets(container, onValueChange) {
+    container.querySelectorAll('[data-upload-widget]').forEach((box) => {
+      const kind = box.dataset.kind || 'file';
+      const name = box.dataset.name || '';
+      const fileInp = box.querySelector('[data-upload-file]');
+      const urlInp = box.querySelector('[data-upload-url]');
+      const prog = box.querySelector('[data-upload-progress]');
+      const bar = box.querySelector('[data-upload-bar]');
+      const status = box.querySelector('[data-upload-status]');
+      const preview = box.querySelector('[data-upload-preview]');
+
+      const refreshPreview = () => {
+        preview.innerHTML = renderUploadPreviewHtml(urlInp.value, kind);
+        preview.querySelector('[data-clear-upload]')?.addEventListener('click', () => {
+          urlInp.value = '';
+          status.textContent = '';
+          refreshPreview();
+          if (typeof onValueChange === 'function') onValueChange(name, '', null);
+        });
+      };
+      refreshPreview();
+
+      urlInp.addEventListener('input', () => {
+        refreshPreview();
+        if (typeof onValueChange === 'function') onValueChange(name, urlInp.value.trim(), null);
+      });
+
+      fileInp.addEventListener('change', async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        prog.classList.add('active');
+        bar.style.width = '10%';
+        status.textContent = `⏳ خەریکە (${file.name} • ${formatBytes(file.size)}) ئەپلۆد دەکرێت...`;
+        try {
+          const result = await uploadFileToCloud(file, kind, (pct) => {
+            bar.style.width = `${pct}%`;
+            status.textContent = `⏳ خەریکە ئەپلۆد دەکرێت... ${pct}% (${file.name})`;
+          });
+          urlInp.value = result.url;
+          bar.style.width = '100%';
+          status.textContent = `✓ ئەپلۆد سەرکەوتوو بوو (${file.name} • ${formatBytes(file.size)}) — ${result.provider}`;
+          refreshPreview();
+          if (typeof onValueChange === 'function') onValueChange(name, result.url, file);
+          showToast(`فایلی ${file.name} بە سەرکەوتوویی ئەپلۆد کرا ✓`, 'success');
+        } catch (err) {
+          status.textContent = `✕ هەڵە لە ئەپلۆد: ${err.message}`;
+          showToast('ئەپلۆدکردن سەرکەوتوو نەبوو: ' + err.message, 'error');
+        } finally {
+          setTimeout(() => prog.classList.remove('active'), 900);
+          fileInp.value = '';
+        }
+      });
+    });
   }
 
   // ===== CLOUD MOCK API SYNC =====
@@ -168,7 +432,6 @@
       const data = await resp.json();
 
       if (!data || data.initialized === false || !Array.isArray(data.courses)) {
-        // Seed cloud automatically from default_data.json if empty
         db = await loadDefaultDataset();
         await saveToCloud('داتا بنەڕەتییەکان بە سەرکەوتوویی بارکرانە سەر Mock API ✓');
       } else {
@@ -272,11 +535,19 @@
   overlay.addEventListener('click', closeSidebar);
 
   // ===== MODAL HELPERS =====
-  function openModal(title, bodyHtml, onSave) {
+  function openModal(title, bodyHtml, onSave, onAfterRender) {
     $('modal-title').textContent = title;
     $('modal-body').innerHTML = bodyHtml;
     modalOnSave = onSave;
     $('editor-modal').classList.add('open');
+    bindUploadWidgets($('modal-body'), (fieldName, url, file) => {
+      // Auto-populate PDF size when a PDF book is uploaded!
+      if (fieldName === 'pdfUrl' && file) {
+        const sizeInp = $('modal-body').querySelector('[name="size"]');
+        if (sizeInp) sizeInp.value = formatBytes(file.size);
+      }
+    });
+    if (typeof onAfterRender === 'function') onAfterRender($('modal-body'));
   }
 
   function closeModal() {
@@ -358,7 +629,7 @@
       <div class="api-banner">
         <div>
           <h2 style="font-size:18px;margin-bottom:4px;">بەخێربێیت بۆ داشبۆردی بەڕێوەبردنی فێرگەی ڕێبوون ✨</h2>
-          <div style="font-size:13px;opacity:0.9;">هەر داتایەک لێرە زیاد بکەیت، دەستکاری بکەیت یان بیسڕیتەوە، ڕاستەوخۆ لە ڕێگەی Mock API لەناو ئەپەکەدا دەردەکەوێت!</div>
+          <div style="font-size:13px;opacity:0.9;">پشتگیری تەواوی ئەپلۆدکردنی <strong>ڤیدیۆ، دەنگ (Audio)، کتێبی PDF، وێنەی بەرگ/مامۆستا و هەر فایلی هاوپێچێک</strong> بەبێ سێرڤەر!</div>
           <code>${esc(apiUrl)}</code>
         </div>
         <div style="text-align:left;font-size:12px;opacity:0.88;">
@@ -382,11 +653,11 @@
           <h2>⚡ کردارە خێراکان</h2>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn btn-primary" data-quick="courses">➕ زیادکردنی کۆرس / ڕاڤەی پەرتووک</button>
-          <button class="btn btn-primary" data-quick="webinars">➕ زیادکردنی وێبینار</button>
-          <button class="btn btn-primary" data-quick="pdfBooks">➕ زیادکردنی کتێبی PDF</button>
-          <button class="btn btn-primary" data-quick="articles">➕ زیادکردنی بابەتی نووسراو</button>
-          <button class="btn btn-primary" data-quick="teachers">➕ زیادکردنی مامۆستا</button>
+          <button class="btn btn-primary" data-quick="courses">🎬 زیادکردنی کۆرس + ڤیدیۆ/دەنگ</button>
+          <button class="btn btn-primary" data-quick="webinars">🎙️ زیادکردنی وێبینار + ڤیدیۆ</button>
+          <button class="btn btn-primary" data-quick="pdfBooks">📚 ئەپلۆدکردنی کتێبی PDF</button>
+          <button class="btn btn-primary" data-quick="guidance">🧭 زیادکردنی ڕێنمایی + ڤیدیۆ</button>
+          <button class="btn btn-primary" data-quick="teachers">👨‍🏫 زیادکردنی مامۆستا + وێنە</button>
           <button class="btn btn-primary" data-quick="notifications">🔔 ناردنی ئاگادارکردنەوە</button>
         </div>
       </div>
@@ -414,7 +685,7 @@
     });
   }
 
-  // ===== 2. SETTINGS & BACKUP =====
+  // ===== 2. SETTINGS & UPLOAD STORAGE =====
   function renderSettings(root) {
     root.innerHTML = `
       <div class="panel">
@@ -422,7 +693,7 @@
           <h2>☁️ پەیوەندی بە Cloud Mock API (بەبێ سێرڤەر و باکئێند)</h2>
         </div>
         <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">
-          ئەم داشبۆردە ڕاستەوخۆ بەستراوەتەوە بە Cloud Mock API (npoint.io) کە هەموو ئەپەکە و داشبۆردەکە پێکەوە هاوبەش دەکات بەبێ پێویستی بە هیچ سێرڤەرێک.
+          هەموو داتاکانی داشبۆردەکە ڕاستەوخۆ پاشەکەوت دەکرێن لەسەر ئەم Cloud Mock APIیە و ئەپەکەش ڕاستەوخۆ لێرەوە دەیانخوێنێتەوە.
         </p>
         <div class="form-group">
           <label>بەستەری Mock API (JSON Endpoint URL)</label>
@@ -431,6 +702,30 @@
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
           <button class="btn btn-primary" id="btn-save-api">💾 پاشەکەوتکردن و پەیوەستکردن</button>
           <button class="btn btn-outline" id="btn-reset-api">گەڕاندنەوە بۆ لینکی فەرمی ڕێبوون</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h2>📤 ڕێکخستنی ئەپلۆدکردنی ڤیدیۆ، دەنگ، PDF و وێنە</h2>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">
+          بە شێوەی خۆکار (بەبێ هیچ ڕێکخستنێک): <strong>وێنەکان</strong> بە شێوەی هەمیشەیی پاشەکەوت دەکرێن و <strong>ڤیدیۆ، دەنگ و PDF</strong> لە ڕێگەی <strong>Gofile Cloud / TmpFiles</strong> ئەپلۆد دەکرێن.<br/>
+          ئارەزوومەندانە: ئەگەر هەژماری خۆڕایی <strong>Cloudinary</strong> (٢٥ گێگابایتی هەمیشەیی) ت هەبێت، لێرە ناوەکەی بنووسە بۆ پەخشی هەمیشەیی خێراتر:
+        </p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Cloudinary Cloud Name (ئارەزوومەندانە)</label>
+            <input id="cfg-cloud-name" class="input" dir="ltr" placeholder="بۆ نموونە: reboon-academy" value="${esc(cloudinaryName)}" />
+          </div>
+          <div class="form-group">
+            <label>Unsigned Upload Preset (ئارەزوومەندانە)</label>
+            <input id="cfg-cloud-preset" class="input" dir="ltr" placeholder="بۆ نموونە: reboon_unsigned" value="${esc(cloudinaryPreset)}" />
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="btn-save-cloud">💾 پاشەکەوتکردنی ڕێکخستنی ئەپلۆد</button>
+          <button class="btn btn-outline" id="btn-clear-cloud">بەکارهێنانی ئەپلۆدی خۆڕایی خۆکار</button>
         </div>
       </div>
 
@@ -467,6 +762,24 @@
       loadFromCloud(true);
     });
 
+    $('btn-save-cloud').addEventListener('click', () => {
+      cloudinaryName = $('cfg-cloud-name').value.trim();
+      cloudinaryPreset = $('cfg-cloud-preset').value.trim();
+      localStorage.setItem(STORAGE_KEY_CLOUD_NAME, cloudinaryName);
+      localStorage.setItem(STORAGE_KEY_CLOUD_PRESET, cloudinaryPreset);
+      showToast('ڕێکخستنی ئەپلۆد پاشەکەوتکرا ✓');
+    });
+
+    $('btn-clear-cloud').addEventListener('click', () => {
+      cloudinaryName = '';
+      cloudinaryPreset = '';
+      localStorage.removeItem(STORAGE_KEY_CLOUD_NAME);
+      localStorage.removeItem(STORAGE_KEY_CLOUD_PRESET);
+      $('cfg-cloud-name').value = '';
+      $('cfg-cloud-preset').value = '';
+      showToast('گەڕایەوە سەر ئەپلۆدی خۆڕایی خۆکار ✓');
+    });
+
     $('btn-export-json').addEventListener('click', () => {
       const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json;charset=utf-8' });
       const a = document.createElement('a');
@@ -500,7 +813,7 @@
     });
   }
 
-  // ===== SIMPLE COLLECTION SCHEMAS =====
+  // ===== SIMPLE COLLECTION SCHEMAS (ALL WITH UPLOAD/ATTACHMENT SUPPORT) =====
   const SIMPLE_CONFIGS = {
     dailyLearning: {
       title: 'فێربوونی ڕۆژانە',
@@ -512,12 +825,14 @@
         { name: 'arabicQuote', label: 'دەق / فەرموودە (عەرەبی یان کوردی)', type: 'textarea', required: true, full: true },
         { name: 'kurdishExplanation', label: 'ڕوونکردنەوەی کوردی', type: 'textarea', full: true },
         { name: 'source', label: 'سەرچاوە', type: 'text', full: true },
+        { name: 'imageUrl', label: '🖼️ وێنە یان کارتی گرافیکی فێربوونی ڕۆژانە (ئارەزوومەندانە)', type: 'upload', kind: 'image', full: true },
+        { name: 'audioUrl', label: '🎧 دەنگی خوێندنەوەی فەرموودە / دەق (ئارەزوومەندانە)', type: 'upload', kind: 'audio', full: true },
       ],
       card: (x) => ({
         title: x.title,
         meta: x.source || x.badge,
         desc: `${x.arabicQuote}\n${x.kurdishExplanation || ''}`,
-        tags: [x.badge].filter(Boolean),
+        tags: [x.badge, ...mediaTagsFor(x)].filter(Boolean),
       }),
     },
 
@@ -529,12 +844,13 @@
         { name: 'arabicName', label: 'ناو بە عەرەبی (لەسەر کارتەکە دەردەکەوێت)', type: 'text', required: true },
         { name: 'kurdishName', label: 'ناو بە کوردی', type: 'text', required: true },
         { name: 'colorHex', label: 'ڕەنگ', type: 'color', default: () => '#15686C' },
+        { name: 'iconUrl', label: '🖼️ ئایکۆن یان وێنەی تایبەت بۆ زانستەکە (PNG / SVG / JPG)', type: 'upload', kind: 'image', full: true },
       ],
       card: (x) => ({
         title: `${x.arabicName} — ${x.kurdishName}`,
         meta: `ID: ${x.id}`,
         color: x.colorHex,
-        tags: [x.id],
+        tags: [x.id, ...mediaTagsFor(x)],
       }),
     },
 
@@ -550,13 +866,17 @@
         { name: 'colorStartHex', label: 'ڕەنگی سەرەکی', type: 'color', default: () => '#15686C' },
         { name: 'colorEndHex', label: 'ڕەنگی دووەم', type: 'color', default: () => '#0C4346' },
         { name: 'desc', label: 'پوختە و وردەکاری وێبینار', type: 'textarea', full: true },
+        { name: 'videoUrl', label: '🎬 فایلی ڤیدیۆی وێبینار (ئەپلۆدی MP4/WebM یان لینک)', type: 'upload', kind: 'video', full: true },
+        { name: 'audioUrl', label: '🎧 فایلی دەنگی وێبینار (ئەپلۆدی MP3/M4A)', type: 'upload', kind: 'audio', full: true },
+        { name: 'thumbnailUrl', label: '🖼️ وێنەی مامۆستا / بەرگی وێبینار', type: 'upload', kind: 'image', full: true },
+        { name: 'attachmentUrl', label: '📎 فایلی هاوپێچ / سلاید / PDFی وێبینار', type: 'upload', kind: 'file', full: true },
       ],
       card: (x) => ({
         title: x.title,
         meta: `${x.speaker} • ${x.duration}`,
         desc: x.desc,
         color: x.colorStartHex,
-        tags: [x.categoryLabel],
+        tags: [x.categoryLabel, ...mediaTagsFor(x)],
       }),
     },
 
@@ -569,17 +889,19 @@
         { name: 'author', label: 'دانەر / نووسەر', type: 'text', required: true },
         { name: 'category', label: 'بەش / پۆلێن', type: 'select', options: PDF_CATEGORIES, default: () => 'aqeedah' },
         { name: 'pages', label: 'ژمارەی لاپەڕە', type: 'number', default: () => 80 },
-        { name: 'size', label: 'قەبارە (بۆ نموونە: 3.5 MB)', type: 'text', default: () => '3.5 MB', dir: 'ltr' },
+        { name: 'size', label: 'قەبارە (خۆکارانە پڕدەبێتەوە لەکاتی ئەپلۆد)', type: 'text', default: () => '3.5 MB', dir: 'ltr' },
         { name: 'icon', label: 'ئیمۆجی / ئایکۆن', type: 'text', default: () => '📖' },
         { name: 'coverColorHex', label: 'ڕەنگی بەرگ', type: 'color', default: () => '#15686C' },
         { name: 'desc', label: 'ناساندنی کتێب', type: 'textarea', full: true },
+        { name: 'pdfUrl', label: '📄 ئەپلۆدکردنی فایلی PDFی کتێبەکە', type: 'upload', kind: 'pdf', full: true },
+        { name: 'coverImageUrl', label: '🖼️ ئەپلۆدکردنی وێنەی بەرگی کتێبەکە', type: 'upload', kind: 'image', full: true },
       ],
       card: (x) => ({
         title: `${x.icon || '📖'} ${x.title}`,
         meta: `${x.author} • ${x.pages} لاپەڕە • ${x.size}`,
         desc: x.desc,
         color: x.coverColorHex,
-        tags: [PDF_CATEGORIES.find((c) => c.value === x.category)?.label || x.category],
+        tags: [PDF_CATEGORIES.find((c) => c.value === x.category)?.label || x.category, ...mediaTagsFor(x)],
       }),
     },
 
@@ -594,13 +916,17 @@
         { name: 'colorHex', label: 'ڕەنگ', type: 'color', default: () => '#15686C' },
         { name: 'summary', label: 'پوختەی ڕێنمایی', type: 'textarea', full: true },
         { name: 'keyTips', label: 'خاڵە گرنگەکان (هەر خاڵێک لە دێڕێکی نوێدا بنووسە)', type: 'lines', full: true },
+        { name: 'videoUrl', label: '🎬 فایلی ڤیدیۆی ڕێنمایی (MP4 / لینک)', type: 'upload', kind: 'video', full: true },
+        { name: 'audioUrl', label: '🎧 فایلی دەنگی ڕێنمایی (MP3 / M4A)', type: 'upload', kind: 'audio', full: true },
+        { name: 'thumbnailUrl', label: '🖼️ وێنەی بەرگی ڕێنمایی', type: 'upload', kind: 'image', full: true },
+        { name: 'attachmentUrl', label: '📎 فایلی هاوپێچ / برۆشوور', type: 'upload', kind: 'file', full: true },
       ],
       card: (x) => ({
         title: x.title,
         meta: `${x.specialist} • ${x.duration}`,
         desc: x.summary,
         color: x.colorHex,
-        tags: [`${(x.keyTips || []).length} خاڵی گرنگ`],
+        tags: [`${(x.keyTips || []).length} خاڵی گرنگ`, ...mediaTagsFor(x)],
       }),
     },
 
@@ -615,13 +941,16 @@
         { name: 'colorHex', label: 'ڕەنگ', type: 'color', default: () => '#15686C' },
         { name: 'excerpt', label: 'پوختە (کورتە)', type: 'textarea', full: true },
         { name: 'fullContent', label: 'دەقی تەواوی بابەتەکە', type: 'textarea', full: true },
+        { name: 'imageUrl', label: '🖼️ وێنەی سەرەکی بابەتەکە', type: 'upload', kind: 'image', full: true },
+        { name: 'audioUrl', label: '🎧 دەنگی خوێندنەوەی بابەتەکە (ئارەزوومەندانە)', type: 'upload', kind: 'audio', full: true },
+        { name: 'attachmentUrl', label: '📎 فایلی PDF / هاوپێچی بابەت', type: 'upload', kind: 'file', full: true },
       ],
       card: (x) => ({
         title: x.title,
         meta: x.author,
         desc: x.excerpt || x.fullContent,
         color: x.colorHex,
-        tags: [x.badge].filter(Boolean),
+        tags: [x.badge, ...mediaTagsFor(x)].filter(Boolean),
       }),
     },
 
@@ -640,13 +969,15 @@
         { name: 'colorEndHex', label: 'ڕەنگی ٢', type: 'color', default: () => '#0C4346' },
         { name: 'bio', label: 'ژیاننامە و ناساندن', type: 'textarea', full: true },
         { name: 'books', label: 'کتێبە ڕاڤەکراوەکان (هەر کتێبێک لە دێڕێکی نوێدا)', type: 'lines', full: true },
+        { name: 'photoUrl', label: '🖼️ وێنەی پڕۆفایلی مامۆستا', type: 'upload', kind: 'image', full: true },
+        { name: 'cvUrl', label: '📄 فایلی سیڤی / ئیجازەنامەی مامۆستا (PDF)', type: 'upload', kind: 'pdf', full: true },
       ],
       card: (x) => ({
         title: x.name,
         meta: `${x.title} • ${x.specialty || ''}`,
         desc: x.bio,
         color: x.colorStartHex,
-        tags: [`📚 ${x.booksCount} کتێب`, `🎬 ${x.lessonsCount} وانە`, `👥 ${x.studentsCount}`],
+        tags: [`📚 ${x.booksCount} کتێب`, `🎬 ${x.lessonsCount} وانە`, ...mediaTagsFor(x)],
       }),
     },
 
@@ -661,12 +992,13 @@
         { name: 'badge', label: 'باج', type: 'text', default: () => 'بەسوود' },
         { name: 'icon', label: 'ئایکۆن / ئیمۆجی', type: 'text', default: () => '🌐' },
         { name: 'desc', label: 'ناساندنی سەرچاوە', type: 'textarea', full: true },
+        { name: 'attachmentUrl', label: '📎 فایلی هاوپێچ بۆ دابەزاندن (ئارەزوومەندانە)', type: 'upload', kind: 'file', full: true },
       ],
       card: (x) => ({
         title: `${x.icon || '🌐'} ${x.title}`,
         meta: x.url,
         desc: x.desc,
-        tags: [x.badge, RESOURCE_CATEGORIES.find((c) => c.value === x.category)?.label || x.category].filter(Boolean),
+        tags: [x.badge, RESOURCE_CATEGORIES.find((c) => c.value === x.category)?.label || x.category, ...mediaTagsFor(x)].filter(Boolean),
       }),
     },
 
@@ -684,13 +1016,15 @@
         { name: 'accentColorHex', label: 'ڕەنگ', type: 'color', default: () => '#15686C' },
         { name: 'isFeatured', label: 'پڕۆژەی هەڵبژێردراو (Featured)', type: 'checkbox' },
         { name: 'desc', label: 'وردەکاری پڕۆژە', type: 'textarea', full: true },
+        { name: 'imageUrl', label: '🖼️ وێنە / پۆستەری پڕۆژە', type: 'upload', kind: 'image', full: true },
+        { name: 'attachmentUrl', label: '📎 برۆشوور / فایلی هاوپێچی پڕۆژە', type: 'upload', kind: 'file', full: true },
       ],
       card: (x) => ({
         title: `${x.icon || '⭐'} ${x.title}`,
         meta: x.subtitle || x.url,
         desc: x.desc,
         color: x.accentColorHex,
-        tags: [x.badge, x.isFeatured ? '⭐ هەڵبژێردراو' : ''].filter(Boolean),
+        tags: [x.badge, x.isFeatured ? '⭐ هەڵبژێردراو' : '', ...mediaTagsFor(x)].filter(Boolean),
       }),
     },
 
@@ -721,6 +1055,15 @@
       const fullCls = f.full ? 'full' : '';
       const dirAttr = f.dir ? `dir="${f.dir}"` : '';
 
+      if (f.type === 'upload') {
+        return buildUploadBoxHtml({
+          name: f.name,
+          label: f.label,
+          kind: f.kind || 'file',
+          value: val,
+          full: f.full !== false,
+        });
+      }
       if (f.type === 'checkbox') {
         return `
           <div class="form-group ${fullCls}" style="align-self:end;">
@@ -883,7 +1226,7 @@
     });
   }
 
-  // ===== 3. COURSES + NESTED EPISODES =====
+  // ===== 3. COURSES + NESTED EPISODES WITH VIDEO / AUDIO / ATTACHMENT UPLOAD =====
   function renderCourses(root) {
     const items = db.courses || [];
     const filtered = items
@@ -900,7 +1243,9 @@
           <input class="input search-box" id="section-search" placeholder="🔍 گەڕان بە ناوی کتێب، مامۆستا یان زانست..." value="${esc(searchTerm)}" />
         </div>
         <div class="items-grid">
-          ${filtered.map(({ item, idx }) => `
+          ${filtered.map(({ item, idx }) => {
+            const epMediaCount = (item.episodes || []).filter((e) => e.videoUrl || e.audioUrl || e.attachmentUrl).length;
+            return `
             <div class="item-card">
               <div>
                 <div class="item-top">
@@ -914,15 +1259,17 @@
                 <div class="item-tags" style="margin-top:10px;">
                   <span class="tag">${esc(item.category)}</span>
                   <span class="tag">🎬 ${(item.episodes || []).length} ئەڵقە</span>
+                  ${epMediaCount > 0 ? `<span class="tag">📤 ${epMediaCount} ئەڵقە بە فایلەوە</span>` : ''}
                   ${item.featured ? '<span class="tag gold">⭐ لە پەڕەی سەرەکی</span>' : ''}
+                  ${mediaTagsFor(item).map((t) => `<span class="tag">${t}</span>`).join('')}
                 </div>
               </div>
               <div class="item-actions">
-                <button class="btn btn-outline btn-sm" data-edit="${idx}">✏️ دەستکاری و ئەڵقەکان</button>
+                <button class="btn btn-outline btn-sm" data-edit="${idx}">✏️ دەستکاری، ئەڵقە و ئەپلۆد</button>
                 <button class="btn btn-danger btn-sm" data-del="${idx}">🗑️ سڕینەوە</button>
               </div>
-            </div>
-          `).join('')}
+            </div>`;
+          }).join('')}
         </div>
       </div>
     `;
@@ -945,7 +1292,9 @@
             summary: '',
             accentColorHex: '#15686C',
             featured: true,
-            episodes: [{ id: 1, title: 'ئەڵقەی ١: پێشەکی و ناساندن', duration: '٢٥ خولەک' }],
+            coverImageUrl: '',
+            pdfUrl: '',
+            episodes: [{ id: 1, title: 'ئەڵقەی ١: پێشەکی و ناساندن', duration: '٢٥ خولەک', videoUrl: '', audioUrl: '', attachmentUrl: '' }],
           }
         : JSON.parse(JSON.stringify(db.courses[idx]));
 
@@ -954,20 +1303,69 @@
         if (!listEl) return;
         listEl.innerHTML = cur.episodes.map((ep, i) => `
           <div class="sub-item-row">
-            <div class="sub-fields">
-              <input class="input" data-ep-title="${i}" placeholder="ناونیشانی ئەڵقە" value="${esc(ep.title)}" />
-              <input class="input" data-ep-dur="${i}" placeholder="ماوە (٢٥ خولەک)" value="${esc(ep.duration || '٢٥ خولەک')}" />
+            <div>
+              <div class="sub-fields">
+                <input class="input" data-ep-field="title" data-i="${i}" placeholder="ناونیشانی ئەڵقە" value="${esc(ep.title)}" />
+                <input class="input" data-ep-field="duration" data-i="${i}" placeholder="ماوە (٢٥ خولەک)" value="${esc(ep.duration || '٢٥ خولەک')}" />
+              </div>
+              <div class="ep-media-grid">
+                <div class="ep-mini-upload">
+                  <label class="upload-btn" title="ئەپلۆدی ڤیدیۆی ئەڵقە">
+                    <span>🎬 ڤیدیۆ</span>
+                    <input type="file" accept="${ACCEPT_MAP.video}" data-ep-upload="videoUrl" data-kind="video" data-i="${i}" />
+                  </label>
+                  <input class="input" dir="ltr" data-ep-field="videoUrl" data-i="${i}" placeholder="لینکی ڤیدیۆ..." value="${esc(ep.videoUrl || '')}" />
+                </div>
+                <div class="ep-mini-upload">
+                  <label class="upload-btn" title="ئەپلۆدی دەنگی ئەڵقە">
+                    <span>🎧 دەنگ</span>
+                    <input type="file" accept="${ACCEPT_MAP.audio}" data-ep-upload="audioUrl" data-kind="audio" data-i="${i}" />
+                  </label>
+                  <input class="input" dir="ltr" data-ep-field="audioUrl" data-i="${i}" placeholder="لینکی دەنگ (MP3)..." value="${esc(ep.audioUrl || '')}" />
+                </div>
+                <div class="ep-mini-upload">
+                  <label class="upload-btn" title="ئەپلۆدی هاوپێچ / مەتن">
+                    <span>📎 هاوپێچ</span>
+                    <input type="file" accept="*/*" data-ep-upload="attachmentUrl" data-kind="file" data-i="${i}" />
+                  </label>
+                  <input class="input" dir="ltr" data-ep-field="attachmentUrl" data-i="${i}" placeholder="PDF / هاوپێچ..." value="${esc(ep.attachmentUrl || '')}" />
+                </div>
+              </div>
             </div>
             <button type="button" class="btn btn-danger btn-sm" data-ep-del="${i}">✕</button>
           </div>
         `).join('');
 
-        listEl.querySelectorAll('[data-ep-title]').forEach((inp) => {
-          inp.addEventListener('input', () => (cur.episodes[Number(inp.dataset.epTitle)].title = inp.value));
+        listEl.querySelectorAll('[data-ep-field]').forEach((inp) => {
+          inp.addEventListener('input', () => {
+            cur.episodes[Number(inp.dataset.i)][inp.dataset.epField] = inp.value;
+          });
         });
-        listEl.querySelectorAll('[data-ep-dur]').forEach((inp) => {
-          inp.addEventListener('input', () => (cur.episodes[Number(inp.dataset.epDur)].duration = inp.value));
+
+        listEl.querySelectorAll('[data-ep-upload]').forEach((fileInp) => {
+          fileInp.addEventListener('change', async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            const i = Number(fileInp.dataset.i);
+            const field = fileInp.dataset.epUpload;
+            const kind = fileInp.dataset.kind;
+            const labelSpan = fileInp.previousElementSibling;
+            const origLabel = labelSpan.textContent;
+            labelSpan.textContent = '⏳ 10%';
+            try {
+              const res = await uploadFileToCloud(file, kind, (pct) => {
+                labelSpan.textContent = `⏳ ${pct}%`;
+              });
+              cur.episodes[i][field] = res.url;
+              showToast(`فایلی ${file.name} بۆ ئەڵقەی ${i + 1} ئەپلۆد کرا ✓`, 'success');
+              renderEpisodeRows();
+            } catch (err) {
+              labelSpan.textContent = origLabel;
+              showToast('هەڵە لە ئەپلۆد: ' + err.message, 'error');
+            }
+          });
         });
+
         listEl.querySelectorAll('[data-ep-del]').forEach((btn) => {
           btn.addEventListener('click', () => {
             cur.episodes.splice(Number(btn.dataset.epDel), 1);
@@ -1008,10 +1406,12 @@
             <label>پوختەی کۆرس</label>
             <textarea class="input" id="c-summary">${esc(cur.summary)}</textarea>
           </div>
+          ${buildUploadBoxHtml({ name: 'coverImageUrl', idAttr: 'c-cover', label: '🖼️ وێنەی بەرگی کۆرس / پەرتووک', kind: 'image', value: cur.coverImageUrl || '' })}
+          ${buildUploadBoxHtml({ name: 'pdfUrl', idAttr: 'c-pdf', label: '📄 فایلی PDFی مەتن یان کتێبەکە', kind: 'pdf', value: cur.pdfUrl || '' })}
           <div class="form-group full">
             <div class="sub-list-box">
               <div class="sub-list-header">
-                <strong>🎬 ئەڵقەکانی کۆرس (${cur.episodes.length})</strong>
+                <strong>🎬 ئەڵقەکانی کۆرس (ڤیدیۆ + دەنگ + هاوپێچ بۆ هەر ئەڵقەیەک)</strong>
                 <button type="button" class="btn btn-primary btn-sm" id="btn-add-episode">➕ زیادکردنی ئەڵقە</button>
               </div>
               <div id="episodes-list"></div>
@@ -1031,10 +1431,21 @@
         cur.accentColorHex = $('c-color').value;
         cur.featured = $('c-featured').checked;
         cur.summary = $('c-summary').value.trim();
+        cur.coverImageUrl = $('c-cover').value.trim();
+        cur.pdfUrl = $('c-pdf').value.trim();
         cur.episodes = cur.episodes
           .filter((ep) => ep.title.trim())
-          .map((ep, i) => ({ id: i + 1, title: ep.title.trim(), duration: ep.duration.trim() || '٢٥ خولەک' }));
-        if (cur.episodes.length === 0) cur.episodes = [{ id: 1, title: 'ئەڵقەی ١', duration: '٢٥ خولەک' }];
+          .map((ep, i) => ({
+            id: i + 1,
+            title: ep.title.trim(),
+            duration: (ep.duration || '').trim() || '٢٥ خولەک',
+            videoUrl: (ep.videoUrl || '').trim(),
+            audioUrl: (ep.audioUrl || '').trim(),
+            attachmentUrl: (ep.attachmentUrl || '').trim(),
+          }));
+        if (cur.episodes.length === 0) {
+          cur.episodes = [{ id: 1, title: 'ئەڵقەی ١', duration: '٢٥ خولەک', videoUrl: '', audioUrl: '', attachmentUrl: '' }];
+        }
 
         if (isNew) db.courses.unshift(cur);
         else db.courses[idx] = cur;
@@ -1043,7 +1454,14 @@
 
       renderEpisodeRows();
       $('btn-add-episode').addEventListener('click', () => {
-        cur.episodes.push({ id: cur.episodes.length + 1, title: `ئەڵقەی ${cur.episodes.length + 1}`, duration: '٢٥ خولەک' });
+        cur.episodes.push({
+          id: cur.episodes.length + 1,
+          title: `ئەڵقەی ${cur.episodes.length + 1}`,
+          duration: '٢٥ خولەک',
+          videoUrl: '',
+          audioUrl: '',
+          attachmentUrl: '',
+        });
         renderEpisodeRows();
       });
     };
@@ -1057,7 +1475,7 @@
     }));
   }
 
-  // ===== 4. SANAD + CHAIN NODES =====
+  // ===== 4. SANAD + CHAIN NODES + VIDEO/AUDIO/PDF/IMAGE UPLOAD =====
   function renderSanad(root) {
     const items = db.sanad || [];
     root.innerHTML = `
@@ -1081,10 +1499,11 @@
                 <div class="item-tags" style="margin-top:10px;">
                   <span class="tag">${esc(sn.science)}</span>
                   <span class="tag">⛓️ ${(sn.chain || []).length} زنجیرەی سەنەد</span>
+                  ${mediaTagsFor(sn).map((t) => `<span class="tag">${t}</span>`).join('')}
                 </div>
               </div>
               <div class="item-actions">
-                <button class="btn btn-outline btn-sm" data-edit="${idx}">✏️ دەستکاری و زنجیرە</button>
+                <button class="btn btn-outline btn-sm" data-edit="${idx}">✏️ دەستکاری، زنجیرە و فایلەکان</button>
                 <button class="btn btn-danger btn-sm" data-del="${idx}">🗑️ سڕینەوە</button>
               </div>
             </div>
@@ -1108,6 +1527,10 @@
             reqText: '',
             iconEmoji: '📜',
             colorHex: '#15686C',
+            imageUrl: '',
+            videoUrl: '',
+            audioUrl: '',
+            pdfUrl: '',
             chain: [{ name: '', title: '' }],
           }
         : JSON.parse(JSON.stringify(db.sanad[idx]));
@@ -1145,6 +1568,10 @@
           <div class="form-group"><label>سەردێڕی مەرجەکان</label><input class="input" id="sn-reqt" value="${esc(cur.reqTitle)}" /></div>
           <div class="form-group"><label>کۆد (Key)</label><input class="input" id="sn-key" dir="ltr" value="${esc(cur.key)}" /></div>
           <div class="form-group full"><label>دەقی مەرجەکان</label><textarea class="input" id="sn-req">${esc(cur.reqText)}</textarea></div>
+          ${buildUploadBoxHtml({ name: 'videoUrl', idAttr: 'sn-video', label: '🎬 ڤیدیۆی وانەی سەنەد', kind: 'video', value: cur.videoUrl || '' })}
+          ${buildUploadBoxHtml({ name: 'audioUrl', idAttr: 'sn-audio', label: '🎧 دەنگی خوێندنەوەی مەتنەکە', kind: 'audio', value: cur.audioUrl || '' })}
+          ${buildUploadBoxHtml({ name: 'pdfUrl', idAttr: 'sn-pdf', label: '📄 فایلی PDFی مەتن یان نموونەی ئیجازە', kind: 'pdf', value: cur.pdfUrl || '' })}
+          ${buildUploadBoxHtml({ name: 'imageUrl', idAttr: 'sn-img', label: '🖼️ وێنەی مەتن / سەنەد', kind: 'image', value: cur.imageUrl || '' })}
           <div class="form-group full">
             <div class="sub-list-box">
               <div class="sub-list-header">
@@ -1171,6 +1598,10 @@
         cur.reqTitle = $('sn-reqt').value.trim();
         cur.reqText = $('sn-req').value.trim();
         cur.key = $('sn-key').value.trim() || ('sanad_' + Date.now());
+        cur.videoUrl = $('sn-video').value.trim();
+        cur.audioUrl = $('sn-audio').value.trim();
+        cur.pdfUrl = $('sn-pdf').value.trim();
+        cur.imageUrl = $('sn-img').value.trim();
         cur.chain = cur.chain.filter((n) => n.name.trim());
         if (isNew) db.sanad.push(cur);
         else db.sanad[idx] = cur;
@@ -1554,7 +1985,7 @@
     }));
   }
 
-  // ===== 8. ORGANIZATION & ACADEMY GOALS =====
+  // ===== 8. ORGANIZATION & ACADEMY GOALS (WITH LOGO + BROCHURE PDF UPLOAD) =====
   function renderOrganization(root) {
     const org = db.organization || {};
     const goals = Array.isArray(org.academyGoals) ? org.academyGoals : [];
@@ -1573,6 +2004,8 @@
           <div class="form-group full"><label>دروشم (Slogan)</label><input class="input" id="org-slogan" value="${esc(org.slogan)}" /></div>
           <div class="form-group full"><label>پێناسەی ڕێکخراو</label><textarea class="input" id="org-def" rows="4">${esc(org.definition)}</textarea></div>
           <div class="form-group full"><label>بوارەکانی کارکردن (هەر بوارێک لە دێڕێکی نوێدا)</label><textarea class="input" id="org-areas" rows="5">${esc((org.workAreas || []).join('\n'))}</textarea></div>
+          ${buildUploadBoxHtml({ name: 'logoUrl', idAttr: 'org-logo', label: '🖼️ لۆگۆی فەرمی ڕێکخراو', kind: 'image', value: org.logoUrl || '' })}
+          ${buildUploadBoxHtml({ name: 'brochureUrl', idAttr: 'org-brochure', label: '📄 فایلی PDFی پڕۆفایل / برۆشووری ڕێکخراو', kind: 'pdf', value: org.brochureUrl || '' })}
         </div>
       </div>
 
@@ -1595,6 +2028,8 @@
         </div>
       </div>
     `;
+
+    bindUploadWidgets(root);
 
     root.querySelectorAll('[data-g]').forEach((inp) => {
       inp.addEventListener('input', () => {
@@ -1625,6 +2060,8 @@
         slogan: $('org-slogan').value.trim(),
         definition: $('org-def').value.trim(),
         workAreas: $('org-areas').value.split('\n').map((s) => s.trim()).filter(Boolean),
+        logoUrl: $('org-logo').value.trim(),
+        brochureUrl: $('org-brochure').value.trim(),
         academyGoals: goals.filter((g) => g.title.trim()),
       };
       await saveToCloud('زانیارییەکانی ڕێکخراو و ئامانجەکان پاشەکەوتکران ✓');

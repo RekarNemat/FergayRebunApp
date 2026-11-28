@@ -5,6 +5,7 @@ import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/media_helpers.dart';
 import 'quiz_sheet.dart';
 
 void openLessonStudySheet(
@@ -173,9 +174,11 @@ void openBookPdfPreviewSheet(BuildContext context, String courseTitleOrKey) {
                 child: FilledButton.icon(
                   onPressed: () {
                     Navigator.pop(ctx);
-                    showReboonToast(
+                    openUploadedMediaUrl(
                       context,
-                      'فایلی PDFی (${detail.title}) بە سەرکەوتوویی داگیرا 📥',
+                      detail.pdfUrl,
+                      fallbackMessage:
+                          'فایلی PDFی (${detail.title}) بە سەرکەوتوویی داگیرا 📥',
                     );
                   },
                   icon: const Icon(Icons.download_rounded),
@@ -594,6 +597,18 @@ class _LessonStudySheetState extends State<LessonStudySheet> {
                             ],
                           ),
                         ),
+                        if (_playingEpisode!.videoUrl.trim().isNotEmpty ||
+                            _playingEpisode!.audioUrl.trim().isNotEmpty ||
+                            _playingEpisode!.attachmentUrl.trim().isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          MediaAttachmentsBar(
+                            videoUrl: _playingEpisode!.videoUrl,
+                            audioUrl: _playingEpisode!.audioUrl,
+                            attachmentUrl: _playingEpisode!.attachmentUrl,
+                            accentColor: AppColors.teal500,
+                            darkSurface: true,
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -683,7 +698,7 @@ class _LessonStudySheetState extends State<LessonStudySheet> {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    '⏱️ ${ep.duration} • 🎧 مەتنی دەنگی/ڤیدیۆیی',
+                                    '⏱️ ${ep.duration}${ep.videoUrl.isNotEmpty ? ' • 🎬 ڤیدیۆ' : ''}${ep.audioUrl.isNotEmpty ? ' • 🎧 دەنگ' : ''}${ep.attachmentUrl.isNotEmpty ? ' • 📎 هاوپێچ' : ''}${(ep.videoUrl.isEmpty && ep.audioUrl.isEmpty && ep.attachmentUrl.isEmpty) ? ' • 🎧 مەتنی دەنگی/ڤیدیۆیی' : ''}',
                                     style: Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],

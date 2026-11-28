@@ -96,6 +96,8 @@ class DailyLearningEntry {
   final String arabicQuote;
   final String kurdishExplanation;
   final String source;
+  final String imageUrl;
+  final String audioUrl;
 
   const DailyLearningEntry({
     required this.id,
@@ -104,6 +106,8 @@ class DailyLearningEntry {
     required this.arabicQuote,
     required this.kurdishExplanation,
     required this.source,
+    this.imageUrl = '',
+    this.audioUrl = '',
   });
 }
 
@@ -368,6 +372,8 @@ class OrganizationInfo {
     'گرنگیدان بە پێگەیاندنی گەنجان بەهەردوو ڕەگەزەوە.',
     'بڵاوکردنەوەی هۆشیاری لە بوارە جیاوازەکان.',
   ];
+  static String logoUrl = '';
+  static String brochureUrl = '';
 }
 
 class AcademyGoalItem {

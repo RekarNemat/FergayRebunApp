@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../data/library_teachers_data.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/media_helpers.dart';
 
 void openUsefulResourcesSheet(BuildContext context) {
   showModalBottomSheet(
@@ -218,21 +219,44 @@ class _UsefulResourcesSheetState extends State<_UsefulResourcesSheet> {
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: FilledButton.icon(
-                              onPressed: () => _openUrl(r.url),
-                              icon: const Icon(Icons.open_in_new_rounded, size: 16),
-                              label: const Text('🔗 سەردانکردنی ماڵپەڕ'),
-                              style: FilledButton.styleFrom(
-                                backgroundColor: AppColors.emerald600,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: FilledButton.icon(
+                                  onPressed: () => _openUrl(r.url),
+                                  icon: const Icon(Icons.open_in_new_rounded, size: 16),
+                                  label: const Text('🔗 سەردانکردنی ماڵپەڕ'),
+                                  style: FilledButton.styleFrom(
+                                    backgroundColor: AppColors.emerald600,
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              if (r.attachmentUrl.trim().isNotEmpty) ...[
+                                const SizedBox(width: 8),
+                                OutlinedButton.icon(
+                                  onPressed: () => openUploadedMediaUrl(
+                                    context,
+                                    r.attachmentUrl,
+                                  ),
+                                  icon: const Icon(Icons.attach_file_rounded, size: 16),
+                                  label: const Text('📎 فایل'),
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ],
                       ),

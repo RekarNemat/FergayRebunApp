@@ -4,6 +4,7 @@ import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/media_helpers.dart';
 import '../../widgets/reboon_logo.dart';
 
 void openSanadDetailSheet(
@@ -261,9 +262,11 @@ void openSanadCertificatePreviewSheet(
               child: FilledButton.icon(
                 onPressed: () {
                   Navigator.pop(ctx);
-                  showReboonToast(
+                  openUploadedMediaUrl(
                     context,
-                    'ئیجازەی سەنەد (${sanad.science}) بە PDF داگیرا 📜',
+                    sanad.pdfUrl,
+                    fallbackMessage:
+                        'ئیجازەی سەنەد (${sanad.science}) بە PDF داگیرا 📜',
                   );
                 },
                 icon: const Icon(Icons.download_rounded),
@@ -431,6 +434,17 @@ class _SanadDetailSheetState extends State<SanadDetailSheet> {
                         'مەتن / کتێب: ${sanad.book} • مامۆستا: ${sanad.teacherName}',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
+                      if (sanad.videoUrl.isNotEmpty ||
+                          sanad.audioUrl.isNotEmpty ||
+                          sanad.pdfUrl.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        MediaAttachmentsBar(
+                          videoUrl: sanad.videoUrl,
+                          audioUrl: sanad.audioUrl,
+                          pdfUrl: sanad.pdfUrl,
+                          accentColor: sanad.color,
+                        ),
+                      ],
                     ],
                   ),
                 ),

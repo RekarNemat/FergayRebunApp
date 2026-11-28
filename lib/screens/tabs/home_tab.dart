@@ -6,6 +6,7 @@ import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/media_helpers.dart';
 import '../modals/independent_quiz_sheet.dart';
 import '../modals/lesson_study_sheet.dart';
 import '../modals/live_stream_sheet.dart';
@@ -644,6 +645,24 @@ class _HomeTabState extends State<HomeTab> {
                 fontSize: 11.5,
               ),
             ),
+            if (daily.imageUrl.trim().isNotEmpty) ...[
+              const SizedBox(height: 10),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: SizedBox(
+                  height: 140,
+                  width: double.infinity,
+                  child: SmartUploadedImage(
+                    imageUrl: daily.imageUrl,
+                    fallback: const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+            ],
+            if (daily.audioUrl.trim().isNotEmpty) ...[
+              const SizedBox(height: 10),
+              MediaAttachmentsBar(audioUrl: daily.audioUrl),
+            ],
           ],
         ),
       ),
@@ -699,20 +718,24 @@ class _HomeTabState extends State<HomeTab> {
                   SizedBox(
                     height: 44,
                     child: Center(
-                      child: hasExactAsset
-                          ? Image.asset(
-                              'assets/images/icons/sci_${item.id}.png',
-                              width: 40,
-                              height: 40,
-                              color: iconTint,
-                              fit: BoxFit.contain,
-                              filterQuality: FilterQuality.high,
-                            )
-                          : Icon(
-                              item.icon,
-                              color: iconTint,
-                              size: 36,
-                            ),
+                      child: SmartUploadedImage(
+                        imageUrl: item.iconUrl,
+                        fit: BoxFit.contain,
+                        fallback: hasExactAsset
+                            ? Image.asset(
+                                'assets/images/icons/sci_${item.id}.png',
+                                width: 40,
+                                height: 40,
+                                color: iconTint,
+                                fit: BoxFit.contain,
+                                filterQuality: FilterQuality.high,
+                              )
+                            : Icon(
+                                item.icon,
+                                color: iconTint,
+                                size: 36,
+                              ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -789,10 +812,13 @@ class _HomeTabState extends State<HomeTab> {
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
-                          Image.asset(
-                            cardAsset,
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.high,
+                          SmartUploadedImage(
+                            imageUrl: book.coverImageUrl,
+                            fallback: Image.asset(
+                              cardAsset,
+                              fit: BoxFit.cover,
+                              filterQuality: FilterQuality.high,
+                            ),
                           ),
                           Positioned(
                             top: 6,
@@ -887,11 +913,16 @@ class _HomeTabState extends State<HomeTab> {
                     right: 6,
                     child: SizedBox(
                       height: 130,
-                      child: Image.asset(
-                        'assets/images/webinar_teacher.png',
+                      child: SmartUploadedImage(
+                        imageUrl: v.thumbnailUrl,
                         fit: BoxFit.contain,
                         alignment: Alignment.bottomCenter,
-                        filterQuality: FilterQuality.high,
+                        fallback: Image.asset(
+                          'assets/images/webinar_teacher.png',
+                          fit: BoxFit.contain,
+                          alignment: Alignment.bottomCenter,
+                          filterQuality: FilterQuality.high,
+                        ),
                       ),
                     ),
                   ),
@@ -1012,10 +1043,13 @@ class _HomeTabState extends State<HomeTab> {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      coverAsset,
-                      fit: BoxFit.cover,
-                      filterQuality: FilterQuality.high,
+                    SmartUploadedImage(
+                      imageUrl: b.coverImageUrl,
+                      fallback: Image.asset(
+                        coverAsset,
+                        fit: BoxFit.cover,
+                        filterQuality: FilterQuality.high,
+                      ),
                     ),
                     if (isCustomAdded)
                       Positioned(
@@ -1104,10 +1138,13 @@ class _HomeTabState extends State<HomeTab> {
                       child: Stack(
                         fit: StackFit.expand,
                         children: [
-                          Image.asset(
-                            thumbAsset,
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.high,
+                          SmartUploadedImage(
+                            imageUrl: g.thumbnailUrl,
+                            fallback: Image.asset(
+                              thumbAsset,
+                              fit: BoxFit.cover,
+                              filterQuality: FilterQuality.high,
+                            ),
                           ),
                           Container(
                             color: Colors.black.withValues(alpha: 0.14),

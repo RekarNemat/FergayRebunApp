@@ -3,6 +3,7 @@ import '../../data/library_teachers_data.dart';
 import '../../models/academy_models.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/media_helpers.dart';
 import '../../widgets/reboon_logo.dart';
 
 void openAcademyTeachersSheet(BuildContext context, AppState appState) {
@@ -144,16 +145,20 @@ class _AcademyTeachersSheet extends StatelessWidget {
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(16),
-                                    child: Image.asset(
-                                      portraitAsset,
-                                      fit: BoxFit.cover,
+                                    child: SmartUploadedImage(
+                                      imageUrl: t.photoUrl,
                                       alignment: Alignment.topCenter,
-                                      filterQuality: FilterQuality.high,
-                                      errorBuilder: (_, _, _) => TeacherAvatarBubble(
-                                        name: t.name,
-                                        size: 70,
-                                        colorStart: t.colorStart,
-                                        colorEnd: t.colorEnd,
+                                      fallback: Image.asset(
+                                        portraitAsset,
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.topCenter,
+                                        filterQuality: FilterQuality.high,
+                                        errorBuilder: (_, _, _) => TeacherAvatarBubble(
+                                          name: t.name,
+                                          size: 70,
+                                          colorStart: t.colorStart,
+                                          colorEnd: t.colorEnd,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -244,28 +249,48 @@ class _AcademyTeachersSheet extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            SizedBox(
-                              width: double.infinity,
-                              child: FilledButton.icon(
-                                onPressed: () => openTeacherChatSheet(
-                                  context,
-                                  appState,
-                                  t,
-                                ),
-                                icon: const Icon(
-                                  Icons.chat_bubble_outline_rounded,
-                                  size: 16,
-                                ),
-                                label: const Text('💬 چاتکردن لەگەڵ مامۆستا'),
-                                style: FilledButton.styleFrom(
-                                  backgroundColor: t.colorStart,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: FilledButton.icon(
+                                    onPressed: () => openTeacherChatSheet(
+                                      context,
+                                      appState,
+                                      t,
+                                    ),
+                                    icon: const Icon(
+                                      Icons.chat_bubble_outline_rounded,
+                                      size: 16,
+                                    ),
+                                    label: const Text('💬 چاتکردن لەگەڵ مامۆستا'),
+                                    style: FilledButton.styleFrom(
+                                      backgroundColor: t.colorStart,
+                                      padding:
+                                          const EdgeInsets.symmetric(vertical: 10),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                                if (t.cvUrl.trim().isNotEmpty) ...[
+                                  const SizedBox(width: 8),
+                                  OutlinedButton(
+                                    onPressed: () =>
+                                        openUploadedMediaUrl(context, t.cvUrl),
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 10,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: const Text('📄 سیڤی'),
+                                  ),
+                                ],
+                              ],
                             ),
                           ],
                         ),

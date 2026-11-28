@@ -4,11 +4,17 @@ class Episode {
   final int id;
   final String title;
   final String duration;
+  final String videoUrl;
+  final String audioUrl;
+  final String attachmentUrl;
 
   const Episode({
     required this.id,
     required this.title,
     this.duration = '٢٥ خولەک',
+    this.videoUrl = '',
+    this.audioUrl = '',
+    this.attachmentUrl = '',
   });
 }
 
@@ -21,6 +27,8 @@ class CourseDetail {
   final String summary;
   final Color accentColor;
   final List<Episode> episodes;
+  final String coverImageUrl;
+  final String pdfUrl;
 
   const CourseDetail({
     required this.key,
@@ -31,6 +39,8 @@ class CourseDetail {
     required this.summary,
     required this.accentColor,
     required this.episodes,
+    this.coverImageUrl = '',
+    this.pdfUrl = '',
   });
 }
 
@@ -128,6 +138,10 @@ class SanadItemData {
   final String iconEmoji;
   final Color color;
   final List<SanadChainNode> chain;
+  final String imageUrl;
+  final String audioUrl;
+  final String videoUrl;
+  final String pdfUrl;
 
   const SanadItemData({
     required this.key,
@@ -142,6 +156,10 @@ class SanadItemData {
     required this.iconEmoji,
     required this.color,
     required this.chain,
+    this.imageUrl = '',
+    this.audioUrl = '',
+    this.videoUrl = '',
+    this.pdfUrl = '',
   });
 }
 
@@ -155,6 +173,8 @@ class PdfBookData {
   final String icon;
   final String desc;
   final Color coverColor;
+  final String pdfUrl;
+  final String coverImageUrl;
 
   const PdfBookData({
     required this.id,
@@ -166,6 +186,8 @@ class PdfBookData {
     required this.icon,
     required this.desc,
     this.coverColor = const Color(0xFF0F766E),
+    this.pdfUrl = '',
+    this.coverImageUrl = '',
   });
 }
 
@@ -181,6 +203,8 @@ class TeacherData {
   final String specialty;
   final String bio;
   final List<String> books;
+  final String photoUrl;
+  final String cvUrl;
 
   const TeacherData({
     required this.id,
@@ -194,6 +218,8 @@ class TeacherData {
     required this.specialty,
     required this.bio,
     required this.books,
+    this.photoUrl = '',
+    this.cvUrl = '',
   });
 }
 
@@ -205,6 +231,7 @@ class ResourceItemData {
   final String desc;
   final String icon;
   final String badge;
+  final String attachmentUrl;
 
   const ResourceItemData({
     required this.id,
@@ -214,6 +241,7 @@ class ResourceItemData {
     required this.desc,
     required this.icon,
     required this.badge,
+    this.attachmentUrl = '',
   });
 }
 
@@ -227,6 +255,10 @@ class VideoContentItem {
   final bool isVerticalReel;
   final Color colorStart;
   final Color colorEnd;
+  final String videoUrl;
+  final String audioUrl;
+  final String thumbnailUrl;
+  final String attachmentUrl;
 
   const VideoContentItem({
     required this.id,
@@ -238,6 +270,10 @@ class VideoContentItem {
     required this.isVerticalReel,
     required this.colorStart,
     required this.colorEnd,
+    this.videoUrl = '',
+    this.audioUrl = '',
+    this.thumbnailUrl = '',
+    this.attachmentUrl = '',
   });
 }
 
@@ -249,6 +285,9 @@ class ArticleContentItem {
   final String excerpt;
   final String fullContent;
   final Color color;
+  final String imageUrl;
+  final String audioUrl;
+  final String attachmentUrl;
 
   const ArticleContentItem({
     required this.id,
@@ -258,6 +297,9 @@ class ArticleContentItem {
     required this.excerpt,
     required this.fullContent,
     required this.color,
+    this.imageUrl = '',
+    this.audioUrl = '',
+    this.attachmentUrl = '',
   });
 }
 
@@ -270,6 +312,10 @@ class GuidanceVideoItem {
   final List<String> keyTips;
   final IconData icon;
   final Color color;
+  final String videoUrl;
+  final String audioUrl;
+  final String thumbnailUrl;
+  final String attachmentUrl;
 
   const GuidanceVideoItem({
     required this.id,
@@ -280,6 +326,10 @@ class GuidanceVideoItem {
     required this.keyTips,
     required this.icon,
     required this.color,
+    this.videoUrl = '',
+    this.audioUrl = '',
+    this.thumbnailUrl = '',
+    this.attachmentUrl = '',
   });
 }
 
@@ -289,6 +339,7 @@ class ScienceCategoryItem {
   final String kurdishName;
   final IconData icon;
   final Color color;
+  final String iconUrl;
 
   const ScienceCategoryItem({
     required this.id,
@@ -296,6 +347,7 @@ class ScienceCategoryItem {
     required this.kurdishName,
     required this.icon,
     required this.color,
+    this.iconUrl = '',
   });
 }
 
@@ -310,6 +362,8 @@ class ReboonProjectItem {
   final String desc;
   final bool isFeatured;
   final Color accentColor;
+  final String imageUrl;
+  final String attachmentUrl;
 
   const ReboonProjectItem({
     required this.id,
@@ -322,6 +376,8 @@ class ReboonProjectItem {
     required this.desc,
     this.isFeatured = false,
     this.accentColor = const Color(0xFF0F766E),
+    this.imageUrl = '',
+    this.attachmentUrl = '',
   });
 }
 

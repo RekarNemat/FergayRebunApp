@@ -55,12 +55,28 @@ void main() {
       'icon': '📗',
       'desc': 'تاقیکردنەوەی زیادکردن لە داشبۆردەوە',
       'coverColorHex': '#15686C',
+      'pdfUrl': 'https://example.com/book.pdf',
+      'coverImageUrl': 'https://example.com/cover.jpg',
     });
+    ((modified['courses'] as List).first as Map)['pdfUrl'] =
+        'https://example.com/course.pdf';
+    ((((modified['courses'] as List).first as Map)['episodes'] as List).first
+        as Map)['videoUrl'] = 'https://example.com/ep1.mp4';
+    ((((modified['courses'] as List).first as Map)['episodes'] as List).first
+        as Map)['audioUrl'] = 'https://example.com/ep1.mp3';
+    ((((modified['courses'] as List).first as Map)['episodes'] as List).first
+        as Map)['attachmentUrl'] = 'https://example.com/ep1.pdf';
     (modified['articles'] as List).removeLast();
 
     RemoteCmsService.applyPayload(modified, appState);
     expect(pdfBooksDatabase.length, originalBooksCount + 1);
     expect(pdfBooksDatabase.last.title, 'کتێبی تاقیکردنەوەی ڕاستەوخۆ');
+    expect(pdfBooksDatabase.last.pdfUrl, 'https://example.com/book.pdf');
+    expect(pdfBooksDatabase.last.coverImageUrl, 'https://example.com/cover.jpg');
+    expect(courseCatalog.values.first.pdfUrl, 'https://example.com/course.pdf');
+    expect(courseCatalog.values.first.episodes.first.videoUrl, 'https://example.com/ep1.mp4');
+    expect(courseCatalog.values.first.episodes.first.audioUrl, 'https://example.com/ep1.mp3');
+    expect(courseCatalog.values.first.episodes.first.attachmentUrl, 'https://example.com/ep1.pdf');
     expect(articlesContentList.length, originalArticlesCount - 1);
     expect(appState.cmsLastSyncTime, isNotNull);
 
