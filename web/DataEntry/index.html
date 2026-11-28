@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>داشبۆردی داتا داغڵکردن — فێرگەی ڕێبوون</title>
+  <link rel="icon" type="image/png" href="../favicon.png" />
+  <style>
+    @font-face {
+      font-family: 'Rabar';
+      src: url('../assets/assets/fonts/Rabar_021.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Rabar';
+      src: url('../assets/assets/fonts/Rabar_021.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --teal-900: #0C4346;
+      --teal-800: #15686C;
+      --teal-700: #1B7E83;
+      --teal-100: #E4F3F3;
+      --teal-50: #F2F9F9;
+      --gold: #D4AF37;
+      --gold-soft: #FEF8E6;
+      --bg: #F4F7F7;
+      --card: #FFFFFF;
+      --text: #162B2D;
+      --muted: #5F7779;
+      --border: #DDE8E8;
+      --danger: #D93848;
+      --danger-soft: #FDECEC;
+      --success: #168055;
+      --success-soft: #E6F6EE;
+      --shadow: 0 8px 24px rgba(15, 68, 71, 0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Rabar', 'Segoe UI', Tahoma, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--teal-900) 0%, var(--teal-800) 55%, #1E8A8F 100%);
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 24px;
+      padding: 36px 28px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+      text-align: center;
+    }
+
+    .login-logo {
+      width: 82px;
+      height: 82px;
+      margin: 0 auto 14px;
+      border-radius: 22px;
+      background: var(--teal-50);
+      border: 2px solid var(--teal-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .login-logo img {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+    }
+
+    .login-card h1 {
+      font-size: 22px;
+      color: var(--teal-800);
+      margin-bottom: 4px;
+    }
+
+    .login-card p.subtitle {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      text-align: right;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal-900);
+      margin-bottom: 6px;
+    }
+
+    .input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--text);
+      background: #FAFDFD;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: var(--teal-800);
+      box-shadow: 0 0 0 3px rgba(21, 104, 108, 0.14);
+      background: #fff;
+    }
+
+    textarea.input {
+      min-height: 86px;
+      resize: vertical;
+    }
+
+    .login-error {
+      display: none;
+      background: var(--danger-soft);
+      color: var(--danger);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.2s, opacity 0.2s;
+      text-decoration: none;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-primary {
+      background: var(--teal-800);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--teal-900); }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #162B2D;
+    }
+    .btn-gold:hover { background: #c19b28; }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--teal-800);
+      border: 1.5px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--teal-50); border-color: var(--teal-800); }
+
+    .btn-danger {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+
+    .btn-sm {
+      padding: 6px 11px;
+      font-size: 12.5px;
+      border-radius: 9px;
+    }
+
+    .btn-block { width: 100%; padding: 13px; font-size: 15px; }
+
+    /* ===== DASHBOARD LAYOUT ===== */
+    #dashboard-app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 278px;
+      background: var(--teal-900);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 40;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar-header {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-header img {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #fff;
+      padding: 4px;
+      object-fit: contain;
+    }
+
+    .sidebar-header .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .sidebar-header .brand-sub {
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .nav-group-title {
+      padding: 14px 18px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.55);
+      letter-spacing: 0.4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0 10px 18px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 11px;
+      cursor: pointer;
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 3px;
+      transition: background 0.18s;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-item.active {
+      background: var(--teal-700);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-item .nav-label {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .nav-badge {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      font-size: 11px;
+      padding: 1px 8px;
+      border-radius: 99px;
+      font-weight: 700;
+    }
+
+    .nav-item.active .nav-badge {
+      background: var(--gold);
+      color: #162B2D;
+    }
+
+    /* Main Content */
+    .main-area {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      flex-wrap: wrap;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: var(--teal-50);
+      color: var(--teal-800);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 11px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--teal-900);
+    }
+
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    .sync-pill.syncing {
+      background: var(--gold-soft);
+      color: #9A6B00;
+    }
+
+    .sync-pill.error {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .content {
+      padding: 22px;
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Cards & Grids */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.16s, border-color 0.16s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--teal-800);
+    }
+
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--teal-800);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .panel-header h2 {
+      font-size: 17px;
+      color: var(--teal-900);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    /* Items Grid / List */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 14px;
+    }
+
+    .item-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      transition: border-color 0.16s, box-shadow 0.16s;
+    }
+
+    .item-card:hover {
+      border-color: var(--teal-700);
+      box-shadow: 0 6px 18px rgba(21, 104, 108, 0.08);
+    }
+
+    .item-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .item-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--teal-900);
+      line-height: 1.4;
+    }
+
+    .item-meta {
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .item-desc {
+      font-size: 13px;
+      color: #395154;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .item-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: var(--teal-50);
+      color: var(--teal-800);
+    }
+
+    .tag.gold {
+      background: var(--gold-soft);
+      color: #8A6100;
+    }
+
+    .color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(0, 0, 0, 0.15);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .item-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 7px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* Form Grid in Modal */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .form-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: var(--teal-50);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13.5px;
+      color: var(--teal-900);
+    }
+
+    .checkbox-row input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--teal-800);
+    }
+
+    /* Nested sub-editor */
+    .sub-list-box {
+      background: #F8FBFB;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .sub-list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .sub-item-row {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 10px;
+      margin-bottom: 9px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .sub-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 8px;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 34, 36, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: #fff;
+      width: 100%;
+      max-width: 780px;
+      max-height: 92vh;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      padding: 16px 22px;
+      background: var(--teal-800);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 16.5px;
+    }
+
+    .modal-close {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 20px 22px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 14px 22px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      background: #FAFDFD;
+    }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 22px;
+      left: 22px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      background: var(--teal-900);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 13px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+      font-size: 13.5px;
+      font-weight: 700;
+      min-width: 240px;
+      animation: slideIn 0.22s ease;
+    }
+
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--danger); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .api-banner {
+      background: linear-gradient(135deg, var(--teal-800), var(--teal-900));
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .api-banner code {
+      background: rgba(255, 255, 255, 0.14);
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-size: 12px;
+      direction: ltr;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 35;
+    }
+
+    @media (max-width: 920px) {
+      .sidebar {
+        position: fixed;
+        right: 0;
+        top: 0;
+        transform: translateX(100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay.open {
+        display: block;
+      }
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .items-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <img src="../icons/Icon-192.png" alt="فێرگەی ڕێبوون" onerror="this.style.display='none'" />
+      </div>
+      <h1>داشبۆردی داتا داغڵکردن</h1>
+      <p class="subtitle">بەڕێوەبردنی تەواوی ناوەڕۆکی ئەپی فێرگەی ڕێبوون (Live Mock API)</p>
+
+      <div id="login-error" class="login-error">یوزەرنەیم یان پاسۆرد هەڵەیە!</div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-username">یوزەرنەیم</label>
+          <input id="login-username" class="input" type="text" dir="ltr" placeholder="Rebun@Ferga" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="login-password">پاسۆرد</label>
+          <input id="login-password" class="input" type="password" dir="ltr" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">چوونەژوورەوە بۆ داشبۆرد</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD APP ===== -->
+  <div id="dashboard-app">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <img src="../icons/Icon-192.png" alt="Reboon" onerror="this.style.display='none'" />
+          <div>
+            <div class="brand-title">فێرگەی ڕێبوون</div>
+            <div class="brand-sub">پانێڵی داتا داغڵکردن</div>
+          </div>
+        </div>
+
+        <div class="nav-group-title">سەرەکی و ڕێکخستن</div>
+        <ul class="nav-list" id="nav-main"></ul>
+
+        <div class="nav-group-title">بەشەکانی پەڕەی سەرەکی</div>
+        <ul class="nav-list" id="nav-home"></ul>
+
+        <div class="nav-group-title">ئەکادیمیا، سەنەد و تاقیکردنەوە</div>
+        <ul class="nav-list" id="nav-academy"></ul>
+
+        <div class="nav-group-title">زیاتر و ڕێکخراو</div>
+        <ul class="nav-list" id="nav-more"></ul>
+      </aside>
+
+      <!-- Main Area -->
+      <div class="main-area">
+        <header class="topbar">
+          <div class="topbar-right">
+            <button class="mobile-menu-btn" id="mobile-menu-btn" title="پێڕست">☰</button>
+            <span class="page-title" id="current-page-title">پوختە و ئامار</span>
+            <span class="sync-pill" id="sync-status-pill">● پەیوەستە بە Mock API</span>
+          </div>
+          <div class="topbar-actions">
+            <button class="btn btn-outline btn-sm" id="btn-refresh-cloud">🔄 نوێکردنەوە لە کلاود</button>
+            <a class="btn btn-gold btn-sm" href="../" target="_blank" rel="noopener">📱 بینینی ئەپەکە</a>
+            <button class="btn btn-danger btn-sm" id="btn-logout">چوونەدەرەوە</button>
+          </div>
+        </header>
+
+        <main class="content" id="main-content">
+          <div class="empty-state">چاوەڕوانبە، داتاکان دەهێنرێن...</div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal-backdrop" id="editor-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-title">دەستکاریکردن</h3>
+        <button class="modal-close" id="modal-close-btn">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modal-cancel-btn">پاشگەزبوونەوە</button>
+        <button class="btn btn-primary" id="modal-save-btn">💾 پاشەکەوتکردن و بڵاوکردنەوەی ڕاستەوخۆ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -243,24 +243,31 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     final s = widget.appState;
-    final daily = dailyLearningEntries[_dailyIndex];
 
     return AnimatedBuilder(
       animation: s,
       builder: (context, _) {
+        final daily = dailyLearningEntries.isEmpty
+            ? null
+            : dailyLearningEntries[_dailyIndex % dailyLearningEntries.length];
         return Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 960),
-            child: ListView(
-              padding: const EdgeInsets.only(top: 12, bottom: 28),
-              children: [
-                // 1. HERO BANNER CAROUSEL (Voice 6 + Image 6 + HTML Hero)
-                _buildHeroCarousel(),
-                const SizedBox(height: 14),
+            child: RefreshIndicator(
+              color: AppColors.teal800,
+              onRefresh: () => s.syncRemoteCms(),
+              child: ListView(
+                padding: const EdgeInsets.only(top: 12, bottom: 28),
+                children: [
+                  // 1. HERO BANNER CAROUSEL (Voice 6 + Image 6 + HTML Hero)
+                  _buildHeroCarousel(),
+                  const SizedBox(height: 14),
 
-                // 2. فێربوونی ڕۆژانە (Voice 6 + Image 6 — below Hero!)
-                _buildDailyLearningCard(daily),
-                const SizedBox(height: 22),
+                  // 2. فێربوونی ڕۆژانە (Voice 6 + Image 6 — below Hero!)
+                  if (daily != null) ...[
+                    _buildDailyLearningCard(daily),
+                    const SizedBox(height: 22),
+                  ],
 
                 // 3. زانستەکان (Image 6 circular teal badges horizontally)
                 const SectionTitleHeader(title: 'زانستەکان'),
@@ -305,6 +312,7 @@ class _HomeTabState extends State<HomeTab> {
                 const SizedBox(height: 12),
                 _buildBottomActionStrip(s),
               ],
+            ),
             ),
           ),
         );
@@ -586,6 +594,7 @@ class _HomeTabState extends State<HomeTab> {
       ),
       child: InkWell(
         onTap: () {
+          if (dailyLearningEntries.isEmpty) return;
           setState(() {
             _dailyIndex = (_dailyIndex + 1) % dailyLearningEntries.length;
           });
@@ -949,14 +958,28 @@ class _HomeTabState extends State<HomeTab> {
   ];
 
   Widget _buildLibraryPreviewStrip(AppState s) {
-    final previewBooks = [
-      pdfBooksDatabase[27], // اختصار علوم الحديث
-      pdfBooksDatabase[28], // إرواء الغليل
-      pdfBooksDatabase[16], // تفسير القرآن العظيم
-      pdfBooksDatabase[0], // الأصول الثلاثة
-      pdfBooksDatabase[10], // الأربعين النووية
-      pdfBooksDatabase[23], // الرحيق المختوم
-    ];
+    final previewBooks = <PdfBookData>[];
+    if (pdfBooksDatabase.isNotEmpty) {
+      // Show newly added books (id > 29) first so DataEntry additions appear immediately
+      final newlyAdded = pdfBooksDatabase.where((b) => b.id > 29).toList().reversed;
+      previewBooks.addAll(newlyAdded);
+      for (final prefId in [28, 29, 17, 1, 11, 24]) {
+        final match = pdfBooksDatabase.where((b) => b.id == prefId).firstOrNull;
+        if (match != null && !previewBooks.any((x) => x.id == match.id)) {
+          previewBooks.add(match);
+        }
+      }
+      for (final b in pdfBooksDatabase) {
+        if (previewBooks.length >= 6) break;
+        if (!previewBooks.any((x) => x.id == b.id)) {
+          previewBooks.add(b);
+        }
+      }
+    }
+
+    if (previewBooks.isEmpty) {
+      return const SizedBox(height: 16);
+    }
 
     return SizedBox(
       height: 186,
@@ -968,6 +991,7 @@ class _HomeTabState extends State<HomeTab> {
         itemBuilder: (_, idx) {
           final b = previewBooks[idx];
           final coverAsset = _libraryCoverAssets[idx % _libraryCoverAssets.length];
+          final isCustomAdded = b.id > 29;
           return InkWell(
             onTap: () => openPdfBookDetailSheet(context, s, b),
             borderRadius: BorderRadius.circular(14),
@@ -985,10 +1009,49 @@ class _HomeTabState extends State<HomeTab> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),
-                child: Image.asset(
-                  coverAsset,
-                  fit: BoxFit.cover,
-                  filterQuality: FilterQuality.high,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      coverAsset,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.high,
+                    ),
+                    if (isCustomAdded)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.black.withValues(alpha: 0.0),
+                                AppColors.teal900.withValues(alpha: 0.92),
+                              ],
+                            ),
+                          ),
+                          child: Text(
+                            b.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 11,
+                              height: 1.25,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),

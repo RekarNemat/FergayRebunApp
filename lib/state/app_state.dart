@@ -5,6 +5,7 @@ import '../models/academy_models.dart';
 import '../data/courses_data.dart';
 import '../data/library_teachers_data.dart';
 import '../data/home_content_data.dart';
+import '../services/remote_cms_service.dart';
 
 class AppState extends ChangeNotifier {
   // Bottom Nav: 0=Sanad, 1=Academy, 2=Home(Center), 3=Favorites, 4=Account
@@ -99,8 +100,39 @@ class AppState extends ChangeNotifier {
   Timer? _simTimer;
   SharedPreferences? _prefs;
 
-  Future<void> init({bool startSimulationTimer = true}) async {
+  // Live Cloud Mock API CMS state
+  bool isSyncingCms = false;
+  DateTime? cmsLastSyncTime;
+  String cmsApiUrl = RemoteCmsService.defaultApiUrl;
+
+  void markCmsSynced() {
+    cmsLastSyncTime = DateTime.now();
+    notifyListeners();
+  }
+
+  Future<bool> syncRemoteCms({String? overrideUrl}) async {
+    if (isSyncingCms) return false;
+    final target = (overrideUrl != null && overrideUrl.trim().isNotEmpty)
+        ? overrideUrl.trim()
+        : cmsApiUrl;
+    if (overrideUrl != null && overrideUrl.trim().isNotEmpty) {
+      cmsApiUrl = target;
+      await _prefs?.setString('cmsApiUrl', target);
+    }
+    isSyncingCms = true;
+    notifyListeners();
+    final ok = await RemoteCmsService.fetchAndApply(this, apiUrl: target);
+    isSyncingCms = false;
+    notifyListeners();
+    return ok;
+  }
+
+  Future<void> init({
+    bool startSimulationTimer = true,
+    bool syncRemoteCms = true,
+  }) async {
     _prefs = await SharedPreferences.getInstance();
+    cmsApiUrl = _prefs?.getString('cmsApiUrl') ?? RemoteCmsService.defaultApiUrl;
     isDarkMode = _prefs?.getBool('isDarkMode') ?? false;
     fontSize = _prefs?.getDouble('fontSize') ?? 16.0;
     fontFamily = _prefs?.getString('fontFamily') ?? 'Rabar';
@@ -128,6 +160,11 @@ class AppState extends ChangeNotifier {
     }
 
     notifyListeners();
+
+    if (syncRemoteCms) {
+      // Non-blocking background sync so UI renders instantly and refreshes as soon as Mock API responds
+      unawaited(this.syncRemoteCms());
+    }
 
     // Simulate incoming live notification once after 6 seconds (like HTML)
     if (startSimulationTimer) {

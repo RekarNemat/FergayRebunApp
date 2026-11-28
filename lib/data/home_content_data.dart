@@ -107,7 +107,7 @@ class DailyLearningEntry {
   });
 }
 
-const List<DailyLearningEntry> dailyLearningEntries = [
+final List<DailyLearningEntry> dailyLearningEntries = [
   DailyLearningEntry(
     id: 'daily_1',
     badge: 'فەرموودەی پیرۆزی ڕۆژ • پاداشتی زانستخواز',
@@ -356,15 +356,15 @@ final List<ArticleContentItem> articlesContentList = [
 ];
 
 class OrganizationInfo {
-  static const String pageTitle = 'دەربارەی ئێمە';
-  static const String orgNameKu = 'ڕێکخراوی ڕێبوون';
-  static const String orgSubtitleKu = 'بۆ پەروەردە و ڕاهێنان';
-  static const String orgNameAr = 'منظمة ريبوون للتعليم والتدريب';
-  static const String orgNameEn = 'Reboon Organization For Education and Training';
-  static const String slogan = 'هۆشیاری - نوێگەری - پێگەیاندن - خزمەت';
-  static const String definition =
+  static String pageTitle = 'دەربارەی ئێمە';
+  static String orgNameKu = 'ڕێکخراوی ڕێبوون';
+  static String orgSubtitleKu = 'بۆ پەروەردە و ڕاهێنان';
+  static String orgNameAr = 'منظمة ريبوون للتعليم والتدريب';
+  static String orgNameEn = 'Reboon Organization For Education and Training';
+  static String slogan = 'هۆشیاری - نوێگەری - پێگەیاندن - خزمەت';
+  static String definition =
       'دامەزراوەیەکی پەروەردەیی ڕێنموونی کاری چاکسازی سەربەخۆی قازانج نەویستە هەوڵدەدات لەپێناو دروستکردنی کۆمەڵگەیەکی بەختەوەر و هاوچەرخ، بەتایبەت پەرەپێدان بەتوانای گەنجان تا بتوانن ڕۆڵی کارا و کاریگەریان هەبێت لە پێشخستنی کۆمەڵگەکیاندا.';
-  static const List<String> workAreas = [
+  static List<String> workAreas = [
     'گرنگیدان بە پێگەیاندنی گەنجان بەهەردوو ڕەگەزەوە.',
     'بڵاوکردنەوەی هۆشیاری لە بوارە جیاوازەکان.',
   ];
@@ -384,7 +384,7 @@ class AcademyGoalItem {
   });
 }
 
-const List<AcademyGoalItem> academyGoalsList = [
+final List<AcademyGoalItem> academyGoalsList = [
   AcademyGoalItem(
     title: 'خوێندنی سەنەددار',
     desc: 'پشتبەستن بە بەڵگەی صەحیح و سەنەدی بەردەوام تا پێغەمبەری خوا صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ.',

@@ -18,7 +18,7 @@ void main() {
     });
 
     final state = AppState();
-    await state.init(startSimulationTimer: false);
+    await state.init(startSimulationTimer: false, syncRemoteCms: false);
     addTearDown(state.dispose);
 
     await tester.pumpWidget(ReboonAcademyApp(appState: state));

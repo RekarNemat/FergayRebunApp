@@ -24,9 +24,9 @@ class AboutOrganizationPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           OrganizationInfo.pageTitle,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFF1B8A5A),
             fontWeight: FontWeight.w800,
           ),
@@ -154,9 +154,9 @@ class AboutOrganizationPage extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 14),
-                      const Text(
+                      Text(
                         OrganizationInfo.slogan,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
                           fontSize: 15.5,

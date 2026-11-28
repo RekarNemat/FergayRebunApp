@@ -93,6 +93,45 @@ class ResponsiveMainShell extends StatelessWidget {
             ),
             actions: [
               IconButton(
+                onPressed: s.isSyncingCms
+                    ? null
+                    : () async {
+                        final ok = await s.syncRemoteCms();
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              ok
+                                  ? 'داتاکان بە سەرکەوتوویی نوێکرانەوە ✓'
+                                  : 'نەتوانرا پەیوەندی بە سێرڤەری داتاوە بکرێت',
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            backgroundColor:
+                                ok ? AppColors.teal800 : AppColors.rose600,
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      },
+                icon: s.isSyncingCms
+                    ? SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : AppColors.teal800,
+                        ),
+                      )
+                    : Icon(
+                        Icons.sync_rounded,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white
+                            : AppColors.teal800,
+                      ),
+                tooltip: 'نوێکردنەوەی داتا',
+              ),
+              IconButton(
                 onPressed: () => openGlobalSearchSheet(
                   context,
                   s,
