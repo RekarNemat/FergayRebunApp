@@ -227,7 +227,7 @@
       margin-bottom: 14px;
     }
 
-    .form-group label {
+    .form-group > label:not(.upload-btn):not(.checkbox-row) {
       display: block;
       font-size: 13px;
       font-weight: 700;
@@ -869,7 +869,7 @@
       position: relative;
       overflow: hidden;
       background: var(--btn-primary-bg);
-      color: #fff;
+      color: #FFFFFF !important;
       border-radius: 9px;
       padding: 7px 12px;
       font-size: 12px;
@@ -880,6 +880,10 @@
       gap: 5px;
       white-space: nowrap;
       flex-shrink: 0;
+    }
+
+    .upload-btn span {
+      color: #FFFFFF !important;
     }
 
     .upload-btn:hover { background: var(--btn-primary-hover); }
